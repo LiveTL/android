@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.ui.composable.VideoPlayer
@@ -30,14 +29,13 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun PlayerScreen(urlOrId: String?) {
-    val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var source by remember { mutableStateOf(urlOrId) }
 
     fun setSource(url: String) {
         coroutineScope.launch {
-            val ytUrl = getYouTubeVideoUrl(context, url)
+            val ytUrl = getYouTubeVideoUrl(url)
             withContext(Dispatchers.Main) { source = ytUrl }
         }
     }
