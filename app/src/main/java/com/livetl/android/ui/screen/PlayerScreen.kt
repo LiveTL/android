@@ -82,7 +82,7 @@ fun PlayerScreen() {
                 Button(onClick = { setSource("https://www.youtube.com/watch?v=W8hTq_l7-AQ") }) {
                     Text("Sample 2")
                 }
-                Button(onClick = { setSource("https://www.youtube.com/watch?v=k1uDPi9MRo4") }) {
+                Button(onClick = { setSource("https://www.youtube.com/watch?v=rVFumg4ECVY") }) {
                     Text("Sample 3")
                 }
             }

@@ -10,6 +10,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -36,8 +37,13 @@ fun VideoPlayer(
             )
 
             val mediaItem = MediaItem.Builder().setUri(sourceUrl).build()
-            val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(mediaItem)
+            val source = if (sourceUrl.endsWith(".m3u8")) {
+                HlsMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaItem)
+            } else {
+                ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaItem)
+            }
 
             exoPlayer.setMediaSource(source)
             exoPlayer.prepare()
