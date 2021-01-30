@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent
-import com.livetl.android.ui.screen.PlayerScreen
+import com.livetl.android.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme
 
 class MainActivity : AppCompatActivity() {
@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LiveTLTheme {
-                PlayerScreen()
+                MainNavHost()
             }
         }
     }
