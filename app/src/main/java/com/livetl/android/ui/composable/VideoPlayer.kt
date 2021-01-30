@@ -1,8 +1,10 @@
 package com.livetl.android.ui.composable
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.google.android.exoplayer2.MediaItem
@@ -14,30 +16,39 @@ import com.google.android.exoplayer2.util.Util
 import com.livetl.android.databinding.VideoPlayerBinding
 
 @Composable
-fun VideoPlayer(sourceUrl: String): MediaPlayback {
+fun VideoPlayer(
+    sourceUrl: String? = null,
+    modifier: Modifier = Modifier
+): MediaPlayback {
     val context = AmbientContext.current
 
+    // TODO: dispose?
     val exoPlayer = remember {
         SimpleExoPlayer.Builder(context).build()
     }
 
     DisposableEffect(sourceUrl) {
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
-            context,
-            Util.getUserAgent(context, context.packageName)
-        )
+        Log.d("VideoPlayer", "Received sourceUrl: $sourceUrl")
+        if (sourceUrl != null) {
+            val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
+                context,
+                Util.getUserAgent(context, context.packageName)
+            )
 
-        val mediaItem = MediaItem.Builder().setUri(sourceUrl).build()
-        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(mediaItem)
+            val mediaItem = MediaItem.Builder().setUri(sourceUrl).build()
+            val source = ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(mediaItem)
 
-        exoPlayer.setMediaSource(source)
-        exoPlayer.prepare()
+            exoPlayer.setMediaSource(source)
+            exoPlayer.prepare()
+        } else {
+            exoPlayer.stop()
+        }
 
-        onDispose {  }
+        onDispose {}
     }
 
-    AndroidViewBinding(VideoPlayerBinding::inflate) {
+    AndroidViewBinding(bindingBlock = VideoPlayerBinding::inflate, modifier = modifier) {
         playerView.player = exoPlayer
         exoPlayer.playWhenReady = true
     }

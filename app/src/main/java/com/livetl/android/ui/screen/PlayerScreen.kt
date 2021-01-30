@@ -3,6 +3,7 @@ package com.livetl.android.ui.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -17,11 +18,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.livetl.android.ui.composable.VideoPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
+import com.livetl.android.util.getYouTubeVideoUrl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PlayerScreen() {
@@ -29,17 +37,23 @@ fun PlayerScreen() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        var source by remember { mutableStateOf("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4") }
+        val context = AmbientContext.current
+        val coroutineScope = rememberCoroutineScope()
+
+        var source by remember { mutableStateOf("") }
+
+        fun setSource(url: String) {
+            coroutineScope.launch {
+                val ytUrl = getYouTubeVideoUrl(context, url)
+                withContext(Dispatchers.Main) { source = ytUrl }
+            }
+        }
 
         Column {
-            val mediaPlayback = VideoPlayer(source)
-
-            Button(onClick = {
-                // Elephant Dream by Blender Foundation
-                source = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-            }) {
-                Text("Another Video")
-            }
+            val mediaPlayback = VideoPlayer(
+                sourceUrl = source,
+                modifier = Modifier.height(150.dp)
+            )
 
             Row {
                 IconButton(onClick = {
@@ -58,6 +72,18 @@ fun PlayerScreen() {
                     mediaPlayback.forward(10_000)
                 }) {
                     Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = "Fast forward")
+                }
+            }
+
+            Row {
+                Button(onClick = { setSource("https://www.youtube.com/watch?v=nJgjiil5lz8") }) {
+                    Text("Sample 1")
+                }
+                Button(onClick = { setSource("https://www.youtube.com/watch?v=W8hTq_l7-AQ") }) {
+                    Text("Sample 2")
+                }
+                Button(onClick = { setSource("https://www.youtube.com/watch?v=k1uDPi9MRo4") }) {
+                    Text("Sample 3")
                 }
             }
         }
