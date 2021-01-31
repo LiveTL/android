@@ -11,14 +11,19 @@ suspend fun getYouTubeStream(context: Context, pageUrl: String): Stream {
         throw NoYouTubeStreamFoundException()
     }
 
-    val highestResVideo = result.files!!.values
-        .filter { it.format.ext == "mp4" || it.format.ext == "ts" }
+    val bestVideoFile = result.files!!.values
+        .filter { it.format.height != -1 }
         .maxByOrNull { it.format.height }!!
-    Log.d("getYouTubeStream", "Highest res video: $highestResVideo")
+    Log.d("getYouTubeStream", "Best video: $bestVideoFile")
+
+    val bestAudioFile = result.files!!.values
+        .filter { it.format.audioBitrate != -1 }
+        .maxByOrNull { it.format.audioBitrate }
+    Log.d("getYouTubeStream", "Best audio: $bestAudioFile")
 
     return Stream(
-        videoUrl = highestResVideo.url,
-        audioUrl = null,
+        videoUrl = bestVideoFile.url,
+        audioUrl = bestAudioFile?.url,
         title = result.metadata.title,
         author = result.metadata.author,
         shortDescription = result.metadata.shortDescription,

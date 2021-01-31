@@ -61,5 +61,5 @@ dependencies {
     // TODO: only use required modules
     implementation 'com.google.android.exoplayer:exoplayer:2.12.3'
 
-    implementation 'com.github.arkon:android-youtubeExtractor:380e3ef'
+    implementation 'com.github.arkon:android-youtubeExtractor:e615c24'
 }

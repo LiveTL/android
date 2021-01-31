@@ -51,15 +51,14 @@ fun PlayerScreen(urlOrId: String?) {
     val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var source by remember { mutableStateOf(urlOrId) }
     var stream by remember { mutableStateOf<Stream?>(null) }
-    var selectedTab by remember { mutableStateOf<Tabs>(Tabs.Info) }
+    var selectedTab by remember { mutableStateOf(Tabs.Info) }
 
+    // TODO: handle passed in urlOrId
     fun setSource(url: String) {
         coroutineScope.launch {
             val newStream = getYouTubeStream(context, url)
             withContext(Dispatchers.Main) {
-                source = newStream.videoUrl
                 stream = newStream
             }
         }
@@ -67,7 +66,8 @@ fun PlayerScreen(urlOrId: String?) {
 
     Column {
         val mediaPlayback = VideoPlayer(
-            sourceUrl = source,
+            videoSourceUrl = stream?.videoUrl,
+            audioSourceUrl = stream?.audioUrl,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16 / 9F)

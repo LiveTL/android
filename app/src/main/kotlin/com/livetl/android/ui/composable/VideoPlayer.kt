@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
@@ -18,7 +19,8 @@ import com.livetl.android.databinding.VideoPlayerBinding
 
 @Composable
 fun VideoPlayer(
-    sourceUrl: String? = null,
+    videoSourceUrl: String? = null,
+    audioSourceUrl: String? = null,
     modifier: Modifier = Modifier
 ): MediaPlayback {
     val context = AmbientContext.current
@@ -28,24 +30,32 @@ fun VideoPlayer(
         SimpleExoPlayer.Builder(context).build()
     }
 
-    DisposableEffect(sourceUrl) {
-        Log.d("VideoPlayer", "Received sourceUrl: $sourceUrl")
-        if (sourceUrl != null) {
+    DisposableEffect(videoSourceUrl) {
+        Log.d("VideoPlayer", "Received sourceUrl: $videoSourceUrl")
+        if (videoSourceUrl != null) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
                 context,
                 Util.getUserAgent(context, context.packageName)
             )
 
-            val mediaItem = MediaItem.Builder().setUri(sourceUrl).build()
-            val source = if (sourceUrl.endsWith(".m3u8")) {
+            val videoSource = if (videoSourceUrl.endsWith(".m3u8")) {
                 HlsMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaItem)
+                    .createMediaSource(videoSourceUrl.toMediaItem())
             } else {
                 ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaItem)
+                    .createMediaSource(videoSourceUrl.toMediaItem())
             }
 
-            exoPlayer.setMediaSource(source)
+            if (audioSourceUrl != null) {
+                val audioSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(audioSourceUrl.toMediaItem())
+
+                val muxedSource = MergingMediaSource(videoSource, audioSource)
+                exoPlayer.setMediaSource(muxedSource)
+            } else {
+                exoPlayer.setMediaSource(videoSource)
+            }
+
             exoPlayer.prepare()
         } else {
             exoPlayer.stop()
@@ -78,4 +88,8 @@ interface MediaPlayback {
     fun playPause()
     fun forward(durationInMillis: Long)
     fun rewind(durationInMillis: Long)
+}
+
+private fun String.toMediaItem(): MediaItem {
+    return MediaItem.Builder().setUri(this).build()
 }
