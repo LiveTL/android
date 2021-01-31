@@ -3,10 +3,8 @@
     <style name="Theme.App" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="Theme.Splash" parent="Theme.App">
-        <item name="colorBackgroundSplash">#01579B</item>
-
         <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:statusBarColor">?attr/colorBackgroundSplash</item>
-        <item name="android:navigationBarColor">?attr/colorBackgroundSplash</item>
+        <item name="android:statusBarColor">@color/background_splash</item>
+        <item name="android:navigationBarColor">@color/background_splash</item>
     </style>
 </resources>
