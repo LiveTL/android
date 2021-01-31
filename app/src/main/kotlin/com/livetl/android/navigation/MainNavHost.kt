@@ -8,12 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigate
 import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navDeepLink
-import com.livetl.android.ui.screen.HomeScreen
-import com.livetl.android.ui.screen.PlayerScreen
+import com.livetl.android.ui.screen.home.HomeScreen
+import com.livetl.android.ui.screen.player.PlayerScreen
 
 val YOUTUBE_URIS = listOf(
     "https://youtu.be/{urlOrId}",

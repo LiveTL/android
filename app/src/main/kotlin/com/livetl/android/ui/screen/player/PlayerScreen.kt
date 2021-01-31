@@ -1,16 +1,13 @@
-package com.livetl.android.ui.screen
+package com.livetl.android.ui.screen.player
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -25,14 +22,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.livetl.android.BuildConfig
 import com.livetl.android.model.Stream
 import com.livetl.android.ui.composable.VideoPlayer
+import com.livetl.android.ui.screen.player.tab.ChatTab
+import com.livetl.android.ui.screen.player.tab.DebugTab
+import com.livetl.android.ui.screen.player.tab.InfoTab
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.getYouTubeStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+enum class Tabs(val nameRes: String) {
+    Info("Info"),
+    Chat("Chat"),
+    Debug("Debug")
+}
+
+val visibleTabs = if (BuildConfig.DEBUG) {
+    Tabs.values().toList()
+} else {
+    Tabs.values().dropLast(1)
+}
 
 @Composable
 fun PlayerScreen(urlOrId: String?) {
@@ -41,6 +53,7 @@ fun PlayerScreen(urlOrId: String?) {
 
     var source by remember { mutableStateOf(urlOrId) }
     var stream by remember { mutableStateOf<Stream?>(null) }
+    var selectedTab by remember { mutableStateOf<Tabs>(Tabs.Info) }
 
     fun setSource(url: String) {
         coroutineScope.launch {
@@ -80,40 +93,19 @@ fun PlayerScreen(urlOrId: String?) {
             }
         }
 
-        Row {
-            Button(onClick = { setSource("https://www.youtube.com/watch?v=nJgjiil5lz8") }) {
-                Text("Sample 1")
-            }
-            Button(onClick = { setSource("https://www.youtube.com/watch?v=W8hTq_l7-AQ") }) {
-                Text("Sample 2")
-            }
-            Button(onClick = { setSource("https://www.youtube.com/watch?v=rVFumg4ECVY") }) {
-                Text("Sample 3")
+        TabRow(selectedTabIndex = selectedTab.ordinal) {
+            visibleTabs.forEachIndexed { index, tab ->
+                Tab(
+                    text = { Text(tab.nameRes) },
+                    selected = index == selectedTab.ordinal,
+                    onClick = { selectedTab = tab }
+                )
             }
         }
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(8.dp),
-        ) {
-            if (stream != null) {
-                Text(
-                    text = stream!!.title,
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
-                Text(
-                    text = stream!!.author,
-                    style = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
-                Text(
-                    text = "Live: ${stream!!.isLive}",
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
-                Text(text = stream!!.shortDescription)
-            }
+        when (selectedTab) {
+            Tabs.Info -> InfoTab(stream = stream)
+            Tabs.Chat -> ChatTab()
+            Tabs.Debug -> DebugTab(setSource = { setSource(it) })
         }
     }
 }

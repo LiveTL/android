@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen
+package com.livetl.android.ui.screen.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
