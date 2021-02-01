@@ -1,14 +1,22 @@
 package com.livetl.android
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.livetl.android.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme
+import com.livetl.android.util.powerManager
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var wakeLock: PowerManager.WakeLock
+
+    @SuppressLint("WakelockTimeout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -16,7 +24,20 @@ class MainActivity : AppCompatActivity() {
                 MainNavHost()
             }
         }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        wakeLock = powerManager.run {
+            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LiveTL::WakelockTag").apply {
+                acquire()
+            }
+        }
+
         onNewIntent(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        wakeLock?.release()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -42,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val DEEP_LINK_INTENT = "LiveTL-DeepLink"
+        const val DEEP_LINK_INTENT = "LiveTL::DeepLink"
         const val DEEP_LINK_INTENT_EXTRA = "data"
     }
 }
