@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -12,19 +13,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import com.livetl.android.R
 import com.livetl.android.model.Stream
 import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
-import com.livetl.android.ui.theme.LiveTLTheme
+import com.livetl.android.ui.screen.player.tab.SettingsTab
 import com.livetl.android.util.getYouTubeStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class Tabs(val nameRes: String) {
-    Info("Info"),
-    Chat("Chat"),
+enum class Tabs(@StringRes val nameRes: Int) {
+    Info(R.string.info),
+    Chat(R.string.chat),
+    Settings(R.string.settings),
 }
 val tabs = Tabs.values().toList()
 
@@ -60,7 +63,7 @@ fun PlayerScreen(urlOrId: String) {
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    text = { Text(tab.nameRes) },
+                    text = { Text(stringResource(tab.nameRes)) },
                     selected = index == selectedTab.ordinal,
                     onClick = { selectedTab = tab }
                 )
@@ -69,14 +72,15 @@ fun PlayerScreen(urlOrId: String) {
         when (selectedTab) {
             Tabs.Info -> InfoTab(stream = stream)
             Tabs.Chat -> ChatTab(stream = stream)
+            Tabs.Settings -> SettingsTab()
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    LiveTLTheme {
-        PlayerScreen("")
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//    LiveTLTheme {
+//        PlayerScreen("")
+//    }
+//}
