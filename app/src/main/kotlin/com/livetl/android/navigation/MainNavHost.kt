@@ -12,10 +12,10 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
-import com.livetl.android.MainActivity
+import com.livetl.android.ui.MainActivity
+import com.livetl.android.ui.composable.BroadcastReceiver
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
-import com.livetl.android.util.BroadcastReceiver
 
 @Composable
 fun MainNavHost() {

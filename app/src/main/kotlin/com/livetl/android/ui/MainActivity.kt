@@ -1,4 +1,4 @@
-package com.livetl.android
+package com.livetl.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent

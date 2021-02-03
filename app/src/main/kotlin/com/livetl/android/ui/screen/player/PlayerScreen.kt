@@ -16,10 +16,10 @@ import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
 import com.livetl.android.model.Stream
+import com.livetl.android.service.YouTubeVideoExtractor
 import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
 import com.livetl.android.ui.screen.player.tab.SettingsTab
-import com.livetl.android.util.getYouTubeStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,7 +41,7 @@ fun PlayerScreen(urlOrId: String) {
 
     fun setSource(url: String) {
         coroutineScope.launch {
-            val newStream = getYouTubeStream(context, url)
+            val newStream = YouTubeVideoExtractor.getStream(context, url)
             withContext(Dispatchers.Main) {
                 stream = newStream
             }
