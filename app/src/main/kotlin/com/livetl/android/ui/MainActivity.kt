@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.WindowManager
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.setContent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.livetl.android.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme

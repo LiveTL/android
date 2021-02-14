@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 @Composable
@@ -14,7 +14,7 @@ fun BroadcastReceiver(
     intentFilter: IntentFilter,
     receiver: (intent: Intent) -> Unit
 ) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
 
     DisposableEffect(context, intentFilter) {
         val broadcast = object : BroadcastReceiver() {

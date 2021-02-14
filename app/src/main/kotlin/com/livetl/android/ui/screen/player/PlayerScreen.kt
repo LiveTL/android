@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.livetl.android.R
@@ -40,7 +40,7 @@ val tabs = Tabs.values().toList()
 
 @Composable
 fun PlayerScreen(urlOrId: String) {
-    val context = AmbientContext.current
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var videoId by remember { mutableStateOf("") }
