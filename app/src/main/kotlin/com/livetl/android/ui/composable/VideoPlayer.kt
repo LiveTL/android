@@ -19,7 +19,7 @@ fun VideoPlayer(
     var player = remember<YouTubePlayer?> { null }
 
     DisposableEffect(videoId) {
-        if (videoId != null) {
+        if (!videoId.isNullOrBlank()) {
             player?.loadVideo(videoId, 0F)
         }
         onDispose {}
@@ -47,6 +47,5 @@ fun VideoPlayer(
 //            ) {
 //            }
         })
-        }
     }
 }

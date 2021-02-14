@@ -9,33 +9,33 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.livetl.android.model.Stream
+import com.livetl.android.model.StreamInfo
 
 @Composable
 fun InfoTab(
-    stream: Stream?
+    streamInfo: StreamInfo?
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(8.dp),
     ) {
-        if (stream != null) {
+        if (streamInfo != null) {
             Text(
-                text = stream.title,
+                text = streamInfo.title,
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
             Text(
-                text = stream.author,
+                text = streamInfo.author,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
             Text(
-                text = "Live: ${stream.isLive}",
+                text = "Live: ${streamInfo.isLive}",
                 modifier = Modifier.padding(bottom = 8.dp),
             )
-            Text(text = stream.shortDescription)
+            Text(text = streamInfo.shortDescription)
         }
     }
 }

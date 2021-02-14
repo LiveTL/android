@@ -1,26 +1,24 @@
 package com.livetl.android.service
 
 import android.content.Context
-import android.util.Log
-import com.livetl.android.model.Stream
+import com.livetl.android.model.StreamInfo
 import me.echeung.youtubeextractor.YouTubeExtractor
 
 object YouTubeVideoExtractor {
 
-    suspend fun getStream(context: Context, pageUrl: String): Stream {
-        val result = YouTubeExtractor(context).extract(pageUrl)
-        if (result?.files == null) {
-            throw NoYouTubeStreamFoundException()
-        }
+    fun getVideoId(context: Context, pageUrl: String): String {
+        return YouTubeExtractor(context).getVideoId(pageUrl)
+    }
 
-        return Stream(
-            videoId = result.metadata.videoId,
-            title = result.metadata.title,
-            author = result.metadata.author,
-            shortDescription = result.metadata.shortDescription,
-            isLive = result.metadata.isLive,
+    suspend fun getStreamInfo(context: Context, pageUrl: String): StreamInfo {
+        val result = YouTubeExtractor(context).getStreamInfo(pageUrl)
+
+        return StreamInfo(
+            videoId = result.videoId,
+            title = result.title,
+            author = result.author,
+            shortDescription = result.shortDescription,
+            isLive = result.isLive,
         )
     }
 }
-
-class NoYouTubeStreamFoundException : Exception()

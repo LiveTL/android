@@ -65,7 +65,7 @@ dependencies {
     // Video player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
-    implementation 'com.github.arkon:android-youtubeExtractor:e615c24'
+    implementation 'com.github.arkon:android-youtubeExtractor:76e4e8c'
 
     // Networking
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'

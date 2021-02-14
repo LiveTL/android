@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
-import com.livetl.android.model.Stream
+import com.livetl.android.model.StreamInfo
 import com.livetl.android.service.YouTubeVideoExtractor
 import com.livetl.android.ui.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.tab.ChatTab
@@ -40,14 +40,18 @@ fun PlayerScreen(urlOrId: String) {
     val context = AmbientContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var stream by remember { mutableStateOf<Stream?>(null) }
+    var videoId by remember { mutableStateOf("") }
+    var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
+
     var selectedTab by remember { mutableStateOf(Tabs.Info) }
 
     fun setSource(url: String) {
+        videoId = YouTubeVideoExtractor.getVideoId(context, url)
+
         coroutineScope.launch {
-            val newStream = YouTubeVideoExtractor.getStream(context, url)
+            val newStream = YouTubeVideoExtractor.getStreamInfo(context, url)
             withContext(Dispatchers.Main) {
-                stream = newStream
+                streamInfo = newStream
             }
         }
     }
@@ -57,7 +61,7 @@ fun PlayerScreen(urlOrId: String) {
             setSource(urlOrId)
         }
         onDispose {
-            stream = null
+            streamInfo = null
         }
     }
 
@@ -66,8 +70,8 @@ fun PlayerScreen(urlOrId: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16 / 9F),
-            videoId = stream?.videoId,
-            isLive = stream?.isLive
+            videoId = videoId,
+            isLive = streamInfo?.isLive
         )
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
@@ -80,8 +84,8 @@ fun PlayerScreen(urlOrId: String) {
             }
         }
         when (selectedTab) {
-            Tabs.Info -> InfoTab(stream = stream)
-            Tabs.Chat -> ChatTab(stream = stream)
+            Tabs.Info -> InfoTab(streamInfo = streamInfo)
+            Tabs.Chat -> ChatTab(streamInfo = streamInfo)
             Tabs.Settings -> SettingsTab()
         }
     }

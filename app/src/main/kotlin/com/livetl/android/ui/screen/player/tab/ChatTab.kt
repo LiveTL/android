@@ -6,10 +6,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.livetl.android.model.Stream
+import com.livetl.android.model.StreamInfo
 
 @Composable
-fun ChatTab(stream: Stream?) {
+fun ChatTab(streamInfo: StreamInfo?) {
     Box(modifier = Modifier.padding(8.dp)) {
         Text("TODO: CHAT")
     }
