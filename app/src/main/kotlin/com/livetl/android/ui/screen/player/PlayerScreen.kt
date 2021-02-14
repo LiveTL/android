@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -17,9 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.livetl.android.R
 import com.livetl.android.model.StreamInfo
 import com.livetl.android.service.YouTubeVideoExtractor
+import com.livetl.android.ui.composable.Chat
 import com.livetl.android.ui.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
@@ -73,6 +76,9 @@ fun PlayerScreen(urlOrId: String) {
             videoId = videoId,
             isLive = streamInfo?.isLive
         )
+
+        // Extracted TLs
+        Chat(modifier = Modifier.height(96.dp))
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->
