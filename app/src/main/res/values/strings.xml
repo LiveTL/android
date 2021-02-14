@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LiveTL</string>
+    <string name="app_name" translatable="false">LiveTL</string>
 
     <string name="info">Info</string>
     <string name="chat">Chat</string>

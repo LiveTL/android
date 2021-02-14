@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         debug {
-            debuggable true
+            applicationIdSuffix '.dev'
         }
         release {
             minifyEnabled false
