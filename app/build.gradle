@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
 }
 
 android {
@@ -69,6 +70,7 @@ dependencies {
 
     // Networking
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 
     // Image loading
     implementation 'io.coil-kt:coil:1.1.1'
