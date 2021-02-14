@@ -13,19 +13,8 @@ object YouTubeVideoExtractor {
             throw NoYouTubeStreamFoundException()
         }
 
-        val bestVideoFile = result.files!!.values
-            .filter { it.format.height != -1 }
-            .maxByOrNull { it.format.height }!!
-        Log.d("getYouTubeStream", "Best video: $bestVideoFile")
-
-        val bestAudioFile = result.files!!.values
-            .filter { it.format.audioBitrate != -1 }
-            .maxByOrNull { it.format.audioBitrate }
-        Log.d("getYouTubeStream", "Best audio: $bestAudioFile")
-
         return Stream(
-            videoUrl = bestVideoFile.url,
-            audioUrl = bestAudioFile?.url,
+            videoId = result.metadata.videoId,
             title = result.metadata.title,
             author = result.metadata.author,
             shortDescription = result.metadata.shortDescription,

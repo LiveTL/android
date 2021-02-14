@@ -62,9 +62,8 @@ dependencies {
     implementation "androidx.compose.ui:ui-viewbinding:$compose_version"
     implementation 'androidx.navigation:navigation-compose:1.0.0-alpha06'
 
-    // TODO: only use required modules
     // Video player
-    implementation 'com.google.android.exoplayer:exoplayer:2.12.3'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
     implementation 'com.github.arkon:android-youtubeExtractor:e615c24'
 
