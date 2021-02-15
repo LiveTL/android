@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.livetl.android.R
+import com.livetl.android.di.get
 import com.livetl.android.model.StreamInfo
 import com.livetl.android.service.YouTubeVideoExtractor
 import com.livetl.android.ui.composable.Chat
@@ -39,7 +40,10 @@ enum class Tabs(@StringRes val nameRes: Int) {
 val tabs = Tabs.values().toList()
 
 @Composable
-fun PlayerScreen(urlOrId: String) {
+fun PlayerScreen(
+    urlOrId: String,
+    youTubeVideoExtractor: YouTubeVideoExtractor = get(),
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -49,10 +53,10 @@ fun PlayerScreen(urlOrId: String) {
     var selectedTab by remember { mutableStateOf(Tabs.Info) }
 
     fun setSource(url: String) {
-        videoId = YouTubeVideoExtractor.getVideoId(context, url)
+        videoId = youTubeVideoExtractor.getVideoId(url)
 
         coroutineScope.launch {
-            val newStream = YouTubeVideoExtractor.getStreamInfo(context, url)
+            val newStream = youTubeVideoExtractor.getStreamInfo(url)
             withContext(Dispatchers.Main) {
                 streamInfo = newStream
             }
@@ -74,7 +78,9 @@ fun PlayerScreen(urlOrId: String) {
                 .fillMaxWidth()
                 .aspectRatio(16 / 9F),
             videoId = videoId,
-            isLive = streamInfo?.isLive
+            isLive = streamInfo?.isLive,
+            onCurrentSecond = { second -> },
+            onStateChange = { state -> }
         )
 
         // Extracted TLs

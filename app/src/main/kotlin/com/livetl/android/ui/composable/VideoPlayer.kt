@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.livetl.android.databinding.VideoPlayerBinding
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 
@@ -14,6 +15,8 @@ fun VideoPlayer(
     modifier: Modifier = Modifier,
     videoId: String?,
     isLive: Boolean?,
+    onCurrentSecond: (Float) -> Unit,
+    onStateChange: (PlayerState) -> Unit,
 ) {
     // TODO: dispose?
     var player = remember<YouTubePlayer?> { null }
@@ -38,14 +41,32 @@ fun VideoPlayer(
                 videoId?.let { youTubePlayer.loadVideo(it, 0F) }
             }
 
-//            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-//            }
-//
-//            override fun onStateChange(
-//                youTubePlayer: YouTubePlayer,
-//                state: PlayerConstants.PlayerState
-//            ) {
-//            }
+            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                onCurrentSecond(second)
+            }
+
+            override fun onStateChange(
+                youTubePlayer: YouTubePlayer,
+                state: PlayerConstants.PlayerState
+            ) {
+                onStateChange(PlayerState.fromPlayerState(state))
+            }
         })
+    }
+}
+
+enum class PlayerState {
+    UNKNOWN, ENDED, PLAYING, PAUSED, BUFFERING;
+
+    companion object {
+        fun fromPlayerState(state: PlayerConstants.PlayerState): PlayerState {
+            return when (state) {
+                PlayerConstants.PlayerState.ENDED -> ENDED
+                PlayerConstants.PlayerState.PLAYING -> PLAYING
+                PlayerConstants.PlayerState.PAUSED -> PAUSED
+                PlayerConstants.PlayerState.BUFFERING -> BUFFERING
+                else -> UNKNOWN
+            }
+        }
     }
 }

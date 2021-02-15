@@ -4,13 +4,13 @@ import android.content.Context
 import com.livetl.android.model.StreamInfo
 import me.echeung.youtubeextractor.YouTubeExtractor
 
-object YouTubeVideoExtractor {
+class YouTubeVideoExtractor(private val context: Context) {
 
-    fun getVideoId(context: Context, pageUrl: String): String {
+    fun getVideoId(pageUrl: String): String {
         return YouTubeExtractor(context).getVideoId(pageUrl)
     }
 
-    suspend fun getStreamInfo(context: Context, pageUrl: String): StreamInfo {
+    suspend fun getStreamInfo(pageUrl: String): StreamInfo {
         val result = YouTubeExtractor(context).getStreamInfo(pageUrl)
 
         return StreamInfo(
