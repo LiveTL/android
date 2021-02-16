@@ -1,4 +1,4 @@
-package com.livetl.android.model
+package com.livetl.android.data.stream
 
 data class StreamInfo(
     val videoId: String,

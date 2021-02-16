@@ -1,4 +1,4 @@
-package com.livetl.android.navigation
+package com.livetl.android.ui.navigation
 
 import android.content.IntentFilter
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +13,7 @@ import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
 import com.livetl.android.ui.MainActivity
-import com.livetl.android.ui.composable.BroadcastReceiver
+import com.livetl.android.ui.BroadcastReceiver
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 

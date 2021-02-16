@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.livetl.android.model.StreamInfo
+import com.livetl.android.data.stream.StreamInfo
 
 @Composable
 fun InfoTab(

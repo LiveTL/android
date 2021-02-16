@@ -1,4 +1,4 @@
-package com.livetl.android.ui.composable
+package com.livetl.android.ui
 
 import android.content.BroadcastReceiver
 import android.content.Context

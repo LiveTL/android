@@ -1,6 +1,5 @@
 package com.livetl.android.data.feed
 
-import com.livetl.android.data.feed.model.Feed
 import com.livetl.android.util.NetworkUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

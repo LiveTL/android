@@ -1,7 +1,6 @@
 package com.livetl.android.data.stream
 
 import android.content.Context
-import com.livetl.android.model.StreamInfo
 import me.echeung.youtubeextractor.YouTubeExtractor
 
 class StreamService(context: Context) {

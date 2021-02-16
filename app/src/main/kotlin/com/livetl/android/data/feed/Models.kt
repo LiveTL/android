@@ -1,4 +1,4 @@
-package com.livetl.android.data.feed.model
+package com.livetl.android.data.feed
 
 import kotlinx.serialization.Serializable
 

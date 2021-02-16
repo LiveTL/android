@@ -1,4 +1,4 @@
-package com.livetl.android.navigation
+package com.livetl.android.ui.navigation
 
 sealed class Route(val id: String) {
     object Home : Route("home")
