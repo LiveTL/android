@@ -1,4 +1,4 @@
-package com.livetl.android.ui.composable
+package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

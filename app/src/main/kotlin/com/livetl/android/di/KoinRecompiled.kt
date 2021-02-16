@@ -2,10 +2,6 @@ package com.livetl.android.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.AmbientViewModelStoreOwner
-import androidx.lifecycle.ViewModel
-import org.koin.androidx.viewmodel.ViewModelOwner.Companion.from
-import org.koin.androidx.viewmodel.koin.getViewModel
 import org.koin.core.Koin
 import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.ParametersDefinition

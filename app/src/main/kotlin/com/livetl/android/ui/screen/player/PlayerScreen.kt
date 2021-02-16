@@ -16,15 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.livetl.android.R
+import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
 import com.livetl.android.model.StreamInfo
-import com.livetl.android.service.YouTubeVideoExtractor
 import com.livetl.android.ui.composable.Chat
-import com.livetl.android.ui.composable.VideoPlayer
+import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
 import com.livetl.android.ui.screen.player.tab.SettingsTab
@@ -42,9 +41,8 @@ val tabs = Tabs.values().toList()
 @Composable
 fun PlayerScreen(
     urlOrId: String,
-    youTubeVideoExtractor: YouTubeVideoExtractor = get(),
+    streamService: StreamService = get(),
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var videoId by remember { mutableStateOf("") }
@@ -53,10 +51,10 @@ fun PlayerScreen(
     var selectedTab by remember { mutableStateOf(Tabs.Info) }
 
     fun setSource(url: String) {
-        videoId = youTubeVideoExtractor.getVideoId(url)
+        videoId = streamService.getVideoId(url)
 
         coroutineScope.launch {
-            val newStream = youTubeVideoExtractor.getStreamInfo(url)
+            val newStream = streamService.getStreamInfo(url)
             withContext(Dispatchers.Main) {
                 streamInfo = newStream
             }

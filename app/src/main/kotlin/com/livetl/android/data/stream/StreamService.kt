@@ -1,17 +1,19 @@
-package com.livetl.android.service
+package com.livetl.android.data.stream
 
 import android.content.Context
 import com.livetl.android.model.StreamInfo
 import me.echeung.youtubeextractor.YouTubeExtractor
 
-class YouTubeVideoExtractor(private val context: Context) {
+class StreamService(context: Context) {
+
+    private val extractor = YouTubeExtractor(context)
 
     fun getVideoId(pageUrl: String): String {
-        return YouTubeExtractor(context).getVideoId(pageUrl)
+        return extractor.getVideoId(pageUrl)
     }
 
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
-        val result = YouTubeExtractor(context).getStreamInfo(pageUrl)
+        val result = extractor.getStreamInfo(pageUrl)
 
         return StreamInfo(
             videoId = result.videoId,
