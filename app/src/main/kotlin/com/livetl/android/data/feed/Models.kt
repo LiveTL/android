@@ -1,7 +1,9 @@
 package com.livetl.android.data.feed
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
+@Immutable
 @Serializable
 data class Feed(
     val live: List<Stream>,
@@ -9,6 +11,7 @@ data class Feed(
     val ended: List<Stream>,
 )
 
+@Immutable
 @Serializable
 data class Stream(
     val yt_video_key: String,
@@ -18,8 +21,11 @@ data class Stream(
     val live_end: String?,
     val live_viewers: Int?,
     val channel: Channel,
-)
+) {
+//    val thumbnail = "https://img.youtube.com/vi/$yt_video_key/hqdefault.jpg"
+}
 
+@Immutable
 @Serializable
 data class Channel(
     val name: String,

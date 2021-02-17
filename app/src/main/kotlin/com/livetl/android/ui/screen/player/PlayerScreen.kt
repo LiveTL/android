@@ -22,7 +22,8 @@ import com.livetl.android.R
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
-import com.livetl.android.ui.composable.Chat
+import com.livetl.android.ui.screen.player.composable.Chat
+import com.livetl.android.ui.screen.player.composable.ChatState
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
@@ -45,6 +46,7 @@ fun PlayerScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
+    val chatState = ChatState()
     var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
 
@@ -54,6 +56,7 @@ fun PlayerScreen(
         videoId = streamService.getVideoId(url)
 
         coroutineScope.launch {
+            chatState.connect(videoId, 0L)
             val newStream = streamService.getStreamInfo(url)
             withContext(Dispatchers.Main) {
                 streamInfo = newStream
@@ -77,12 +80,12 @@ fun PlayerScreen(
                 .aspectRatio(16 / 9F),
             videoId = videoId,
             isLive = streamInfo?.isLive,
-            onCurrentSecond = { second -> },
-            onStateChange = { state -> }
+            onCurrentSecond = { second -> coroutineScope.launch { chatState.seekTo(second.toLong()) }},
+            onStateChange = { state -> coroutineScope.launch { chatState.setState(state) }},
         )
 
         // Extracted TLs
-        Chat(modifier = Modifier.height(96.dp))
+        Chat(modifier = Modifier.height(96.dp), chatState.messages)
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->
@@ -95,7 +98,7 @@ fun PlayerScreen(
         }
         when (selectedTab) {
             Tabs.Info -> InfoTab(streamInfo = streamInfo)
-            Tabs.Chat -> ChatTab(streamInfo = streamInfo)
+            Tabs.Chat -> ChatTab(chatState = chatState)
             Tabs.Settings -> SettingsTab()
         }
     }
