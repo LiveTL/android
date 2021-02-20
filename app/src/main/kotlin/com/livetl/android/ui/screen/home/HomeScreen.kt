@@ -50,6 +50,7 @@ fun HomeScreen(
             streamItems(
                 heading = "Live",
                 streams = feed!!.live,
+                sortByAscending = false,
                 timestampSupplier = { it.live_start!! },
                 navigateToStream = navigateToStream
             )
