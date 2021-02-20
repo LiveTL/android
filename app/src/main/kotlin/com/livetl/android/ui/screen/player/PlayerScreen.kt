@@ -1,6 +1,5 @@
 package com.livetl.android.ui.screen.player
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -59,8 +58,7 @@ fun PlayerScreen(
             val newStream = streamService.getStreamInfo(url)
 
             chatState.connect(videoId, 0L)
-            val chatUrl = chatService.getChatUrl(videoId, newStream.isLive)
-            Log.d("CHAT_URL", chatUrl)
+            chatService.load(videoId, newStream.isLive)
 
             withContext(Dispatchers.Main) {
                 streamInfo = newStream

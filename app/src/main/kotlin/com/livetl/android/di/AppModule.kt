@@ -13,7 +13,7 @@ val appModule = module {
     single { HttpClient(Android) }
     single { Json { ignoreUnknownKeys = true } }
 
-    single { ChatService(get()) }
+    single { ChatService(androidContext(), get()) }
     single { FeedService(get(), get()) }
     single { StreamService(androidContext()) }
 }
