@@ -22,11 +22,6 @@ class ChatState {
         addMockMessages()
     }
 
-    suspend fun setState(state: PlayerState) {
-        // TODO
-        addMockMessages()
-    }
-
     private fun addMockMessages() {
         GlobalScope.launch(Dispatchers.IO) {
             for (i in 1..500) {

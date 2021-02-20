@@ -56,13 +56,19 @@ fun PlayerScreen(
 
         coroutineScope.launch {
             val newStream = streamService.getStreamInfo(url)
-
-            chatState.connect(videoId, 0L)
-            chatService.load(videoId, newStream.isLive)
-
             withContext(Dispatchers.Main) {
                 streamInfo = newStream
             }
+
+            chatState.connect(videoId, 0L)
+            chatService.load(videoId, newStream.isLive)
+        }
+    }
+
+    fun onCurrentSecond(second: Long) {
+        // Live chats don't need to be progressed manually
+        if (streamInfo?.isLive == false) {
+            chatService.seekTo(videoId, second)
         }
     }
 
@@ -82,8 +88,7 @@ fun PlayerScreen(
                 .aspectRatio(16 / 9F),
             videoId = videoId,
             isLive = streamInfo?.isLive,
-            onCurrentSecond = { second -> coroutineScope.launch { chatState.seekTo(second.toLong()) }},
-            onStateChange = { state -> coroutineScope.launch { chatState.setState(state) }},
+            onCurrentSecond = { onCurrentSecond(it.toLong()) },
         )
 
         // Extracted TLs

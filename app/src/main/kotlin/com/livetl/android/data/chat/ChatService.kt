@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.livetl.android.ui.screen.player.composable.PlayerState
 import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
@@ -37,19 +36,22 @@ class ChatService(context: Context, private val client: HttpClient) {
         }
     }
 
+    private var currentSecond: Long = 0
+
     val messages: Flow<ChatMessage> = MutableSharedFlow()
 
     suspend fun load(videoId: String, isLive: Boolean) {
         val chatUrl = getChatUrl(videoId, isLive)
-        Log.d("ChatService", "URL: $chatUrl")
+        Log.d("ChatService", "Loading URL: $chatUrl")
         webview.loadUrl(chatUrl)
     }
 
-    fun seekTo(videoId: String, duration: Long) {
-        webview.runJS("window.postMessage({ 'yt-player-video-progress': $duration, video: '$videoId'}, '*');")
-    }
-
-    fun setState(state: PlayerState) {
+    fun seekTo(videoId: String, second: Long) {
+        if (second != currentSecond) {
+            Log.d("ChatService", "Seeking to $second for video $videoId")
+            webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
+            currentSecond = second
+        }
     }
 
     private suspend fun getChatUrl(videoId: String, isLive: Boolean): String {
