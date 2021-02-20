@@ -1,23 +1,19 @@
 package com.livetl.android.data.feed
 
-import com.livetl.android.util.NetworkUtil
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.readText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import okhttp3.Request
-import ru.gildor.coroutines.okhttp.await
 
-class FeedService(private val networkUtil: NetworkUtil, private val json: Json) {
+class FeedService(private val client: HttpClient, private val json: Json) {
 
     suspend fun getFeed(): Feed = withContext(Dispatchers.IO) {
-        val request = Request.Builder()
-            .url(SCHEDULE_API)
-            .build()
-
-        val result = networkUtil.client.newCall(request).await()
-        val data = result.body?.string() ?: ""
-        json.decodeFromString(data)
+        val result = client.get<HttpResponse>(SCHEDULE_API)
+        json.decodeFromString(result.readText())
     }
 
     companion object {

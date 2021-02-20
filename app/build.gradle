@@ -82,9 +82,10 @@ dependencies {
     implementation 'com.github.arkon:android-youtubeExtractor:76e4e8c'
 
     // Networking
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    final ktor_version = '1.5.1'
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0'
 
     // Image loading
     implementation 'io.coil-kt:coil:1.1.1'
