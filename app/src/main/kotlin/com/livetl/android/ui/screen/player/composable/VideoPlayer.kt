@@ -33,6 +33,7 @@ fun VideoPlayer(
             enableLiveVideoUi(isLive ?: false)
             showVideoTitle(false)
             showYouTubeButton(false)
+            showFullscreenButton(false)
         }
 
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,12 +20,12 @@ import com.livetl.android.data.stream.StreamInfo
 fun InfoTab(
     streamInfo: StreamInfo?
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(8.dp),
-    ) {
-        if (streamInfo != null) {
+    if (streamInfo != null) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(8.dp),
+        ) {
             Text(
                 text = streamInfo.title,
                 style = MaterialTheme.typography.h5,
@@ -35,18 +36,15 @@ fun InfoTab(
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
-            Text(
-                text = "Live: ${streamInfo.isLive}",
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
+            Divider(modifier = Modifier.padding(bottom = 8.dp))
             Text(text = streamInfo.shortDescription)
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+        }
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }
