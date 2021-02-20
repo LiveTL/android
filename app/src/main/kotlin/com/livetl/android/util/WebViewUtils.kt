@@ -14,6 +14,14 @@ fun WebView.injectScript(js: String) {
             script.innerHTML = window.atob('$encodedJs');
             parent.appendChild(script);
         })()
-        """.trimIndent().replace("\n", "")
+        """.trimToSingleLine()
     )
+}
+
+fun WebView.runJS(js: String) {
+    loadUrl("javascript:(function() { $js })()".trimToSingleLine())
+}
+
+private fun String.trimToSingleLine(): String {
+    return trimIndent().replace("\n", "")
 }

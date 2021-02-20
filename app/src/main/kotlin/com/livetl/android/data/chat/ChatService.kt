@@ -7,6 +7,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.livetl.android.ui.screen.player.composable.PlayerState
 import com.livetl.android.util.injectScript
+import com.livetl.android.util.readFile
+import com.livetl.android.util.runJS
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -30,7 +32,7 @@ class ChatService(context: Context, private val client: HttpClient) {
         webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
-                webview.injectScript("window.Android.receiveMessages('test webview data')")
+                webview.injectScript(context.readFile("ChatInjector.js"))
             }
         }
     }
@@ -43,11 +45,11 @@ class ChatService(context: Context, private val client: HttpClient) {
         webview.loadUrl(chatUrl)
     }
 
-    suspend fun seekTo(videoId: String, duration: Long) {
-        // """window.postMessage({ "yt-player-video-progress": $duration, video: "$videoId"}, '*');"""
+    fun seekTo(videoId: String, duration: Long) {
+        webview.runJS("window.postMessage({ 'yt-player-video-progress': $duration, video: '$videoId'}, '*');")
     }
 
-    suspend fun setState(state: PlayerState) {
+    fun setState(state: PlayerState) {
     }
 
     private suspend fun getChatUrl(videoId: String, isLive: Boolean): String {
