@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
+import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
@@ -40,6 +42,7 @@ val tabs = Tabs.values().toList()
 fun PlayerScreen(
     urlOrId: String,
     streamService: StreamService = get(),
+    chatService: ChatService = get()
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -53,8 +56,12 @@ fun PlayerScreen(
         videoId = streamService.getVideoId(url)
 
         coroutineScope.launch {
-            chatState.connect(videoId, 0L)
             val newStream = streamService.getStreamInfo(url)
+
+            chatState.connect(videoId, 0L)
+            val chatUrl = chatService.getChatUrl(videoId, newStream.isLive)
+            Log.d("CHAT_URL", chatUrl)
+
             withContext(Dispatchers.Main) {
                 streamInfo = newStream
             }
