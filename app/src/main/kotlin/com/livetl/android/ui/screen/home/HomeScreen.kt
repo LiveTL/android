@@ -1,9 +1,12 @@
 package com.livetl.android.ui.screen.home
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.feed.Feed
@@ -26,7 +30,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun HomeScreen(
     navigateToPlayer: (String) -> Unit,
-    feedService: FeedService = get()
+    feedService: FeedService = get(),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -41,22 +45,47 @@ fun HomeScreen(
         }
     }
 
-    LazyColumn {
-        if (feed != null) {
-            streamItems("Live", feed!!.live.sortedBy { it.live_start }, navigateToStream)
-            streamItems("Upcoming", feed!!.upcoming.sortedBy { it.live_schedule }, navigateToStream)
-            streamItems("Archives", feed!!.ended.sortedByDescending { it.live_end }, navigateToStream)
-        }
+    if (feed != null) {
+        LazyColumn {
+            streamItems(
+                heading = "Live",
+                streams = feed!!.live,
+                timestampSupplier = { it.live_start!! },
+                navigateToStream = navigateToStream
+            )
+            streamItems(
+                heading = "Upcoming",
+                streams = feed!!.upcoming,
+                timestampSupplier = { it.live_schedule },
+                navigateToStream = navigateToStream
+            )
+            streamItems(
+                heading = "Archives",
+                streams = feed!!.ended,
+                sortByAscending = false,
+                timestampSupplier = { it.live_end!! },
+                navigateToStream = navigateToStream
+            )
 
 //        if (BuildConfig.DEBUG) {
 //            item { TestStreams(navigateToStream = { navigateToPlayer(it) }) }
 //        }
+        }
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }
 
 private fun LazyListScope.streamItems(
     heading: String,
     streams: List<Stream>,
+    sortByAscending: Boolean = true,
+    timestampSupplier: (Stream) -> String,
     navigateToStream: (Stream) -> Unit,
 ) {
     if (streams.isNotEmpty()) {
@@ -68,6 +97,11 @@ private fun LazyListScope.streamItems(
             )
         }
 
-        items(streams) { Stream(it, navigateToStream) }
+        val sortedStreams = when (sortByAscending) {
+            true -> streams.sortedBy(timestampSupplier)
+            false -> streams.sortedByDescending(timestampSupplier)
+        }
+
+        items(sortedStreams) { Stream(it, timestampSupplier, navigateToStream) }
     }
 }

@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.util.toDate
+import com.livetl.android.util.toRelativeString
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun Stream(
     stream: Stream,
-    navigateToStream: (Stream) -> Unit
+    timestampSupplier: (Stream) -> String,
+    navigateToStream: (Stream) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -42,6 +45,7 @@ fun Stream(
         ) {
             Text(stream.title, maxLines = 1)
             Text(stream.channel.name, maxLines = 1)
+            Text(timestampSupplier(stream).toDate().toRelativeString())
         }
     }
 }

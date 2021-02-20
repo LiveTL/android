@@ -1,5 +1,6 @@
 package com.livetl.android.di
 
+import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.stream.StreamService
 import io.ktor.client.HttpClient
@@ -12,6 +13,7 @@ val appModule = module {
     single { HttpClient(Android) }
     single { Json { ignoreUnknownKeys = true } }
 
-    single { StreamService(androidContext()) }
+    single { ChatService(get(), get()) }
     single { FeedService(get(), get()) }
+    single { StreamService(androidContext()) }
 }

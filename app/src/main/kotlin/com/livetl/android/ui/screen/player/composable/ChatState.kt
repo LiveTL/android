@@ -1,7 +1,8 @@
 package com.livetl.android.ui.screen.player.composable
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.mutableStateListOf
+import com.livetl.android.data.chat.ChatMessage
+import com.livetl.android.data.chat.MessageAuthor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -30,15 +31,12 @@ class ChatState {
         GlobalScope.launch(Dispatchers.IO) {
             for (i in 1..500) {
                 delay(500)
-                _messages.add(ChatMessage("Message #$i"))
+                _messages.add(ChatMessage.RegularChat(
+                    MessageAuthor("url", "Author #$i"),
+                    "Message #$i",
+                    0
+                ))
             }
         }
     }
 }
-
-@Immutable
-data class ChatMessage(
-//    val author: String,
-    val content: String,
-//    val timestamp: String,
-)
