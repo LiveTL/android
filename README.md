@@ -4,9 +4,7 @@
 
 ⚠️ **This be a WIP** ⚠️
 
-## About
-
-Native Android app for LiveTL.
+Native Android app for LiveTL using [Jetpack Compose](https://developer.android.com/jetpack/compose) for the UI.
 
 
 ## Contributing

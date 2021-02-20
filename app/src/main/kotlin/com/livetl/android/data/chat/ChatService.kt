@@ -18,7 +18,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 
 @SuppressLint("SetJavaScriptEnabled")
-class ChatService(context: Context, private val client: HttpClient) {
+class ChatService(
+    context: Context,
+    private val jsInterface: ChatJSInterface,
+    private val client: HttpClient,
+) {
 
     private val webview = WebView(context)
     init {
@@ -27,7 +31,7 @@ class ChatService(context: Context, private val client: HttpClient) {
             domStorageEnabled = true
             userAgentString = USER_AGENT
         }
-        webview.addJavascriptInterface(ChatJSInterface(), "Android")
+        webview.addJavascriptInterface(jsInterface, "Android")
         webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
