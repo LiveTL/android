@@ -79,7 +79,7 @@ fun PlayerScreen(
             setSource(urlOrId)
         }
         onDispose {
-            streamInfo = null
+            chatService.stop()
         }
     }
 

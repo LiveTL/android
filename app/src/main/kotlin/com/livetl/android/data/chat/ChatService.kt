@@ -66,6 +66,10 @@ class ChatService(
         }
     }
 
+    fun stop() {
+        webview.loadUrl("")
+    }
+
     @Suppress("Unused")
     @JavascriptInterface
     fun receiveMessages(data: String) {

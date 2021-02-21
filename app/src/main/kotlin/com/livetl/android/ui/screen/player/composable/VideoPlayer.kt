@@ -8,6 +8,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.livetl.android.databinding.VideoPlayerBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 @Composable
 fun VideoPlayer(
@@ -16,17 +17,23 @@ fun VideoPlayer(
     isLive: Boolean?,
     onCurrentSecond: (Float) -> Unit,
 ) {
-    // TODO: dispose?
+    var playerView: YouTubePlayerView? = null
     var player = remember<YouTubePlayer?> { null }
 
     DisposableEffect(videoId) {
         if (!videoId.isNullOrBlank()) {
             player?.loadVideo(videoId, 0F)
         }
-        onDispose {}
+
+        // TODO: do this properly
+        onDispose {
+//            playerView?.release()
+        }
     }
 
     AndroidViewBinding(bindingBlock = VideoPlayerBinding::inflate, modifier = modifier) {
+        playerView = youtubePlayerView
+
         with (youtubePlayerView.getPlayerUiController()) {
             enableLiveVideoUi(isLive ?: false)
             showVideoTitle(false)
