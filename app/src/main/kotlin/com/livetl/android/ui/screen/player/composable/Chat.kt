@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.chat.ChatMessage
+import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -74,8 +75,19 @@ private fun Message(message: ChatMessage) {
         if (message is ChatMessage.SuperChat) {
             Text(message.amount, color = textColor, modifier = Modifier.padding(end = 8.dp))
         }
-        // TODO: handle emotes and wrap text
-        Text(message.content, color = textColor)
+        // TODO: wrap text
+        message.content.forEach {
+            when (it) {
+                is ChatMessageContent.Text -> Text(it.text, color = textColor)
+                is ChatMessageContent.Emote -> CoilImage(
+                    data = it.src,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(24.dp)
+                        .aspectRatio(1F)
+                )
+            }
+        }
     }
 }
 
@@ -85,13 +97,13 @@ private fun MessagePreviews() {
     Column {
         Message(message = ChatMessage.RegularChat(
             author = MessageAuthor(name = "Name", photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-            content = "Hello world",
+            content = listOf(ChatMessageContent.Text("Hello world")),
             timestamp = 1234,
         ))
 
         Message(message = ChatMessage.SuperChat(
             author = MessageAuthor(name = "Name", photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-            content = "Hello world",
+            content = listOf(ChatMessageContent.Text("Hello world")),
             timestamp = 1234,
             amount = "$100.00",
             level = ChatMessage.SuperChat.Level.RED,

@@ -5,18 +5,18 @@ import kotlinx.serialization.Serializable
 
 sealed class ChatMessage {
     abstract val author: MessageAuthor
-    abstract val content: String
+    abstract val content: List<ChatMessageContent>
     abstract val timestamp: Long
 
     data class RegularChat(
         override val author: MessageAuthor,
-        override val content: String,
+        override val content: List<ChatMessageContent>,
         override val timestamp: Long,
     ) : ChatMessage()
 
     data class SuperChat(
         override val author: MessageAuthor,
-        override val content: String,
+        override val content: List<ChatMessageContent>,
         override val timestamp: Long,
         val amount: String,
         val level: Level,
@@ -31,6 +31,11 @@ sealed class ChatMessage {
             RED(Color(0xFFE62117), Color.White)
         }
     }
+}
+
+sealed class ChatMessageContent {
+    data class Text(val text: String) : ChatMessageContent()
+    data class Emote(val src: String) : ChatMessageContent()
 }
 
 data class MessageAuthor(
@@ -51,14 +56,14 @@ data class YTChatMessage(
     val index: Int,
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
-    val showtime: Int,
+    val showtime: Double,
     val superchat: YTSuperChat? = null,
 ) {
     fun toChatMessage(): ChatMessage {
         return if (superchat != null) {
             ChatMessage.SuperChat(
                 author = author.toMessageAuthor(),
-                content = messages.joinToString("; ") { it.toChatMessageContent() },
+                content = messages.map { it.toChatMessageContent() },
                 timestamp = timestamp,
                 amount = superchat.amount,
                 level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
@@ -66,7 +71,7 @@ data class YTChatMessage(
         } else {
             ChatMessage.RegularChat(
                 author = author.toMessageAuthor(),
-                content = messages.joinToString("; ") { it.toChatMessageContent() },
+                content = messages.map { it.toChatMessageContent() },
                 timestamp = timestamp,
             )
         }
@@ -94,11 +99,10 @@ data class YTChatMessageData(
     val text: String? = null,
     val src: String? = null,
 ) {
-    // TODO: decide how to pass this up to Chat
-    fun toChatMessageContent(): String {
+    fun toChatMessageContent(): ChatMessageContent {
         return when (type) {
-            "text" -> text!!
-            "emote" -> src!!
+            "text" -> ChatMessageContent.Text(text!!)
+            "emote" -> ChatMessageContent.Emote(src!!)
             else -> throw Exception("Unknown YTChatMessageData type: $type")
         }
     }

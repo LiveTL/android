@@ -68,6 +68,7 @@ class ChatService(
 
     fun stop() {
         webview.loadUrl("")
+        _messages.value = emptyList()
     }
 
     @Suppress("Unused")
