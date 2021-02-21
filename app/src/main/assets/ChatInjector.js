@@ -44,13 +44,13 @@ const getMillis = (timestamp, usec) => {
 };
 
 const colorConversionTable = {
-  4280191205: 'blue',
-  4278248959: 'lightblue',
-  4280150454: 'turquoise',
-  4294953512: 'yellow',
-  4294278144: 'orange',
-  4293467747: 'pink',
-  4293271831: 'red'
+  4280191205: 'BLUE',
+  4278248959: 'LIGHT_BLUE',
+  4280150454: 'TURQUOISE',
+  4294953512: 'YELLOW',
+  4294278144: 'ORANGE',
+  4293467747: 'PINK',
+  4293271831: 'RED'
 };
 
 const messageReceiveCallback = async (response) => {

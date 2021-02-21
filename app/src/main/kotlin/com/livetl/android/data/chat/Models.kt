@@ -1,5 +1,6 @@
 package com.livetl.android.data.chat
 
+import androidx.compose.ui.graphics.Color
 import kotlinx.serialization.Serializable
 
 sealed class ChatMessage {
@@ -19,14 +20,14 @@ sealed class ChatMessage {
         override val timestamp: Long,
         val level: Level
     ) : ChatMessage() {
-        enum class Level {
-            BLUE,
-            TEAL,
-            GREEN,
-            YELLOW,
-            ORANGE,
-            PINK,
-            RED
+        enum class Level(val backgroundColor: Color, val textColor: Color) {
+            BLUE(Color(0xFF1565BF), Color.White),
+            LIGHT_BLUE(Color(0xFF00E4FE), Color.Black),
+            TURQUOISE(Color(0xFF1CE9B6), Color.Black),
+            YELLOW(Color(0xFFFFCA28), Color.Black),
+            ORANGE(Color(0xFFF57C00), Color.White),
+            PINK(Color(0xFFE91E63), Color.White),
+            RED(Color(0xFFE62117), Color.White)
         }
     }
 }
@@ -58,8 +59,7 @@ data class YTChatMessage(
                 author = author.toMessageAuthor(),
                 content = messages.joinToString("; ") { it.toChatMessageContent() },
                 timestamp = timestamp,
-                // TODO: map levels properly
-                level = ChatMessage.SuperChat.Level.RED
+                level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
             )
         } else {
             ChatMessage.RegularChat(
