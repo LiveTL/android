@@ -18,7 +18,8 @@ sealed class ChatMessage {
         override val author: MessageAuthor,
         override val content: String,
         override val timestamp: Long,
-        val level: Level
+        val amount: String,
+        val level: Level,
     ) : ChatMessage() {
         enum class Level(val backgroundColor: Color, val textColor: Color) {
             BLUE(Color(0xFF1565BF), Color.White),
@@ -59,6 +60,7 @@ data class YTChatMessage(
                 author = author.toMessageAuthor(),
                 content = messages.joinToString("; ") { it.toChatMessageContent() },
                 timestamp = timestamp,
+                amount = superchat.amount,
                 level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
             )
         } else {

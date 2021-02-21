@@ -71,6 +71,9 @@ private fun Message(message: ChatMessage) {
             color = textColor,
             modifier = Modifier.padding(top = 1.dp, start = 8.dp, end = 8.dp),
         )
+        if (message is ChatMessage.SuperChat) {
+            Text(message.amount, color = textColor, modifier = Modifier.padding(end = 8.dp))
+        }
         // TODO: handle emotes and wrap text
         Text(message.content, color = textColor)
     }
@@ -90,6 +93,7 @@ private fun MessagePreviews() {
             author = MessageAuthor(name = "Name", photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
             content = "Hello world",
             timestamp = 1234,
+            amount = "$100.00",
             level = ChatMessage.SuperChat.Level.RED,
         ))
     }
