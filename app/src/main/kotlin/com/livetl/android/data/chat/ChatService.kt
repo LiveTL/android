@@ -75,9 +75,13 @@ class ChatService(
     fun receiveMessages(data: String) {
         scope.launch {
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
-            _messages.value += ytChatMessages.messages
-                .sortedBy { it.timestamp }
-                .map { it.toChatMessage() }
+            _messages.value =
+                // TODO: consider jumping around when seeking
+                (_messages.value +
+                    ytChatMessages.messages
+                        .sortedBy { it.timestamp }
+                        .map { it.toChatMessage() }
+                ).takeLast(250)
         }
     }
 

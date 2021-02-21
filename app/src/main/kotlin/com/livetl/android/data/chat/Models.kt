@@ -32,14 +32,13 @@ sealed class ChatMessage {
 }
 
 data class MessageAuthor(
-//    val photoUrl: String,
     val name: String,
+    val photoUrl: String,
 //    val badge: String,
 )
 
 @Serializable
 data class YTChatMessages(
-    val type: String,
     val messages: List<YTChatMessage>,
     val isReplay: Boolean,
 )
@@ -51,13 +50,24 @@ data class YTChatMessage(
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
     val showtime: Int,
+    val superchat: YTSuperChat? = null,
 ) {
     fun toChatMessage(): ChatMessage {
-        return ChatMessage.RegularChat(
-            author = author.toMessageAuthor(),
-            content = messages.joinToString("; ") { it.toChatMessageContent() },
-            timestamp = timestamp,
-        )
+        return if (superchat != null) {
+            ChatMessage.SuperChat(
+                author = author.toMessageAuthor(),
+                content = messages.joinToString("; ") { it.toChatMessageContent() },
+                timestamp = timestamp,
+                // TODO: map levels properly
+                level = ChatMessage.SuperChat.Level.RED
+            )
+        } else {
+            ChatMessage.RegularChat(
+                author = author.toMessageAuthor(),
+                content = messages.joinToString("; ") { it.toChatMessageContent() },
+                timestamp = timestamp,
+            )
+        }
     }
 }
 
@@ -65,11 +75,13 @@ data class YTChatMessage(
 data class YTChatAuthor(
     val name: String,
     val id: String,
+    val photo: String,
     val types: List<String>,
 ) {
     fun toMessageAuthor(): MessageAuthor {
         return MessageAuthor(
-            name = name
+            name = name,
+            photoUrl = photo,
         )
     }
 }
@@ -80,6 +92,7 @@ data class YTChatMessageData(
     val text: String? = null,
     val src: String? = null,
 ) {
+    // TODO: decide how to pass this up to Chat
     fun toChatMessageContent(): String {
         return when (type) {
             "text" -> text!!
@@ -88,3 +101,9 @@ data class YTChatMessageData(
         }
     }
 }
+
+@Serializable
+data class YTSuperChat(
+    val amount: String,
+    val color: String,
+)

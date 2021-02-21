@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.chat.ChatMessage
+
+val messageModifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
 
 @Composable
 fun Chat(
@@ -32,8 +35,12 @@ fun Chat(
 
 @Composable
 private fun RegularMessage(message: ChatMessage.RegularChat) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        Text(message.author.name)
+    Row(modifier = messageModifier) {
+        Text(
+            text = message.author.name,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(end = 8.dp)
+        )
         Text(message.content)
 //        Text(message.timestamp.toString())
     }
@@ -41,9 +48,10 @@ private fun RegularMessage(message: ChatMessage.RegularChat) {
 
 @Composable
 private fun SuperMessage(message: ChatMessage.SuperChat) {
-    Row(modifier = Modifier.padding(8.dp)) {
+    Row(modifier = messageModifier) {
+        Text("SC (${message.level})")
         Text(message.author.name)
         Text(message.content)
-        Text(message.timestamp.toString())
+//        Text(message.timestamp.toString())
     }
 }

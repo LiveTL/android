@@ -109,10 +109,12 @@ const messageReceiveCallback = async (response) => {
         const timestampUsec = parseInt(messageItem.timestampUsec);
         const timestampText = (messageItem.timestampText || {}).simpleText;
         const date = new Date();
+        const authorThumbnails = messageItem.authorPhoto.thumbnails;
         const item = {
           author: {
             name: messageItem.authorName.simpleText,
             id: messageItem.authorExternalChannelId,
+            photo: authorThumbnails[authorThumbnails.length - 1].url,
             types: authorTypes
           },
           index: i,
@@ -135,7 +137,6 @@ const messageReceiveCallback = async (response) => {
       }
     });
     const chunk = {
-      type: 'messageChunk',
       messages: messages,
       isReplay
     };
