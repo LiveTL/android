@@ -37,7 +37,6 @@ fun Stream(
                 .width(48.dp)
                 .aspectRatio(1F)
                 .clip(CircleShape),
-            onRequestCompleted = {}
         )
         Column(
             modifier = Modifier
