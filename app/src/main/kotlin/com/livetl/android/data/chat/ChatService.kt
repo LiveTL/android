@@ -3,6 +3,7 @@ package com.livetl.android.data.chat
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.livetl.android.util.injectScript
@@ -13,14 +14,18 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 @SuppressLint("SetJavaScriptEnabled")
 class ChatService(
     context: Context,
-    private val jsInterface: ChatJSInterface,
+    private val json: Json,
     private val client: HttpClient,
 ) {
 
@@ -31,7 +36,7 @@ class ChatService(
             domStorageEnabled = true
             userAgentString = USER_AGENT
         }
-        webview.addJavascriptInterface(jsInterface, "Android")
+        webview.addJavascriptInterface(this, "Android")
         webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -42,7 +47,10 @@ class ChatService(
 
     private var currentSecond: Long = 0
 
-    val messages: Flow<ChatMessage> = MutableSharedFlow()
+    private val scope = CoroutineScope(Dispatchers.IO)
+    private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
+    val messages: StateFlow<List<ChatMessage>>
+        get() = _messages
 
     suspend fun load(videoId: String, isLive: Boolean) {
         val chatUrl = getChatUrl(videoId, isLive)
@@ -55,6 +63,17 @@ class ChatService(
             Log.d("ChatService", "Seeking to $second for video $videoId")
             webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
             currentSecond = second
+        }
+    }
+
+    @Suppress("Unused")
+    @JavascriptInterface
+    fun receiveMessages(data: String) {
+        scope.launch {
+            val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
+            _messages.value += ytChatMessages.messages
+                .sortedBy { it.timestamp }
+                .map { it.toChatMessage() }
         }
     }
 

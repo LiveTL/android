@@ -32,7 +32,7 @@ sealed class ChatMessage {
 }
 
 data class MessageAuthor(
-    val photoUrl: String,
+//    val photoUrl: String,
     val name: String,
 //    val badge: String,
 )
@@ -51,18 +51,40 @@ data class YTChatMessage(
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
     val showtime: Int,
-)
+) {
+    fun toChatMessage(): ChatMessage {
+        return ChatMessage.RegularChat(
+            author = author.toMessageAuthor(),
+            content = messages.joinToString("; ") { it.toChatMessageContent() },
+            timestamp = timestamp,
+        )
+    }
+}
 
 @Serializable
 data class YTChatAuthor(
     val name: String,
     val id: String,
     val types: List<String>,
-)
+) {
+    fun toMessageAuthor(): MessageAuthor {
+        return MessageAuthor(
+            name = name
+        )
+    }
+}
 
 @Serializable
 data class YTChatMessageData(
-    val type: String, // text: text, emote: src
+    val type: String,
     val text: String? = null,
     val src: String? = null,
-)
+) {
+    fun toChatMessageContent(): String {
+        return when (type) {
+            "text" -> text!!
+            "emote" -> src!!
+            else -> throw Exception("Unknown YTChatMessageData type: $type")
+        }
+    }
+}

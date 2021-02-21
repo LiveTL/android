@@ -1,6 +1,5 @@
 package com.livetl.android.di
 
-import com.livetl.android.data.chat.ChatJSInterface
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.stream.StreamService
@@ -14,7 +13,6 @@ val appModule = module {
     single { HttpClient(Android) }
     single { Json { ignoreUnknownKeys = true } }
 
-    single { ChatJSInterface(get()) }
     single { ChatService(androidContext(), get(), get()) }
     single { FeedService(get(), get()) }
     single { StreamService(androidContext()) }

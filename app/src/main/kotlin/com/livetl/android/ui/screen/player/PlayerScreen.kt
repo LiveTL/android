@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -9,6 +10,7 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,9 +23,8 @@ import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
-import com.livetl.android.ui.screen.player.composable.ChatState
+import com.livetl.android.ui.screen.player.composable.Chat
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
-import com.livetl.android.ui.screen.player.tab.ChatTab
 import com.livetl.android.ui.screen.player.tab.InfoTab
 import com.livetl.android.ui.screen.player.tab.SettingsTab
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ fun PlayerScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val chatState = ChatState()
+    val chatMessages by chatService.messages.collectAsState()
     var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
 
@@ -60,7 +61,6 @@ fun PlayerScreen(
                 streamInfo = newStream
             }
 
-            chatState.connect(videoId, 0L)
             chatService.load(videoId, newStream.isLive)
         }
     }
@@ -71,6 +71,8 @@ fun PlayerScreen(
             chatService.seekTo(videoId, second)
         }
     }
+
+    Log.d("PlayerScreen", "chat: $chatMessages")
 
     DisposableEffect(urlOrId) {
         if (urlOrId.isNotEmpty()) {
@@ -105,7 +107,7 @@ fun PlayerScreen(
         }
         when (selectedTab) {
             Tabs.Info -> InfoTab(streamInfo = streamInfo)
-            Tabs.Chat -> ChatTab(chatState = chatState)
+            Tabs.Chat -> Chat(messages = chatMessages)
             Tabs.Settings -> SettingsTab()
         }
     }
