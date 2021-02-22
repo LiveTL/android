@@ -21,7 +21,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun Stream(
     stream: Stream,
-    timestampSupplier: (Stream) -> String,
+    timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
     Row(
@@ -44,7 +44,7 @@ fun Stream(
         ) {
             Text(stream.title, maxLines = 1)
             Text(stream.channel.name, maxLines = 1)
-            Text(timestampSupplier(stream).toDate().toRelativeString())
+            timestampSupplier(stream)?.let { Text(it.toDate().toRelativeString()) }
         }
     }
 }

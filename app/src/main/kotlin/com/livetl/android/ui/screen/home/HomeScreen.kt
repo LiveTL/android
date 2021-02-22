@@ -51,7 +51,7 @@ fun HomeScreen(
                 heading = "Live",
                 streams = feed!!.live,
                 sortByAscending = false,
-                timestampSupplier = { it.live_start!! },
+                timestampSupplier = { it.live_start },
                 navigateToStream = navigateToStream
             )
             streamItems(
@@ -64,7 +64,7 @@ fun HomeScreen(
                 heading = "Archives",
                 streams = feed!!.ended,
                 sortByAscending = false,
-                timestampSupplier = { it.live_end!! },
+                timestampSupplier = { it.live_end },
                 navigateToStream = navigateToStream
             )
 
@@ -86,7 +86,7 @@ private fun LazyListScope.streamItems(
     heading: String,
     streams: List<Stream>,
     sortByAscending: Boolean = true,
-    timestampSupplier: (Stream) -> String,
+    timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
     if (streams.isNotEmpty()) {

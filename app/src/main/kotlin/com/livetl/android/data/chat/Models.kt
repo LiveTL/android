@@ -14,6 +14,7 @@ sealed class ChatMessage {
         override val timestamp: Long,
     ) : ChatMessage()
 
+    // TODO: handle super stickers
     data class SuperChat(
         override val author: MessageAuthor,
         override val content: List<ChatMessageContent>,
