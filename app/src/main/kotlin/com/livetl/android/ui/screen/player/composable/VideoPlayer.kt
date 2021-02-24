@@ -31,7 +31,7 @@ fun VideoPlayer(
         }
     }
 
-    AndroidViewBinding(bindingBlock = VideoPlayerBinding::inflate, modifier = modifier) {
+    AndroidViewBinding(factory = VideoPlayerBinding::inflate, modifier = modifier) {
         playerView = youtubePlayerView
 
         with (youtubePlayerView.getPlayerUiController()) {

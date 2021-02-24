@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.home
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.livetl.android.R
 import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
@@ -48,29 +51,27 @@ fun HomeScreen(
     if (feed != null) {
         LazyColumn {
             streamItems(
-                heading = "Live",
+                headingRes = R.string.live,
                 streams = feed!!.live,
                 sortByAscending = false,
+                timestampFormatStringRes = R.string.started_streaming,
                 timestampSupplier = { it.live_start },
                 navigateToStream = navigateToStream
             )
             streamItems(
-                heading = "Upcoming",
+                headingRes = R.string.upcoming,
                 streams = feed!!.upcoming,
                 timestampSupplier = { it.live_schedule },
                 navigateToStream = navigateToStream
             )
             streamItems(
-                heading = "Archives",
+                headingRes = R.string.archives,
                 streams = feed!!.ended,
                 sortByAscending = false,
+                timestampFormatStringRes = R.string.streamed,
                 timestampSupplier = { it.live_end },
                 navigateToStream = navigateToStream
             )
-
-//        if (BuildConfig.DEBUG) {
-//            item { TestStreams(navigateToStream = { navigateToPlayer(it) }) }
-//        }
         }
     } else {
         Box(
@@ -83,16 +84,17 @@ fun HomeScreen(
 }
 
 private fun LazyListScope.streamItems(
-    heading: String,
+    @StringRes headingRes: Int,
     streams: List<Stream>,
     sortByAscending: Boolean = true,
+    @StringRes timestampFormatStringRes: Int? = null,
     timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
     if (streams.isNotEmpty()) {
         item {
             Text(
-                text = heading,
+                text = stringResource(headingRes),
                 modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.h6,
             )
@@ -103,6 +105,9 @@ private fun LazyListScope.streamItems(
             false -> streams.sortedByDescending(timestampSupplier)
         }
 
-        items(sortedStreams) { Stream(it, timestampSupplier, navigateToStream) }
+        items(sortedStreams) { stream ->
+            val timestampFormatString = timestampFormatStringRes?.let { stringResource(it) } ?: "%s"
+            Stream(stream, timestampFormatString, timestampSupplier, navigateToStream)
+        }
     }
 }

@@ -4,4 +4,10 @@
     <string name="info">Info</string>
     <string name="chat">Chat</string>
     <string name="settings">Settings</string>
+
+    <string name="live">Live</string>
+    <string name="started_streaming">Started %s</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="archives">Archives</string>
+    <string name="streamed">Streamed %s</string>
 </resources>

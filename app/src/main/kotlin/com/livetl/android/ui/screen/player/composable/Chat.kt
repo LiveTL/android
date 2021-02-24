@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -32,7 +33,7 @@ fun Chat(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth(),
-        reverseLayout = true,
+        state = rememberLazyListState(initialFirstVisibleItemIndex = messages.lastIndex)
     ) {
         items(messages) { message -> Message(message) }
     }
@@ -62,7 +63,7 @@ private fun Message(message: ChatMessage) {
             data = message.author.photoUrl,
             contentDescription = null,
             modifier = Modifier
-                .width(16.dp)
+                .requiredWidth(16.dp)
                 .aspectRatio(1F)
                 .clip(CircleShape),
         )
@@ -83,7 +84,7 @@ private fun Message(message: ChatMessage) {
                     data = it.src,
                     contentDescription = null,
                     modifier = Modifier
-                        .width(24.dp)
+                        .requiredWidth(24.dp)
                         .aspectRatio(1F)
                 )
             }

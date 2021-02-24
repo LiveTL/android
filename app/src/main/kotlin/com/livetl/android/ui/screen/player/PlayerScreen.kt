@@ -94,7 +94,7 @@ fun PlayerScreen(
         )
 
         // Extracted TLs
-//        Chat(modifier = Modifier.height(96.dp), chatState.messages)
+//        Chat(modifier = Modifier.requiredHeight(96.dp), chatState.messages)
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->
