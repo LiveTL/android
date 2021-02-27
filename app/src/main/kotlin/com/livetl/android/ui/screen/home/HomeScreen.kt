@@ -13,7 +13,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -113,8 +112,7 @@ private fun LazyListScope.streamItems(
         }
 
         items(sortedStreams) { stream ->
-            val timestampFormatString = timestampFormatStringRes?.let { stringResource(it) } ?: "%s"
-            Stream(stream, timestampFormatString, timestampSupplier, navigateToStream)
+            Stream(stream, timestampFormatStringRes, timestampSupplier, navigateToStream)
         }
     }
 }

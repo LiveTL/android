@@ -3,6 +3,8 @@ package com.livetl.android.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.view.WindowManager
 import androidx.activity.compose.setContent
@@ -32,7 +34,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        onNewIntent(intent)
+        // Needs to be delayed so the app contents can load first
+        Handler(Looper.getMainLooper()).post {
+            onNewIntent(intent)
+        }
     }
 
     override fun onDestroy() {
@@ -43,10 +48,13 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        if (Intent.ACTION_VIEW == intent.action) {
-            handleVideoIntent(intent.dataString)
-        } else if (Intent.ACTION_SEND == intent.action && "text/plain" == intent.type) {
-            handleVideoIntent(intent.getStringExtra(Intent.EXTRA_TEXT))
+        when (intent.action) {
+            Intent.ACTION_VIEW -> handleVideoIntent(intent.dataString)
+            Intent.ACTION_SEND -> {
+                if (intent.type == "text/plain") {
+                    handleVideoIntent(intent.getStringExtra(Intent.EXTRA_TEXT))
+                }
+            }
         }
     }
 

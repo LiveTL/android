@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.home.composable
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,10 +13,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.util.toDate
@@ -25,7 +28,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun Stream(
     stream: Stream,
-    timestampFormatString: String,
+    @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
@@ -88,8 +91,10 @@ fun Stream(
         )
         timestampSupplier(stream)?.let {
             val relativeDateString = it.toDate().toRelativeString()
+            val timestampFormatString = timestampFormatStringRes?.let { res -> stringResource(res) }
+            val timestampString = timestampFormatString?.format(relativeDateString) ?: relativeDateString
             Text(
-                String.format(timestampFormatString, relativeDateString),
+                timestampString,
                 modifier = Modifier
                     .constrainAs(timestamp) {
                         bottom.linkTo(parent.bottom)
@@ -116,7 +121,7 @@ private fun StreamPreview() {
                     photo = "",
                 )
             ),
-            timestampFormatString = "Started %s",
+            timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
             navigateToStream = {},
         )
@@ -130,7 +135,7 @@ private fun StreamPreview() {
                     photo = "",
                 )
             ),
-            timestampFormatString = "%s",
+            timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
             navigateToStream = {},
         )
