@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.home.composable
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -86,12 +87,7 @@ fun Stream(
                 modifier = Modifier
                     .constrainAs(timestamp) {
                         bottom.linkTo(parent.bottom)
-                        linkTo(
-                            start = channel.end,
-                            end = parent.end,
-                            startMargin = 8.dp,
-                            bias = 1f
-                        )
+                        end.linkTo(parent.end)
                     },
                 style = MaterialTheme.typography.caption,
             )
@@ -102,20 +98,35 @@ fun Stream(
 @Preview
 @Composable
 private fun StreamPreview() {
-    val stream = Stream(
-        yt_video_key = "123",
-        title = "Some very, extremely, quite long long long title for testing",
-        live_schedule = "2020-01-01T00:00:00.000Z",
-        live_start = "2020-01-01T00:01:12.000Z",
-        channel = Channel(
-            name = "Wow Such YouTube Channel",
-            photo = "",
+    Column {
+        Stream(
+            stream = Stream(
+                yt_video_key = "123",
+                title = "Some very, extremely, quite long long long title for testing",
+                live_schedule = "2020-01-01T00:00:00.000Z",
+                live_start = "2020-01-01T00:01:12.000Z",
+                channel = Channel(
+                    name = "Wow Such YouTube Channel",
+                    photo = "",
+                )
+            ),
+            timestampFormatString = "Started %s",
+            timestampSupplier = { "2020-01-01T00:01:12.000Z" },
+            navigateToStream = {},
         )
-    )
-    Stream(
-        stream = stream,
-        timestampFormatString = "Started %s",
-        timestampSupplier = { stream.live_start },
-        navigateToStream = {},
-    )
+        Stream(
+            stream = Stream(
+                yt_video_key = "123",
+                title = "Short title",
+                live_schedule = "2030-01-01T00:01:12.000Z",
+                channel = Channel(
+                    name = "Smol Ch",
+                    photo = "",
+                )
+            ),
+            timestampFormatString = "%s",
+            timestampSupplier = { "2030-01-01T00:01:12.000Z" },
+            navigateToStream = {},
+        )
+    }
 }

@@ -24,18 +24,32 @@ import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun Chat(
     modifier: Modifier = Modifier,
     messages: List<ChatMessage>
 ) {
+    val state = rememberLazyListState()
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth(),
-        state = rememberLazyListState(initialFirstVisibleItemIndex = messages.lastIndex)
+        state = state,
     ) {
         items(messages) { message -> Message(message) }
+
+        // TODO: scroll to bottom button
+
+        // TODO: only do this if already scrolled to bottom
+        if (messages.isNotEmpty()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                state.scrollToItem(messages.lastIndex, 0)
+            }
+        }
     }
 }
 

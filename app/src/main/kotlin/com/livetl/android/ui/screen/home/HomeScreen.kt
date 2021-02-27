@@ -1,15 +1,19 @@
 package com.livetl.android.ui.screen.home
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,6 +87,7 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun LazyListScope.streamItems(
     @StringRes headingRes: Int,
     streams: List<Stream>,
@@ -92,12 +97,14 @@ private fun LazyListScope.streamItems(
     navigateToStream: (Stream) -> Unit,
 ) {
     if (streams.isNotEmpty()) {
-        item {
-            Text(
-                text = stringResource(headingRes),
-                modifier = Modifier.padding(8.dp),
-                style = MaterialTheme.typography.h6,
-            )
+        stickyHeader {
+            Surface(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(headingRes),
+                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.h6,
+                )
+            }
         }
 
         val sortedStreams = when (sortByAscending) {

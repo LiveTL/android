@@ -1,6 +1,5 @@
 package com.livetl.android.ui.screen.player
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -71,8 +70,6 @@ fun PlayerScreen(
             chatService.seekTo(videoId, second)
         }
     }
-
-    Log.d("PlayerScreen", "chat: $chatMessages")
 
     DisposableEffect(urlOrId) {
         if (urlOrId.isNotEmpty()) {
