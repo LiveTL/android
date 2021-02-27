@@ -29,7 +29,9 @@ import com.livetl.android.ui.screen.player.composable.Chat
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.tab.InfoTab
 import com.livetl.android.ui.screen.player.tab.SettingsTab
+import com.livetl.android.util.PreferencesHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,17 +42,20 @@ enum class Tabs(@StringRes val nameRes: Int) {
 }
 val tabs = Tabs.values().toList()
 
+@ExperimentalCoroutinesApi
 @Composable
 fun PlayerScreen(
     urlOrId: String,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
     chatFilterService: ChatFilterService = get(),
+    prefs: PreferencesHelper = get(),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     val chatMessages by chatService.messages.collectAsState()
     val filteredMessages by chatFilterService.messages.collectAsState()
+    val showFilteredMessages by prefs.showTlPanel().asFlow().collectAsState(initial = true)
 
     var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
@@ -97,7 +102,9 @@ fun PlayerScreen(
         )
 
         // Extracted TLs
-        Chat(modifier = Modifier.requiredHeight(96.dp), filteredMessages)
+        if (showFilteredMessages) {
+            Chat(modifier = Modifier.requiredHeight(96.dp), filteredMessages)
+        }
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->

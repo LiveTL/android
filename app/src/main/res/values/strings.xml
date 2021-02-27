@@ -10,4 +10,6 @@
     <string name="upcoming">Upcoming</string>
     <string name="archives">Archives</string>
     <string name="streamed">Streamed %s</string>
+
+    <string name="setting_show_tl_panel">Show TL Panel</string>
 </resources>
