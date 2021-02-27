@@ -90,7 +90,7 @@ dependencies {
 
     // Image loading
     implementation 'io.coil-kt:coil:1.1.1'
-    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.6.0'
+    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.6.1'
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'

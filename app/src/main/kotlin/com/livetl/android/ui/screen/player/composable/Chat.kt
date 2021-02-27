@@ -78,7 +78,7 @@ private fun Message(message: ChatMessage) {
             contentDescription = null,
             modifier = Modifier
                 .requiredWidth(16.dp)
-                .aspectRatio(1F)
+                .aspectRatio(1f)
                 .clip(CircleShape),
         )
         Text(
@@ -99,7 +99,7 @@ private fun Message(message: ChatMessage) {
                     contentDescription = null,
                     modifier = Modifier
                         .requiredWidth(24.dp)
-                        .aspectRatio(1F)
+                        .aspectRatio(1f)
                 )
             }
         }

@@ -45,7 +45,7 @@ fun Stream(
             contentDescription = null,
             modifier = Modifier
                 .requiredWidth(48.dp)
-                .aspectRatio(1F)
+                .aspectRatio(1f)
                 .clip(CircleShape)
                 .constrainAs(photo) {
                     top.linkTo(parent.top)
