@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -18,18 +17,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.livetl.android.R
-import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
 import com.livetl.android.ui.screen.player.composable.Chat
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
-import com.livetl.android.ui.screen.player.tab.InfoTab
-import com.livetl.android.ui.screen.player.tab.SettingsTab
+import com.livetl.android.ui.screen.player.section.InfoTab
+import com.livetl.android.ui.screen.player.section.SettingsTab
+import com.livetl.android.ui.screen.player.section.TLPanel
 import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.collectAsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -48,14 +47,12 @@ fun PlayerScreen(
     urlOrId: String,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
-    chatFilterService: ChatFilterService = get(),
     prefs: PreferencesHelper = get(),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     val chatMessages by chatService.messages.collectAsState()
-    val filteredMessages by chatFilterService.messages.collectAsState()
-    val showFilteredMessages by prefs.showTlPanel().asFlow().collectAsState(initial = true)
+    val showFilteredMessages by prefs.showTlPanel().collectAsState()
 
     var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
@@ -101,9 +98,8 @@ fun PlayerScreen(
             onCurrentSecond = { onCurrentSecond(it.toLong()) },
         )
 
-        // Extracted TLs
         if (showFilteredMessages) {
-            Chat(modifier = Modifier.requiredHeight(96.dp), filteredMessages)
+            TLPanel()
         }
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
@@ -122,11 +118,3 @@ fun PlayerScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    LiveTLTheme {
-//        PlayerScreen("")
-//    }
-//}
