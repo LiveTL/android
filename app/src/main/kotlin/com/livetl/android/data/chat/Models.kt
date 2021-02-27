@@ -32,6 +32,13 @@ sealed class ChatMessage {
             RED(Color(0xFFE62117), Color.White)
         }
     }
+
+    fun getTextContent(): String {
+        return content
+            .filterIsInstance<ChatMessageContent.Text>()
+            .joinToString { it.text }
+            .trim()
+    }
 }
 
 sealed class ChatMessageContent {

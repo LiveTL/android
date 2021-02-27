@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -17,7 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.livetl.android.R
+import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
@@ -41,11 +44,14 @@ val tabs = Tabs.values().toList()
 fun PlayerScreen(
     urlOrId: String,
     streamService: StreamService = get(),
-    chatService: ChatService = get()
+    chatService: ChatService = get(),
+    chatFilterService: ChatFilterService = get(),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     val chatMessages by chatService.messages.collectAsState()
+    val filteredMessages by chatFilterService.messages.collectAsState()
+
     var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
 
@@ -91,7 +97,7 @@ fun PlayerScreen(
         )
 
         // Extracted TLs
-//        Chat(modifier = Modifier.requiredHeight(96.dp), chatState.messages)
+        Chat(modifier = Modifier.requiredHeight(96.dp), filteredMessages)
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
             tabs.forEachIndexed { index, tab ->
