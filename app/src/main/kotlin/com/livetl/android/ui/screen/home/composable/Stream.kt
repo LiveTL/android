@@ -53,14 +53,20 @@ fun Stream(
             stream.title,
             modifier = Modifier
                 .constrainAs(title) {
+                    val offset = when (stream.title.startsWith('【')) {
+                        true -> 0.dp
+                        false -> 8.dp
+                    }
+
                     top.linkTo(parent.top)
                     linkTo(
                         start = photo.end,
                         end = parent.end,
-                        startMargin = 8.dp,
+                        startMargin = offset,
                         bias = 0f
                     )
                 },
+            // TODO: why isn't this actually limited to the parent's width?
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -102,7 +108,7 @@ private fun StreamPreview() {
         Stream(
             stream = Stream(
                 yt_video_key = "123",
-                title = "Some very, extremely, quite long long long title for testing",
+                title = "Some very, extremely, quite long long long title for testing wow",
                 live_schedule = "2020-01-01T00:00:00.000Z",
                 live_start = "2020-01-01T00:01:12.000Z",
                 channel = Channel(
