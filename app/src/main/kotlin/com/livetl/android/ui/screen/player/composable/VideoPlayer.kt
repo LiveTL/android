@@ -1,11 +1,13 @@
 package com.livetl.android.ui.screen.player.composable
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.livetl.android.databinding.VideoPlayerBinding
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -17,13 +19,20 @@ fun VideoPlayer(
     isLive: Boolean?,
     onCurrentSecond: (Float) -> Unit,
 ) {
+    var videoAttemptedRetries: Int = 0
+
     var playerView: YouTubePlayerView? = null
     var player = remember<YouTubePlayer?> { null }
 
-    DisposableEffect(videoId) {
+    fun loadVideo() {
         if (!videoId.isNullOrBlank()) {
             player?.loadVideo(videoId, 0F)
         }
+    }
+
+    DisposableEffect(videoId) {
+        videoAttemptedRetries = 0
+        loadVideo()
 
         // TODO: do this properly
         onDispose {
@@ -44,7 +53,17 @@ fun VideoPlayer(
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 player = youTubePlayer
-                videoId?.let { youTubePlayer.loadVideo(it, 0F) }
+                loadVideo()
+            }
+
+            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                super.onError(youTubePlayer, error)
+                Log.w("VideoPlayer", "Error: ${error.name}")
+                if (videoId != null && videoAttemptedRetries < 3) {
+                    videoAttemptedRetries++
+                    Log.d("VideoPlayer", "Retry #$videoAttemptedRetries to load $videoId")
+                    loadVideo()
+                }
             }
 
             override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
