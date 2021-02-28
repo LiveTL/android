@@ -1,6 +1,7 @@
 package com.livetl.android.data.chat
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.util.fastMap
 import kotlinx.serialization.Serializable
 
 sealed class ChatMessage {
@@ -71,7 +72,7 @@ data class YTChatMessage(
         return if (superchat != null) {
             ChatMessage.SuperChat(
                 author = author.toMessageAuthor(),
-                content = messages.map { it.toChatMessageContent() },
+                content = messages.fastMap { it.toChatMessageContent() },
                 timestamp = timestamp,
                 amount = superchat.amount,
                 level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
@@ -79,7 +80,7 @@ data class YTChatMessage(
         } else {
             ChatMessage.RegularChat(
                 author = author.toMessageAuthor(),
-                content = messages.map { it.toChatMessageContent() },
+                content = messages.fastMap { it.toChatMessageContent() },
                 timestamp = timestamp,
             )
         }

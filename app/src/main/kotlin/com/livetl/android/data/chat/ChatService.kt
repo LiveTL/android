@@ -6,6 +6,7 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.ui.util.fastMap
 import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
@@ -81,7 +82,7 @@ class ChatService(
                 (_messages.value +
                     ytChatMessages.messages
                         .sortedBy { it.timestamp }
-                        .map { it.toChatMessage() }
+                        .fastMap { it.toChatMessage() }
                 ).takeLast(250)
         }
     }

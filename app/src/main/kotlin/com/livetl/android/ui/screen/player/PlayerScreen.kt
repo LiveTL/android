@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastForEachIndexed
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
@@ -103,7 +104,7 @@ fun PlayerScreen(
         }
 
         TabRow(selectedTabIndex = selectedTab.ordinal) {
-            tabs.forEachIndexed { index, tab ->
+            tabs.fastForEachIndexed { index, tab ->
                 Tab(
                     text = { Text(stringResource(tab.nameRes)) },
                     selected = index == selectedTab.ordinal,
