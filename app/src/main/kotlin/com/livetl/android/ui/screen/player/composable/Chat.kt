@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -118,19 +119,21 @@ private fun Message(message: ChatMessage) {
                 .aspectRatio(1f)
                 .clip(CircleShape),
         )
+        Spacer(modifier = Modifier.requiredWidth(8.dp))
         Text(
             text = message.author.name,
             style = MaterialTheme.typography.caption,
             color = textColor,
-            modifier = Modifier.padding(top = 1.dp, start = 8.dp, end = 8.dp),
+            modifier = Modifier.padding(top = 1.dp),
         )
+        Spacer(modifier = Modifier.requiredWidth(8.dp))
         if (message is ChatMessage.SuperChat) {
             Text(
                 message.amount,
                 fontWeight = FontWeight.Bold,
                 color = textColor,
-                modifier = Modifier.padding(end = 8.dp),
             )
+            Spacer(modifier = Modifier.requiredWidth(8.dp))
         }
 
         // TODO: wrap text

@@ -2,22 +2,26 @@ package com.livetl.android.ui.screen.home.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
@@ -32,76 +36,60 @@ fun Stream(
     timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
-    ConstraintLayout(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { navigateToStream(stream) }
             .padding(8.dp)
+            .requiredHeight(48.dp)
     ) {
-        val (photo, title, channel, timestamp) = createRefs()
-
         CoilImage(
             data = stream.channel.photo,
             contentDescription = null,
             modifier = Modifier
-                .requiredWidth(48.dp)
+                .fillMaxHeight()
                 .aspectRatio(1f)
-                .clip(CircleShape)
-                .constrainAs(photo) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                },
+                .clip(CircleShape),
         )
-        Text(
-            stream.title,
-            modifier = Modifier
-                .constrainAs(title) {
-                    val offset = when (stream.title.startsWith('【')) {
-                        true -> 0.dp
-                        false -> 8.dp
-                    }
 
-                    top.linkTo(parent.top)
-                    linkTo(
-                        start = photo.end,
-                        end = parent.end,
-                        startMargin = offset,
-                        bias = 0f
-                    )
-                },
-            // TODO: why isn't this actually limited to the parent's width?
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-            stream.channel.name,
-            modifier = Modifier
-                .constrainAs(channel) {
-                    bottom.linkTo(parent.bottom)
-                    linkTo(
-                        start = photo.end,
-                        end = timestamp.start,
-                        startMargin = 8.dp,
-                        bias = 0f
-                    )
-                },
-            style = MaterialTheme.typography.caption,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        timestampSupplier(stream)?.let {
-            val relativeDateString = it.toDate().toRelativeString()
-            val timestampFormatString = timestampFormatStringRes?.let { res -> stringResource(res) }
-            val timestampString = timestampFormatString?.format(relativeDateString) ?: relativeDateString
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            val titleOffset = when (stream.title.startsWith('【')) {
+                true -> 0.dp
+                false -> 8.dp
+            }
             Text(
-                timestampString,
-                modifier = Modifier
-                    .constrainAs(timestamp) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    },
-                style = MaterialTheme.typography.caption,
+                stream.title,
+                modifier = Modifier.padding(start = titleOffset),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
+
+            Row {
+                Text(
+                    stream.channel.name,
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp)
+                        .weight(1f),
+                    style = MaterialTheme.typography.caption,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+                timestampSupplier(stream)?.let {
+                    val relativeDateString = it.toDate().toRelativeString()
+                    val timestampFormatString =
+                        timestampFormatStringRes?.let { res -> stringResource(res) }
+                    val timestampString =
+                        timestampFormatString?.format(relativeDateString) ?: relativeDateString
+                    Text(
+                        timestampString,
+                        style = MaterialTheme.typography.caption,
+                    )
+                }
+            }
         }
     }
 }

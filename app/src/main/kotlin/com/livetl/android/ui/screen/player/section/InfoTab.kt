@@ -2,8 +2,11 @@ package com.livetl.android.ui.screen.player.section
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
@@ -29,14 +32,15 @@ fun InfoTab(
             Text(
                 text = streamInfo.title,
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 8.dp),
             )
+            Spacer(modifier = Modifier.requiredHeight(8.dp))
             Text(
                 text = streamInfo.author,
                 style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(bottom = 8.dp),
             )
-            Divider(modifier = Modifier.padding(bottom = 8.dp))
+            Spacer(modifier = Modifier.requiredHeight(8.dp))
+            Divider()
+            Spacer(modifier = Modifier.requiredHeight(8.dp))
             Text(text = streamInfo.shortDescription)
         }
     } else {
