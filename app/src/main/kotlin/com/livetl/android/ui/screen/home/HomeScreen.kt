@@ -10,9 +10,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +42,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun HomeScreen(
     navigateToPlayer: (String) -> Unit,
+    navigateToAbout: () -> Unit,
     feedService: FeedService = get(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -51,37 +58,55 @@ fun HomeScreen(
         }
     }
 
-    if (feed != null) {
-        LazyColumn {
-            streamItems(
-                headingRes = R.string.live,
-                streams = feed!!.live,
-                sortByAscending = false,
-                timestampFormatStringRes = R.string.started_streaming,
-                timestampSupplier = { it.live_start },
-                navigateToStream = navigateToStream
-            )
-            streamItems(
-                headingRes = R.string.upcoming,
-                streams = feed!!.upcoming,
-                timestampSupplier = { it.live_schedule },
-                navigateToStream = navigateToStream
-            )
-            streamItems(
-                headingRes = R.string.archives,
-                streams = feed!!.ended,
-                sortByAscending = false,
-                timestampFormatStringRes = R.string.streamed,
-                timestampSupplier = { it.live_end },
-                navigateToStream = navigateToStream
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.app_name))
+                },
+                actions = {
+                    IconButton(onClick = { navigateToAbout() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.about)
+                        )
+                    }
+                },
             )
         }
-    } else {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+    ) {
+        if (feed != null) {
+            LazyColumn {
+                streamItems(
+                    headingRes = R.string.live,
+                    streams = feed!!.live,
+                    sortByAscending = false,
+                    timestampFormatStringRes = R.string.started_streaming,
+                    timestampSupplier = { it.live_start },
+                    navigateToStream = navigateToStream
+                )
+                streamItems(
+                    headingRes = R.string.upcoming,
+                    streams = feed!!.upcoming,
+                    timestampSupplier = { it.live_schedule },
+                    navigateToStream = navigateToStream
+                )
+                streamItems(
+                    headingRes = R.string.archives,
+                    streams = feed!!.ended,
+                    sortByAscending = false,
+                    timestampFormatStringRes = R.string.streamed,
+                    timestampSupplier = { it.live_end },
+                    navigateToStream = navigateToStream
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }

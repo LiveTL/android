@@ -12,8 +12,9 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
-import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.BroadcastReceiver
+import com.livetl.android.ui.MainActivity
+import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 
@@ -28,13 +29,20 @@ fun MainNavHost() {
         }
     }
 
+    fun navigateBack() {
+        navController.popBackStack()
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         NavHost(navController, startDestination = Route.Home.id) {
             composable(Route.Home.id) {
-                HomeScreen(navigateToPlayer = { navigateToPlayer(it) })
+                HomeScreen(
+                    navigateToPlayer = { navigateToPlayer(it) },
+                    navigateToAbout = { navController.navigate(Route.About.id) },
+                )
             }
 
             composable(
@@ -43,6 +51,12 @@ fun MainNavHost() {
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
                 PlayerScreen(urlOrId)
+            }
+
+            composable(Route.About.id) {
+                AboutScreen(
+                    onBackPressed = { navigateBack() }
+                )
             }
         }
     }

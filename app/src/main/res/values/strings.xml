@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">LiveTL</string>
 
+    <string name="cd_back">Back</string>
+
+    <string name="about">About</string>
+
     <string name="info">Info</string>
     <string name="chat">Chat</string>
     <string name="settings">Settings</string>
