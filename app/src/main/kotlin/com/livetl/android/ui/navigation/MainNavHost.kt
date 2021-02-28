@@ -19,7 +19,9 @@ import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 
 @Composable
-fun MainNavHost() {
+fun MainNavHost(
+    setKeepScreenOn: (Boolean) -> Unit,
+) {
     val navController = rememberNavController()
 
     fun navigateToPlayer(urlOrId: String) {
@@ -50,7 +52,7 @@ fun MainNavHost() {
                 arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                PlayerScreen(urlOrId)
+                PlayerScreen(urlOrId, setKeepScreenOn)
             }
 
             composable(Route.About.id) {

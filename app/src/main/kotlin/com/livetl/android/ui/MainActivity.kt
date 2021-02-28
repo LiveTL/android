@@ -16,21 +16,16 @@ import com.livetl.android.util.powerManager
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var wakeLock: PowerManager.WakeLock
+    private var wakeLock: PowerManager.WakeLock? = null
 
     @SuppressLint("WakelockTimeout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             LiveTLTheme {
-                MainNavHost()
-            }
-        }
-
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        wakeLock = powerManager.run {
-            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LiveTL::WakelockTag").apply {
-                acquire()
+                MainNavHost(
+                    setKeepScreenOn = this::setKeepScreenOn,
+                )
             }
         }
 
@@ -42,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        wakeLock?.release()
+        setKeepScreenOn(false)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -55,6 +50,21 @@ class MainActivity : AppCompatActivity() {
                     handleVideoIntent(intent.getStringExtra(Intent.EXTRA_TEXT))
                 }
             }
+        }
+    }
+
+    fun setKeepScreenOn(enabled: Boolean) {
+        if (enabled) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            wakeLock = powerManager.run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LiveTL::WakelockTag").apply {
+                    acquire()
+                }
+            }
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            wakeLock?.release()
+            wakeLock = null
         }
     }
 

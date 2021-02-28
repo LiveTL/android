@@ -46,6 +46,7 @@ val tabs = Tabs.values().toList()
 @Composable
 fun PlayerScreen(
     urlOrId: String,
+    setKeepScreenOn: (Boolean) -> Unit,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
     prefs: PreferencesHelper = get(),
@@ -78,6 +79,12 @@ fun PlayerScreen(
         if (streamInfo?.isLive == false) {
             chatService.seekTo(videoId, second)
         }
+    }
+
+    DisposableEffect(Unit) {
+        setKeepScreenOn(true)
+
+        onDispose { setKeepScreenOn(false) }
     }
 
     DisposableEffect(urlOrId) {
