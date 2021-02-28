@@ -2,7 +2,6 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,41 +14,79 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
+import com.livetl.android.ui.flow.FlowRow
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun Chat(
     modifier: Modifier = Modifier,
-    messages: List<ChatMessage>
+    messages: List<ChatMessage>,
+    showJumpToBottomButton: Boolean = false,
 ) {
-    val state = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    val scrollState = rememberLazyListState()
+    var isScrolledToBottom by remember { mutableStateOf(true) }
+    var _messages by remember { mutableStateOf<List<ChatMessage>>(emptyList()) }
+
+    fun checkIfAtBottom(): Boolean {
+        if (_messages.isEmpty()) {
+            return true
+        }
+
+        val visibleItems = scrollState.layoutInfo.visibleItemsInfo
+        return visibleItems.lastOrNull()?.index == _messages.lastIndex
+    }
+
+    fun scrollToBottom() {
+//        if (isScrolledToBottom && _messages.isNotEmpty()) {
+        if (_messages.isNotEmpty()) {
+            scope.launch {
+                scrollState.scrollToItem(_messages.lastIndex, 0)
+            }
+        }
+    }
+
+    DisposableEffect(messages) {
+        isScrolledToBottom = checkIfAtBottom()
+        _messages = messages
+
+        scrollToBottom()
+
+        onDispose { }
+    }
 
     LazyColumn(
         modifier = modifier
             .fillMaxWidth(),
-        state = state,
+        state = scrollState,
     ) {
-        items(messages) { message -> Message(message) }
+        items(_messages) { message -> Message(message) }
+    }
 
-        // TODO: scroll to bottom button
-
-        // TODO: only do this if already scrolled to bottom
-        if (messages.isNotEmpty()) {
-            CoroutineScope(Dispatchers.Main).launch {
-                state.scrollToItem(messages.lastIndex, 0)
-            }
-        }
+    if (showJumpToBottomButton) {
+        JumpToBottomButton(
+            enabled = !isScrolledToBottom,
+            onClicked = ::scrollToBottom,
+//        modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -71,8 +108,8 @@ private fun Message(message: ChatMessage) {
         is ChatMessage.SuperChat -> message.level.textColor
     }
 
-    Row(modifier = modifier) {
-//        Text(message.timestamp.toString(), color = textColor)
+    FlowRow(modifier = modifier) {
+        //        Text(message.timestamp.toString(), color = textColor)
         CoilImage(
             data = message.author.photoUrl,
             contentDescription = null,
@@ -88,10 +125,16 @@ private fun Message(message: ChatMessage) {
             modifier = Modifier.padding(top = 1.dp, start = 8.dp, end = 8.dp),
         )
         if (message is ChatMessage.SuperChat) {
-            Text(message.amount, color = textColor, modifier = Modifier.padding(end = 8.dp))
+            Text(
+                message.amount,
+                fontWeight = FontWeight.Bold,
+                color = textColor,
+                modifier = Modifier.padding(end = 8.dp),
+            )
         }
+
         // TODO: wrap text
-        message.content.forEach {
+        message.content.fastForEach {
             when (it) {
                 is ChatMessageContent.Text -> Text(it.text, color = textColor)
                 is ChatMessageContent.Emote -> CoilImage(
