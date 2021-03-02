@@ -31,7 +31,6 @@ import com.livetl.android.ui.screen.player.section.TLPanel
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -42,7 +41,6 @@ enum class Tabs(@StringRes val nameRes: Int) {
 }
 val tabs = Tabs.values().toList()
 
-@ExperimentalCoroutinesApi
 @Composable
 fun PlayerScreen(
     urlOrId: String,

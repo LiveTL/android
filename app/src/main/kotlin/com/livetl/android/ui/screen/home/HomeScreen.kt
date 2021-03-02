@@ -1,7 +1,6 @@
 package com.livetl.android.ui.screen.home
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -111,7 +110,6 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyListScope.streamItems(
     @StringRes headingRes: Int,
     streams: List<Stream>,

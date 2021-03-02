@@ -6,9 +6,7 @@ import com.livetl.android.R
 import com.livetl.android.di.get
 import com.livetl.android.ui.preference.SwitchPreference
 import com.livetl.android.util.PreferencesHelper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @Composable
 fun SettingsTab(
     prefs: PreferencesHelper = get(),

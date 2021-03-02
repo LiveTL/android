@@ -7,9 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.preference.PreferenceManager
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 class PreferencesHelper(context: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private val flowPrefs = FlowSharedPreferences(prefs)

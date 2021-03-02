@@ -6,7 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.android.InternalPlatformTextApi
 import androidx.compose.ui.text.buildAnnotatedString
 
 // Regex containing the syntax tokens
@@ -74,7 +73,6 @@ fun messageFormatter(text: String): AnnotatedString {
  * @param matchResult is a regex result matching our syntax symbols
  * @return pair of AnnotatedString with annotation (optional) used inside the ClickableText wrapper
  */
-@OptIn(InternalPlatformTextApi::class)
 private fun getSymbolAnnotation(
     matchResult: MatchResult,
     colors: Colors,
