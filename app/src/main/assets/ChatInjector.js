@@ -99,10 +99,11 @@ const messageReceiveCallback = async (response) => {
                 ))))
               });
             } else if (run.emoji) {
+              const thumbnails = run.emoji.image.thumbnails;
               runs.push({
-                type: 'emote',
-                emoteId: run.emoji.shortcuts[0],
-                emoteSrc: run.emoji.image.thumbnails[0].url
+                type: 'emoji',
+                emojiId: run.emoji.shortcuts[0],
+                emojiSrc: thumbnails[thumbnails.length - 1].url
               });
             }
           });

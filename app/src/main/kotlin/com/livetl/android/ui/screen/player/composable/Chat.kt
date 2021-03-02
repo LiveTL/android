@@ -153,7 +153,7 @@ private fun Message(message: ChatMessage) {
 
 private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> {
     return content
-        .filterIsInstance<ChatMessageContent.Emote>()
+        .filterIsInstance<ChatMessageContent.Emoji>()
         .associate { emote ->
             emote.id to InlineTextContent(
                 placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.TextBottom),

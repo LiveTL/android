@@ -1,8 +1,6 @@
 package com.livetl.android.data.chat
 
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.util.fastMap
 import kotlinx.serialization.Serializable
 
@@ -47,7 +45,7 @@ sealed class ChatMessageContent {
     data class Text(val text: String) : ChatMessageContent() {
         override fun toString() = text
     }
-    data class Emote(val id: String, val src: String) : ChatMessageContent() {
+    data class Emoji(val id: String, val src: String) : ChatMessageContent() {
         override fun toString() = id
     }
 }
@@ -111,13 +109,13 @@ data class YTChatAuthor(
 data class YTChatMessageData(
     val type: String,
     val text: String? = null,
-    val emoteId: String? = null,
-    val emoteSrc: String? = null,
+    val emojiId: String? = null,
+    val emojiSrc: String? = null,
 ) {
     fun toChatMessageContent(): ChatMessageContent {
         return when (type) {
             "text" -> ChatMessageContent.Text(text!!)
-            "emote" -> ChatMessageContent.Emote(emoteId!!, emoteSrc!!)
+            "emoji" -> ChatMessageContent.Emoji(emojiId!!, emojiSrc!!)
             else -> throw Exception("Unknown YTChatMessageData type: $type")
         }
     }

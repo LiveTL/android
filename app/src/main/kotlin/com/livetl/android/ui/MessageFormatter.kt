@@ -10,7 +10,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 
 // Regex containing the syntax tokens
 val symbolPattern by lazy {
-    Regex("""(https?://[^\s\t\n]+)|(:[^:]+:)""")
+    Regex("""(https?://[^\s\t\n]+)|(:[\w+]+:)""")
 }
 
 // Accepted annotations for the ClickableTextWrapper
