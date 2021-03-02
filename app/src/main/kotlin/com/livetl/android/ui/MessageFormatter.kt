@@ -1,15 +1,17 @@
 package com.livetl.android.ui
 
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.android.InternalPlatformTextApi
 import androidx.compose.ui.text.buildAnnotatedString
 
 // Regex containing the syntax tokens
 val symbolPattern by lazy {
-    Regex("""(https?://[^\s\t\n]+)""")
+    Regex("""(https?://[^\s\t\n]+)|(:[^:]+:)""")
 }
 
 // Accepted annotations for the ClickableTextWrapper
@@ -22,12 +24,8 @@ typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
 /**
  * Format a message following Markdown-lite syntax
- * | @username -> bold, primary color and clickable element
  * | http(s)://... -> clickable link, opening it into the browser
- * | *bold* -> bold
- * | _italic_ -> italic
- * | ~strikethrough~ -> strikethrough
- * | `MyClass.myMethod` -> inline code styling
+ * | :_text: -> emote
  *
  * @param text contains message to be parsed
  * @return AnnotatedString with annotations used inside the ClickableText wrapper
@@ -42,15 +40,21 @@ fun messageFormatter(text: String): AnnotatedString {
         for (token in tokens) {
             append(text.slice(cursorPosition until token.range.first))
 
-            val (annotatedString, stringAnnotation) = getSymbolAnnotation(
-                matchResult = token,
-                colors = MaterialTheme.colors,
-            )
-            append(annotatedString)
+            if (token.value.first() == ':') {
+                // Emotes are replaced with placeholders later
+                appendInlineContent(token.value, token.value)
+            } else {
+                val (annotatedString, stringAnnotation) = getSymbolAnnotation(
+                    matchResult = token,
+                    colors = MaterialTheme.colors,
+                )
+                append(annotatedString)
 
-            if (stringAnnotation != null) {
-                val (item, start, end, tag) = stringAnnotation
-                addStringAnnotation(tag = tag, start = start, end = end, annotation = item)
+
+                if (stringAnnotation != null) {
+                    val (item, start, end, tag) = stringAnnotation
+                    addStringAnnotation(tag = tag, start = start, end = end, annotation = item)
+                }
             }
 
             cursorPosition = token.range.last + 1
@@ -70,6 +74,7 @@ fun messageFormatter(text: String): AnnotatedString {
  * @param matchResult is a regex result matching our syntax symbols
  * @return pair of AnnotatedString with annotation (optional) used inside the ClickableText wrapper
  */
+@OptIn(InternalPlatformTextApi::class)
 private fun getSymbolAnnotation(
     matchResult: MatchResult,
     colors: Colors,

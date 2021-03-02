@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,15 +26,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.unit.em
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.flow.FlowRow
+import com.livetl.android.ui.messageFormatter
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
 
@@ -105,7 +110,7 @@ private fun Message(message: ChatMessage) {
     }
 
     val textColor = when (message) {
-        is ChatMessage.RegularChat -> Color.Unspecified
+        is ChatMessage.RegularChat -> LocalContentColor.current
         is ChatMessage.SuperChat -> message.level.textColor
     }
 
@@ -135,21 +140,34 @@ private fun Message(message: ChatMessage) {
             )
             Spacer(modifier = Modifier.requiredWidth(8.dp))
         }
+        
+        val styledText = messageFormatter(message.getTextContent())
 
-        // TODO: wrap text
-        message.content.fastForEach {
-            when (it) {
-                is ChatMessageContent.Text -> Text(it.text, color = textColor)
-                is ChatMessageContent.Emote -> CoilImage(
-                    data = it.src,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .requiredWidth(24.dp)
-                        .aspectRatio(1f)
-                )
-            }
-        }
+        BasicText(
+            text = styledText,
+            style = MaterialTheme.typography.body1.copy(color = textColor),
+            inlineContent = message.getEmoteInlineContent()
+        )
     }
+}
+
+private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> {
+    return content
+        .filterIsInstance<ChatMessageContent.Emote>()
+        .associate { emote ->
+            emote.id to InlineTextContent(
+                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.TextBottom),
+                children = {
+                    CoilImage(
+                        data = emote.src,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .requiredWidth(24.dp)
+                            .aspectRatio(1f)
+                    )
+                }
+            )
+        }
 }
 
 @Preview
