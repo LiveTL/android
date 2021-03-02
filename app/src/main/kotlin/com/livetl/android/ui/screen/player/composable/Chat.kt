@@ -2,7 +2,6 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,9 +13,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -26,12 +27,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
@@ -115,38 +120,53 @@ private fun Message(message: ChatMessage) {
     }
 
     FlowRow(modifier = modifier) {
-        //        Text(message.timestamp.toString(), color = textColor)
-        CoilImage(
-            data = message.author.photoUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .requiredWidth(16.dp)
-                .aspectRatio(1f)
-                .clip(CircleShape),
-        )
-        Spacer(modifier = Modifier.requiredWidth(8.dp))
-        Text(
-            text = message.author.name,
-            style = MaterialTheme.typography.caption,
-            color = textColor,
-            modifier = Modifier.padding(top = 1.dp),
-        )
-        Spacer(modifier = Modifier.requiredWidth(8.dp))
-        if (message is ChatMessage.SuperChat) {
-            Text(
-                message.amount,
-                fontWeight = FontWeight.Bold,
-                color = textColor,
+        val authorPicInlineContent = mapOf(
+            message.author.photoUrl to InlineTextContent(
+                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
+                children = {
+                    CoilImage(
+                        data = message.author.photoUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .requiredWidth(16.dp)
+                            .aspectRatio(1f)
+                            .clip(CircleShape),
+                    )
+                }
             )
-            Spacer(modifier = Modifier.requiredWidth(8.dp))
+        )
+
+        val textPrefix = buildAnnotatedString {
+            appendInlineContent(message.author.photoUrl, message.author.name)
+
+            // message.timestamp.toString()
+
+            append(AnnotatedString(
+                text = " ${message.author.name} ",
+                spanStyle = SpanStyle(
+                    color = textColor.copy(alpha = ContentAlpha.medium),
+                    fontSize = 12.sp,
+                    letterSpacing = 0.4.sp
+                )
+            ))
+
+            if (message is ChatMessage.SuperChat) {
+                append(AnnotatedString(
+                    text = "${message.amount} ",
+                    spanStyle = SpanStyle(
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
+                    )
+                ))
+            }
         }
-        
-        val styledText = messageFormatter(message.getTextContent())
+
+        val styledText = textPrefix + messageFormatter(message.getTextContent())
 
         BasicText(
             text = styledText,
             style = MaterialTheme.typography.body1.copy(color = textColor),
-            inlineContent = message.getEmoteInlineContent()
+            inlineContent = authorPicInlineContent + message.getEmoteInlineContent()
         )
     }
 }
@@ -156,7 +176,7 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
         .filterIsInstance<ChatMessageContent.Emoji>()
         .associate { emote ->
             emote.id to InlineTextContent(
-                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.TextBottom),
+                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
                 children = {
                     CoilImage(
                         data = emote.src,
@@ -175,13 +195,15 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
 private fun MessagePreviews() {
     Column {
         Message(message = ChatMessage.RegularChat(
-            author = MessageAuthor(name = "Name", photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
+            author = MessageAuthor(name = "Name",
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
             content = listOf(ChatMessageContent.Text("Hello world")),
             timestamp = 1234,
         ))
 
         Message(message = ChatMessage.SuperChat(
-            author = MessageAuthor(name = "Name", photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
+            author = MessageAuthor(name = "Name",
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
             content = listOf(ChatMessageContent.Text("Hello world")),
             timestamp = 1234,
             amount = "$100.00",
