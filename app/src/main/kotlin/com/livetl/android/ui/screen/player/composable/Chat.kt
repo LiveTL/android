@@ -174,6 +174,7 @@ private fun Message(message: ChatMessage) {
 private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> {
     return content
         .filterIsInstance<ChatMessageContent.Emoji>()
+        .distinct()
         .associate { emote ->
             emote.id to InlineTextContent(
                 placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
@@ -182,7 +183,7 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
                         data = emote.src,
                         contentDescription = null,
                         modifier = Modifier
-                            .requiredWidth(24.dp)
+                            .requiredWidth(18.dp)
                             .aspectRatio(1f)
                     )
                 }
@@ -192,22 +193,24 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
 
 @Preview
 @Composable
-private fun MessagePreviews() {
-    Column {
-        Message(message = ChatMessage.RegularChat(
-            author = MessageAuthor(name = "Name",
-                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-            content = listOf(ChatMessageContent.Text("Hello world")),
-            timestamp = 1234,
-        ))
+private fun RegularChatPreview() {
+    Message(message = ChatMessage.RegularChat(
+        author = MessageAuthor(name = "Name",
+            photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
+        content = listOf(ChatMessageContent.Text("Hello world")),
+        timestamp = 1234,
+    ))
+}
 
-        Message(message = ChatMessage.SuperChat(
-            author = MessageAuthor(name = "Name",
-                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-            content = listOf(ChatMessageContent.Text("Hello world")),
-            timestamp = 1234,
-            amount = "$100.00",
-            level = ChatMessage.SuperChat.Level.RED,
-        ))
-    }
+@Preview
+@Composable
+private fun SuperChatPreview() {
+    Message(message = ChatMessage.SuperChat(
+        author = MessageAuthor(name = "Pekora Shachou",
+            photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
+        content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
+        timestamp = 1234,
+        amount = "$100.00",
+        level = ChatMessage.SuperChat.Level.RED,
+    ))
 }
