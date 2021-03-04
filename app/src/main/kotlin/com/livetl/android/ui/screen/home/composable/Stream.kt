@@ -40,7 +40,7 @@ fun Stream(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { navigateToStream(stream) }
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .requiredHeight(48.dp)
     ) {
         CoilImage(

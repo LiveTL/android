@@ -49,7 +49,6 @@ fun messageFormatter(text: String): AnnotatedString {
                 )
                 append(annotatedString)
 
-
                 if (stringAnnotation != null) {
                     val (item, start, end, tag) = stringAnnotation
                     addStringAnnotation(tag = tag, start = start, end = end, annotation = item)
