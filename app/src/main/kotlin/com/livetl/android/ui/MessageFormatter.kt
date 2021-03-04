@@ -18,6 +18,7 @@ enum class SymbolAnnotationType {
     LINK
 }
 typealias StringAnnotation = AnnotatedString.Range<String>
+
 // Pair returning styled content and annotation for ClickableText when matching syntax token
 typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 

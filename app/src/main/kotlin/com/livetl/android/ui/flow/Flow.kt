@@ -112,10 +112,12 @@ enum class FlowCrossAxisAlignment {
      * Place children such that their center is in the middle of the cross axis.
      */
     Center,
+
     /**
      * Place children such that their start edge is aligned to the start edge of the cross axis.
      */
     Start,
+
     /**
      * Place children such that their end edge is aligned to the end edge of the cross axis.
      */
@@ -167,7 +169,7 @@ private fun Flow(
         // Return whether the placeable can be added to the current sequence.
         fun canAddToCurrentSequence(placeable: Placeable) =
             currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
-                    placeable.mainAxisSize() <= constraints.mainAxisMax
+                placeable.mainAxisSize() <= constraints.mainAxisMax
 
         // Store current sequence information and start a new sequence.
         fun startNewSequence() {
@@ -228,7 +230,7 @@ private fun Flow(
             sequences.fastForEachIndexed { i, placeables ->
                 val childrenMainAxisSizes = IntArray(placeables.size) { j ->
                     placeables[j].mainAxisSize() +
-                            if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
+                        if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
                 val arrangement = if (i < sequences.lastIndex) {
                     mainAxisAlignment.arrangement
@@ -287,6 +289,7 @@ enum class SizeMode {
      * subject to the incoming layout constraints.
      */
     Wrap,
+
     /**
      * Maximize the amount of free space by expanding to fill the available space,
      * subject to the incoming layout constraints.

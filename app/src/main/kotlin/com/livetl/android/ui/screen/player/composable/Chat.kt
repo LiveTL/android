@@ -1,7 +1,6 @@
 package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,7 +14,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -104,14 +102,16 @@ fun Chat(
 @Composable
 private fun Message(message: ChatMessage) {
     val modifier = when (message) {
-        is ChatMessage.RegularChat -> Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
-        is ChatMessage.SuperChat -> Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp))
-            .background(color = message.level.backgroundColor)
-            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+        is ChatMessage.RegularChat ->
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+        is ChatMessage.SuperChat ->
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(4.dp))
+                .background(color = message.level.backgroundColor)
+                .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
     }
 
     val textColor = when (message) {
@@ -141,23 +141,27 @@ private fun Message(message: ChatMessage) {
 
             // message.timestamp.toString()
 
-            append(AnnotatedString(
-                text = " ${message.author.name} ",
-                spanStyle = SpanStyle(
-                    color = textColor.copy(alpha = ContentAlpha.medium),
-                    fontSize = 12.sp,
-                    letterSpacing = 0.4.sp
+            append(
+                AnnotatedString(
+                    text = " ${message.author.name} ",
+                    spanStyle = SpanStyle(
+                        color = textColor.copy(alpha = ContentAlpha.medium),
+                        fontSize = 12.sp,
+                        letterSpacing = 0.4.sp
+                    )
                 )
-            ))
+            )
 
             if (message is ChatMessage.SuperChat) {
-                append(AnnotatedString(
-                    text = "${message.amount} ",
-                    spanStyle = SpanStyle(
-                        color = textColor,
-                        fontWeight = FontWeight.Bold,
+                append(
+                    AnnotatedString(
+                        text = "${message.amount} ",
+                        spanStyle = SpanStyle(
+                            color = textColor,
+                            fontWeight = FontWeight.Bold,
+                        )
                     )
-                ))
+                )
             }
         }
 
@@ -194,23 +198,31 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
 @Preview
 @Composable
 private fun RegularChatPreview() {
-    Message(message = ChatMessage.RegularChat(
-        author = MessageAuthor(name = "Name",
-            photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-        content = listOf(ChatMessageContent.Text("Hello world")),
-        timestamp = 1234,
-    ))
+    Message(
+        message = ChatMessage.RegularChat(
+            author = MessageAuthor(
+                name = "Name",
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"
+            ),
+            content = listOf(ChatMessageContent.Text("Hello world")),
+            timestamp = 1234,
+        )
+    )
 }
 
 @Preview
 @Composable
 private fun SuperChatPreview() {
-    Message(message = ChatMessage.SuperChat(
-        author = MessageAuthor(name = "Pekora Shachou",
-            photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"),
-        content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
-        timestamp = 1234,
-        amount = "$100.00",
-        level = ChatMessage.SuperChat.Level.RED,
-    ))
+    Message(
+        message = ChatMessage.SuperChat(
+            author = MessageAuthor(
+                name = "Pekora Shachou",
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"
+            ),
+            content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
+            timestamp = 1234,
+            amount = "$100.00",
+            level = ChatMessage.SuperChat.Level.RED,
+        )
+    )
 }

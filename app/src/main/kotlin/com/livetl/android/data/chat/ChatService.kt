@@ -79,11 +79,12 @@ class ChatService(
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
             _messages.value =
                 // TODO: consider jumping around when seeking
-                (_messages.value +
-                    ytChatMessages.messages
-                        .sortedBy { it.timestamp }
-                        .fastMap { it.toChatMessage() }
-                ).takeLast(250)
+                (
+                    _messages.value +
+                        ytChatMessages.messages
+                            .sortedBy { it.timestamp }
+                            .fastMap { it.toChatMessage() }
+                    ).takeLast(250)
         }
     }
 
@@ -106,11 +107,9 @@ class ChatService(
             throw NoChatContinuationFoundException()
         }
     }
-
-    companion object {
-        private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
-        private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
-    }
 }
 
 class NoChatContinuationFoundException : Exception()
+
+private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
+private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }

@@ -43,7 +43,7 @@ fun VideoPlayer(
     AndroidViewBinding(factory = VideoPlayerBinding::inflate, modifier = modifier) {
         playerView = youtubePlayerView
 
-        with (youtubePlayerView.getPlayerUiController()) {
+        with(youtubePlayerView.getPlayerUiController()) {
             enableLiveVideoUi(isLive ?: false)
             showVideoTitle(false)
             showYouTubeButton(false)

@@ -3,8 +3,8 @@ package com.livetl.android.di
 import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.feed.FeedService
-import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.data.stream.StreamService
+import com.livetl.android.util.PreferencesHelper
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import kotlinx.serialization.json.Json

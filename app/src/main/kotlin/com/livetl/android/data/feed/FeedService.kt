@@ -15,8 +15,6 @@ class FeedService(private val client: HttpClient, private val json: Json) {
         val result = client.get<HttpResponse>(SCHEDULE_API)
         json.decodeFromString(result.readText())
     }
-
-    companion object {
-        private const val SCHEDULE_API = "https://jetrico.sfo2.digitaloceanspaces.com/hololive/youtube.json"
-    }
 }
+
+private const val SCHEDULE_API = "https://jetrico.sfo2.digitaloceanspaces.com/hololive/youtube.json"

@@ -5,17 +5,17 @@ import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-        primary = purple200,
-        primaryVariant = purple700,
-        secondary = teal200
+    primary = purple200,
+    primaryVariant = purple700,
+    secondary = teal200
 )
 
 @Composable
 fun LiveTLTheme(content: @Composable() () -> Unit) {
     MaterialTheme(
-            colors = DarkColorPalette,
-            typography = typography,
-            shapes = shapes,
-            content = content
+        colors = DarkColorPalette,
+        typography = typography,
+        shapes = shapes,
+        content = content
     )
 }
