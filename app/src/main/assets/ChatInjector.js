@@ -87,9 +87,13 @@ const messageReceiveCallback = async (response) => {
 
         messageItem.authorBadges = messageItem.authorBadges || [];
         const authorTypes = [];
-        messageItem.authorBadges.forEach((badge) =>
-          authorTypes.push(badge.liveChatAuthorBadgeRenderer.tooltip.toLowerCase())
-        );
+        messageItem.authorBadges.forEach((badge) => {
+          const thumbnails = badge.liveChatAuthorBadgeRenderer.customThumbnail.thumbnails;
+          authorTypes.push({
+            name: badge.liveChatAuthorBadgeRenderer.tooltip,
+            thumbnailSrc: thumbnails[thumbnails.length - 1].url
+          })
+        });
 
         const runs = [];
         if (messageItem.message) {

@@ -136,11 +136,31 @@ private fun Message(message: ChatMessage) {
             )
         )
 
-        val textPrefix = buildAnnotatedString {
-            appendInlineContent(message.author.photoUrl, message.author.name)
+        val authorBadgeInlineContent = when {
+            message.author.membershipBadgeUrl != null -> mapOf(
+                message.author.membershipBadgeUrl!! to InlineTextContent(
+                    placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
+                    children = {
+                        CoilImage(
+                            data = message.author.membershipBadgeUrl!!,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .requiredWidth(16.dp)
+                                .aspectRatio(1f),
+                        )
+                    }
+                )
+            )
+            else -> emptyMap()
+        }
 
+        val textPrefix = buildAnnotatedString {
             // message.timestamp.toString()
 
+            // Profile picture
+            appendInlineContent(message.author.photoUrl, message.author.name)
+
+            // Username
             append(
                 AnnotatedString(
                     text = " ${message.author.name} ",
@@ -152,6 +172,15 @@ private fun Message(message: ChatMessage) {
                 )
             )
 
+            // Badge icon
+            if (message.author.membershipRank != null) {
+                appendInlineContent(
+                    message.author.membershipBadgeUrl!!,
+                    message.author.membershipRank!!
+                )
+            }
+
+            // Superchat monetary amount
             if (message is ChatMessage.SuperChat) {
                 append(
                     AnnotatedString(
@@ -165,12 +194,14 @@ private fun Message(message: ChatMessage) {
             }
         }
 
+        // Actual chat message contents
         val styledText = textPrefix + messageFormatter(message.getTextContent())
 
         BasicText(
             text = styledText,
             style = MaterialTheme.typography.body1.copy(color = textColor),
-            inlineContent = authorPicInlineContent + message.getEmoteInlineContent()
+            // TODO: should try to cache these
+            inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()
         )
     }
 }
