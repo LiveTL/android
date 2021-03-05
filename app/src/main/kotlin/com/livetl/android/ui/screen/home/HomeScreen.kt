@@ -94,6 +94,7 @@ fun HomeScreen(
         }
     ) {
         SwipeToRefreshLayout(
+            modifier = Modifier.fillMaxWidth(),
             refreshingState = refreshingFeed,
             onRefresh = { refreshFeed() },
             refreshIndicator = {
