@@ -11,13 +11,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,32 +49,58 @@ fun HomeScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
+    var refreshingFeed by remember { mutableStateOf(false) }
     var feed by remember { mutableStateOf<Feed?>(null) }
 
     val navigateToStream = { stream: Stream -> navigateToPlayer(stream.yt_video_key) }
 
-    coroutineScope.launch {
-        val newFeed = feedService.getFeed()
-        withContext(Dispatchers.Main) {
-            feed = newFeed
+    fun refreshFeed() {
+        coroutineScope.launch {
+            refreshingFeed = true
+            val newFeed = feedService.getFeed()
+            withContext(Dispatchers.Main) {
+                feed = newFeed
+                refreshingFeed = false
+            }
         }
+    }
+
+    DisposableEffect(Unit) {
+        refreshFeed()
+
+        onDispose { }
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.app_name))
-                },
-                actions = {
-                    IconButton(onClick = { navigateToAbout() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = stringResource(R.string.about)
-                        )
-                    }
-                },
-            )
+            Box {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(R.string.app_name))
+                    },
+                    actions = {
+                        IconButton(onClick = { refreshFeed() }) {
+                            Icon(
+                                imageVector = Icons.Filled.Refresh,
+                                contentDescription = stringResource(R.string.refresh)
+                            )
+                        }
+                        IconButton(onClick = { navigateToAbout() }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = stringResource(R.string.about)
+                            )
+                        }
+                    },
+                )
+                if (refreshingFeed) {
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    )
+                }
+            }
         }
     ) {
         if (feed != null) {
