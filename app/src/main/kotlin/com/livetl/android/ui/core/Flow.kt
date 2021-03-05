@@ -19,7 +19,6 @@ package com.livetl.android.ui.core
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
@@ -45,7 +44,6 @@ import kotlin.math.max
  */
 @Composable
 fun FlowRow(
-    modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -55,7 +53,6 @@ fun FlowRow(
     content: @Composable () -> Unit
 ) {
     Flow(
-        modifier = modifier,
         orientation = LayoutOrientation.Horizontal,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -82,7 +79,6 @@ fun FlowRow(
  */
 @Composable
 fun FlowColumn(
-    modifier: Modifier = Modifier,
     mainAxisSize: SizeMode = SizeMode.Wrap,
     mainAxisAlignment: FlowMainAxisAlignment = FlowMainAxisAlignment.Start,
     mainAxisSpacing: Dp = 0.dp,
@@ -92,7 +88,6 @@ fun FlowColumn(
     content: @Composable () -> Unit
 ) {
     Flow(
-        modifier = modifier,
         orientation = LayoutOrientation.Vertical,
         mainAxisSize = mainAxisSize,
         mainAxisAlignment = mainAxisAlignment,
@@ -112,12 +107,10 @@ enum class FlowCrossAxisAlignment {
      * Place children such that their center is in the middle of the cross axis.
      */
     Center,
-
     /**
      * Place children such that their start edge is aligned to the start edge of the cross axis.
      */
     Start,
-
     /**
      * Place children such that their end edge is aligned to the end edge of the cross axis.
      */
@@ -131,7 +124,6 @@ typealias FlowMainAxisAlignment = MainAxisAlignment
  */
 @Composable
 private fun Flow(
-    modifier: Modifier,
     orientation: LayoutOrientation,
     mainAxisSize: SizeMode,
     mainAxisAlignment: FlowMainAxisAlignment,
@@ -146,7 +138,7 @@ private fun Flow(
     fun Placeable.crossAxisSize() =
         if (orientation == LayoutOrientation.Horizontal) height else width
 
-    Layout(content, modifier) { measurables, outerConstraints ->
+    Layout(content) { measurables, outerConstraints ->
         val sequences = mutableListOf<List<Placeable>>()
         val crossAxisSizes = mutableListOf<Int>()
         val crossAxisPositions = mutableListOf<Int>()
@@ -169,7 +161,7 @@ private fun Flow(
         // Return whether the placeable can be added to the current sequence.
         fun canAddToCurrentSequence(placeable: Placeable) =
             currentSequence.isEmpty() || currentMainAxisSize + mainAxisSpacing.roundToPx() +
-                placeable.mainAxisSize() <= constraints.mainAxisMax
+                    placeable.mainAxisSize() <= constraints.mainAxisMax
 
         // Store current sequence information and start a new sequence.
         fun startNewSequence() {
@@ -230,7 +222,7 @@ private fun Flow(
             sequences.fastForEachIndexed { i, placeables ->
                 val childrenMainAxisSizes = IntArray(placeables.size) { j ->
                     placeables[j].mainAxisSize() +
-                        if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
+                            if (j < placeables.lastIndex) mainAxisSpacing.roundToPx() else 0
                 }
                 val arrangement = if (i < sequences.lastIndex) {
                     mainAxisAlignment.arrangement
@@ -241,11 +233,7 @@ private fun Flow(
                 // Handle vertical direction
                 val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
                 with(arrangement) {
-                    this@Layout.arrange(
-                        mainAxisLayoutSize,
-                        childrenMainAxisSizes,
-                        mainAxisPositions
-                    )
+                    arrange(mainAxisLayoutSize, childrenMainAxisSizes, mainAxisPositions)
                 }
                 placeables.fastForEachIndexed { j, placeable ->
                     val crossAxis = when (crossAxisAlignment) {
@@ -289,7 +277,6 @@ enum class SizeMode {
      * subject to the incoming layout constraints.
      */
     Wrap,
-
     /**
      * Maximize the amount of free space by expanding to fill the available space,
      * subject to the incoming layout constraints.
