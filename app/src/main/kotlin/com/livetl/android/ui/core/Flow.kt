@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.livetl.android.ui.flow
+package com.livetl.android.ui.core
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable

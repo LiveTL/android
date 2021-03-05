@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.livetl.android.ui.flow
+package com.livetl.android.ui.core
 
 import androidx.compose.ui.unit.Constraints
 

@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setKeepScreenOn(enabled: Boolean) {
+    private fun setKeepScreenOn(enabled: Boolean) {
         if (enabled) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             wakeLock = powerManager.run {

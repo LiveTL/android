@@ -1,17 +1,16 @@
 package com.livetl.android.ui.screen.home
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -26,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +34,7 @@ import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.di.get
+import com.livetl.android.ui.core.SwipeToRefreshLayout
 import com.livetl.android.ui.screen.home.composable.Stream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,67 +72,66 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            Box {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.app_name))
-                    },
-                    actions = {
-                        IconButton(onClick = { refreshFeed() }) {
-                            Icon(
-                                imageVector = Icons.Filled.Refresh,
-                                contentDescription = stringResource(R.string.refresh)
-                            )
-                        }
-                        IconButton(onClick = { navigateToAbout() }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Info,
-                                contentDescription = stringResource(R.string.about)
-                            )
-                        }
-                    },
-                )
-                if (refreshingFeed) {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
-                    )
-                }
-            }
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.app_name))
+                },
+                actions = {
+                    IconButton(onClick = { refreshFeed() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = stringResource(R.string.refresh)
+                        )
+                    }
+                    IconButton(onClick = { navigateToAbout() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.about)
+                        )
+                    }
+                },
+            )
         }
     ) {
-        if (feed != null) {
-            LazyColumn {
-                streamItems(
-                    headingRes = R.string.live,
-                    streams = feed!!.live,
-                    sortByAscending = false,
-                    timestampFormatStringRes = R.string.started_streaming,
-                    timestampSupplier = { it.live_start },
-                    navigateToStream = navigateToStream
-                )
-                streamItems(
-                    headingRes = R.string.upcoming,
-                    streams = feed!!.upcoming,
-                    timestampSupplier = { it.live_schedule },
-                    navigateToStream = navigateToStream
-                )
-                streamItems(
-                    headingRes = R.string.archives,
-                    streams = feed!!.ended,
-                    sortByAscending = false,
-                    timestampFormatStringRes = R.string.streamed,
-                    timestampSupplier = { it.live_end },
-                    navigateToStream = navigateToStream
-                )
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+        SwipeToRefreshLayout(
+            refreshingState = refreshingFeed,
+            onRefresh = { refreshFeed() },
+            refreshIndicator = {
+                Surface(elevation = 10.dp, shape = CircleShape) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .padding(8.dp),
+                        strokeWidth = 2.dp,
+                    )
+                }
+            },
+        ) {
+            if (feed != null) {
+                LazyColumn {
+                    streamItems(
+                        headingRes = R.string.live,
+                        streams = feed!!.live,
+                        sortByAscending = false,
+                        timestampFormatStringRes = R.string.started_streaming,
+                        timestampSupplier = { it.live_start },
+                        navigateToStream = navigateToStream
+                    )
+                    streamItems(
+                        headingRes = R.string.upcoming,
+                        streams = feed!!.upcoming,
+                        timestampSupplier = { it.live_schedule },
+                        navigateToStream = navigateToStream
+                    )
+                    streamItems(
+                        headingRes = R.string.archives,
+                        streams = feed!!.ended,
+                        sortByAscending = false,
+                        timestampFormatStringRes = R.string.streamed,
+                        timestampSupplier = { it.live_end },
+                        navigateToStream = navigateToStream
+                    )
+                }
             }
         }
     }
