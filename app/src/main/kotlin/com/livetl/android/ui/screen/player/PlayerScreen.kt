@@ -43,7 +43,7 @@ val tabs = Tabs.values().toList()
 
 @Composable
 fun PlayerScreen(
-    urlOrId: String,
+    videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
@@ -54,23 +54,9 @@ fun PlayerScreen(
     val chatMessages by chatService.messages.collectAsState()
     val showFilteredMessages by prefs.showTlPanel().collectAsState()
 
-    var videoId by remember { mutableStateOf("") }
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
 
     var selectedTab by remember { mutableStateOf(Tabs.Info) }
-
-    fun setSource(url: String) {
-        videoId = streamService.getVideoId(url)
-
-        coroutineScope.launch {
-            val newStream = streamService.getStreamInfo(url)
-            withContext(Dispatchers.Main) {
-                streamInfo = newStream
-            }
-
-            chatService.load(videoId, newStream.isLive)
-        }
-    }
 
     fun onCurrentSecond(second: Long) {
         // Live chats don't need to be progressed manually
@@ -85,10 +71,18 @@ fun PlayerScreen(
         onDispose { setKeepScreenOn(false) }
     }
 
-    DisposableEffect(urlOrId) {
-        if (urlOrId.isNotEmpty()) {
-            setSource(urlOrId)
+    DisposableEffect(videoId) {
+        if (videoId.isNotEmpty()) {
+            coroutineScope.launch {
+                val newStream = streamService.getStreamInfo(videoId)
+                withContext(Dispatchers.Main) {
+                    streamInfo = newStream
+                }
+
+                chatService.load(videoId, newStream.isLive)
+            }
         }
+
         onDispose {
             chatService.stop()
         }

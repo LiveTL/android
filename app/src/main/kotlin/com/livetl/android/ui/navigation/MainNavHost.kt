@@ -12,6 +12,8 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
+import com.livetl.android.data.stream.StreamService
+import com.livetl.android.di.get
 import com.livetl.android.ui.BroadcastReceiver
 import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
@@ -21,6 +23,7 @@ import com.livetl.android.ui.screen.player.PlayerScreen
 @Composable
 fun MainNavHost(
     setKeepScreenOn: (Boolean) -> Unit,
+    streamService: StreamService = get(),
 ) {
     val navController = rememberNavController()
 
@@ -52,7 +55,8 @@ fun MainNavHost(
                 arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                PlayerScreen(urlOrId, setKeepScreenOn)
+                val videoId = streamService.getVideoId(urlOrId)
+                PlayerScreen(videoId, setKeepScreenOn)
             }
 
             composable(Route.About.id) {
