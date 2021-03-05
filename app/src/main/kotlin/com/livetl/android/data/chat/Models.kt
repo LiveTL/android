@@ -51,6 +51,7 @@ sealed class ChatMessageContent {
 }
 
 data class MessageAuthor(
+    val id: String,
     val name: String,
     val photoUrl: String,
     val isModerator: Boolean,
@@ -102,6 +103,7 @@ data class YTChatAuthor(
 ) {
     fun toMessageAuthor(): MessageAuthor {
         return MessageAuthor(
+            id = id,
             name = name,
             photoUrl = photo,
             isModerator = isModerator,

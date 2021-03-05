@@ -17,4 +17,6 @@
     <string name="streamed">Streamed %s</string>
 
     <string name="setting_show_tl_panel">Show TL Panel</string>
+    <string name="setting_show_mod_messages">Mod messages</string>
+    <string name="setting_show_timestamps">Timestamps</string>
 </resources>

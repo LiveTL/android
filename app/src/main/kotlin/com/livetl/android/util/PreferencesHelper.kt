@@ -13,6 +13,11 @@ class PreferencesHelper(context: Context) {
     private val flowPrefs = FlowSharedPreferences(prefs)
 
     fun showTlPanel() = flowPrefs.getBoolean("show_tl_panel", true)
+    fun tlLanguages() = flowPrefs.getStringSet("tl_langs", setOf())
+    fun showModMessages() = flowPrefs.getBoolean("show_mod_messages", false)
+    fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
+    fun allowedUsers() = flowPrefs.getStringSet("allowed_users", setOf())
+    fun blockedUsers() = flowPrefs.getStringSet("blocked_users", setOf())
 }
 
 fun Preference<Boolean>.toggle() {

@@ -18,7 +18,7 @@ val appModule = module {
     single { PreferencesHelper(androidContext()) }
 
     single { ChatService(androidContext(), get(), get()) }
-    single { ChatFilterService(get()) }
+    single { ChatFilterService(get(), get()) }
     single { FeedService(get(), get()) }
     single { StreamService(androidContext()) }
 }

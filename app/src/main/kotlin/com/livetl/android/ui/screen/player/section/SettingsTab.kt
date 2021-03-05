@@ -14,11 +14,28 @@ fun SettingsTab(
     Column {
         SwitchPreference(nameRes = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
 
-        // Languages
-        // Show mod messages
-        // Show timestamps
+        if (prefs.showTlPanel().get()) {
+            // TODO
+            // Languages
+//            prefs.tlLanguages()
 
-        // Allowlisted users
-        // Blocklisted users
+            // Show mod messages
+            SwitchPreference(
+                nameRes = R.string.setting_show_mod_messages,
+                preference = prefs.showModMessages()
+            )
+            // TODO: actually implement UI for timestamps
+            // Show timestamps
+            SwitchPreference(
+                nameRes = R.string.setting_show_timestamps,
+                preference = prefs.showTimestamps()
+            )
+
+            // TODO
+            // Allowlisted users
+//            prefs.allowedUsers()
+            // Blocklisted users
+//            prefs.blockedUsers()
+        }
     }
 }

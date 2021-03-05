@@ -249,6 +249,7 @@ private fun RegularChatPreview() {
     Message(
         message = ChatMessage.RegularChat(
             author = MessageAuthor(
+                id = "1",
                 name = "Name",
                 photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
                 isModerator = false,
@@ -265,6 +266,7 @@ private fun SuperChatPreview() {
     Message(
         message = ChatMessage.SuperChat(
             author = MessageAuthor(
+                id = "2",
                 name = "Pekora Shachou",
                 photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
                 isModerator = true,
