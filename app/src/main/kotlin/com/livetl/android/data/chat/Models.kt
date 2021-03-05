@@ -53,6 +53,7 @@ sealed class ChatMessageContent {
 data class MessageAuthor(
     val name: String,
     val photoUrl: String,
+    val isModerator: Boolean,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
 )
@@ -96,20 +97,22 @@ data class YTChatAuthor(
     val name: String,
     val id: String,
     val photo: String,
-    val types: List<YTChatAuthorType>,
+    val isModerator: Boolean,
+    val membershipBadge: YTChatMembershipBadge?,
 ) {
     fun toMessageAuthor(): MessageAuthor {
         return MessageAuthor(
             name = name,
             photoUrl = photo,
-            membershipRank = types.firstOrNull()?.name,
-            membershipBadgeUrl = types.firstOrNull()?.thumbnailSrc,
+            isModerator = isModerator,
+            membershipRank = membershipBadge?.name,
+            membershipBadgeUrl = membershipBadge?.thumbnailSrc,
         )
     }
 }
 
 @Serializable
-data class YTChatAuthorType(
+data class YTChatMembershipBadge(
     val name: String,
     val thumbnailSrc: String,
 )

@@ -85,14 +85,20 @@ const messageReceiveCallback = async (response) => {
           return;
         }
 
-        messageItem.authorBadges = messageItem.authorBadges || [];
-        const authorTypes = [];
-        messageItem.authorBadges.forEach((badge) => {
-          const thumbnails = badge.liveChatAuthorBadgeRenderer.customThumbnail.thumbnails;
-          authorTypes.push({
-            name: badge.liveChatAuthorBadgeRenderer.tooltip,
-            thumbnailSrc: thumbnails[thumbnails.length - 1].url
-          })
+        let isAuthorModerator = false;
+        let authorMembership = null;
+        (messageItem.authorBadges || []).forEach((badge) => {
+          if (badge.liveChatAuthorBadgeRenderer.tooltip === 'Moderator') {
+            isAuthorModerator = true;
+          }
+
+          if (badge.liveChatAuthorBadgeRenderer.tooltip.startsWith('Member')) {
+            const thumbnails = badge.liveChatAuthorBadgeRenderer.customThumbnail.thumbnails;
+            authorMembership = {
+              name: badge.liveChatAuthorBadgeRenderer.tooltip,
+              thumbnailSrc: thumbnails[thumbnails.length - 1].url
+            }
+          }
         });
 
         const runs = [];
@@ -125,7 +131,8 @@ const messageReceiveCallback = async (response) => {
             name: messageItem.authorName.simpleText,
             id: messageItem.authorExternalChannelId,
             photo: authorThumbnails[authorThumbnails.length - 1].url,
-            types: authorTypes
+            isModerator: isAuthorModerator,
+            membershipBadge: authorMembership,
           },
           index: i,
           messages: runs,

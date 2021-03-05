@@ -13,5 +13,12 @@ fun SettingsTab(
 ) {
     Column {
         SwitchPreference(nameRes = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
+
+        // Languages
+        // Show mod messages
+        // Show timestamps
+
+        // Allowlisted users
+        // Blocklisted users
     }
 }

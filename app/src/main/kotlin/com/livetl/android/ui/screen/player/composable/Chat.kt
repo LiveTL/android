@@ -250,7 +250,8 @@ private fun RegularChatPreview() {
         message = ChatMessage.RegularChat(
             author = MessageAuthor(
                 name = "Name",
-                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
+                isModerator = false,
             ),
             content = listOf(ChatMessageContent.Text("Hello world")),
             timestamp = 1234,
@@ -265,7 +266,8 @@ private fun SuperChatPreview() {
         message = ChatMessage.SuperChat(
             author = MessageAuthor(
                 name = "Pekora Shachou",
-                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj"
+                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
+                isModerator = true,
             ),
             content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
             timestamp = 1234,
