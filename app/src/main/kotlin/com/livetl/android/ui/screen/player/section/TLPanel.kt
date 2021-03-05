@@ -16,5 +16,9 @@ fun TLPanel(
 ) {
     val filteredMessages by chatFilterService.messages.collectAsState()
 
-    Chat(modifier = Modifier.requiredHeight(96.dp), filteredMessages)
+    Chat(
+        modifier = Modifier.requiredHeight(96.dp),
+        messages = filteredMessages,
+        minimalMode = true,
+    )
 }

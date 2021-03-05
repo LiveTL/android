@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
-import com.livetl.android.ui.flow.FlowRow
 import com.livetl.android.ui.messageFormatter
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
@@ -47,6 +47,7 @@ import kotlinx.coroutines.launch
 fun Chat(
     modifier: Modifier = Modifier,
     messages: List<ChatMessage>,
+    minimalMode: Boolean = false,
     showJumpToBottomButton: Boolean = false,
 ) {
     val scope = rememberCoroutineScope()
@@ -87,7 +88,12 @@ fun Chat(
             .fillMaxWidth(),
         state = scrollState,
     ) {
-        items(_messages) { message -> Message(message) }
+        items(_messages) { message ->
+            when (minimalMode) {
+                true -> MinimalMessage(message)
+                false -> Message(message)
+            }
+        }
     }
 
     if (showJumpToBottomButton) {
@@ -100,18 +106,28 @@ fun Chat(
 }
 
 @Composable
+private fun MinimalMessage(message: ChatMessage) {
+    Text(
+        text = messageFormatter(message.getTextContent()),
+        modifier = Modifier
+            .fillMaxWidth()
+            .chatPadding()
+    )
+}
+
+@Composable
 private fun Message(message: ChatMessage) {
     val modifier = when (message) {
         is ChatMessage.RegularChat ->
             Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                .chatPadding()
         is ChatMessage.SuperChat ->
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(4.dp))
                 .background(color = message.level.backgroundColor)
-                .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                .chatPadding()
     }
 
     val textColor = when (message) {
@@ -119,91 +135,90 @@ private fun Message(message: ChatMessage) {
         is ChatMessage.SuperChat -> message.level.textColor
     }
 
-    FlowRow(modifier = modifier) {
-        val authorPicInlineContent = mapOf(
-            message.author.photoUrl to InlineTextContent(
-                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
+    val authorPicInlineContent = mapOf(
+        message.author.photoUrl to InlineTextContent(
+            placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
+            children = {
+                CoilImage(
+                    data = message.author.photoUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .requiredWidth(16.dp)
+                        .aspectRatio(1f)
+                        .clip(CircleShape),
+                )
+            }
+        )
+    )
+
+    val authorBadgeInlineContent = when {
+        message.author.membershipBadgeUrl != null -> mapOf(
+            message.author.membershipBadgeUrl!! to InlineTextContent(
+                placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
                 children = {
                     CoilImage(
-                        data = message.author.photoUrl,
+                        data = message.author.membershipBadgeUrl!!,
                         contentDescription = null,
                         modifier = Modifier
                             .requiredWidth(16.dp)
-                            .aspectRatio(1f)
-                            .clip(CircleShape),
+                            .aspectRatio(1f),
                     )
                 }
             )
         )
+        else -> emptyMap()
+    }
 
-        val authorBadgeInlineContent = when {
-            message.author.membershipBadgeUrl != null -> mapOf(
-                message.author.membershipBadgeUrl!! to InlineTextContent(
-                    placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
-                    children = {
-                        CoilImage(
-                            data = message.author.membershipBadgeUrl!!,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .requiredWidth(16.dp)
-                                .aspectRatio(1f),
-                        )
-                    }
+    val textPrefix = buildAnnotatedString {
+        // message.timestamp.toString()
+
+        // Profile picture
+        appendInlineContent(message.author.photoUrl, message.author.name)
+
+        // Username
+        append(
+            AnnotatedString(
+                text = " ${message.author.name} ",
+                spanStyle = SpanStyle(
+                    color = textColor.copy(alpha = ContentAlpha.medium),
+                    fontSize = 12.sp,
+                    letterSpacing = 0.4.sp
                 )
             )
-            else -> emptyMap()
+        )
+
+        // Badge icon
+        if (message.author.membershipRank != null) {
+            appendInlineContent(
+                message.author.membershipBadgeUrl!!,
+                message.author.membershipRank!!
+            )
         }
 
-        val textPrefix = buildAnnotatedString {
-            // message.timestamp.toString()
-
-            // Profile picture
-            appendInlineContent(message.author.photoUrl, message.author.name)
-
-            // Username
+        // Superchat monetary amount
+        if (message is ChatMessage.SuperChat) {
             append(
                 AnnotatedString(
-                    text = " ${message.author.name} ",
+                    text = "${message.amount} ",
                     spanStyle = SpanStyle(
-                        color = textColor.copy(alpha = ContentAlpha.medium),
-                        fontSize = 12.sp,
-                        letterSpacing = 0.4.sp
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
                     )
                 )
             )
-
-            // Badge icon
-            if (message.author.membershipRank != null) {
-                appendInlineContent(
-                    message.author.membershipBadgeUrl!!,
-                    message.author.membershipRank!!
-                )
-            }
-
-            // Superchat monetary amount
-            if (message is ChatMessage.SuperChat) {
-                append(
-                    AnnotatedString(
-                        text = "${message.amount} ",
-                        spanStyle = SpanStyle(
-                            color = textColor,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
-                )
-            }
         }
-
-        // Actual chat message contents
-        val styledText = textPrefix + messageFormatter(message.getTextContent())
-
-        BasicText(
-            text = styledText,
-            style = MaterialTheme.typography.body1.copy(color = textColor),
-            // TODO: should try to cache these
-            inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()
-        )
     }
+
+    // Actual chat message contents
+    val styledText = textPrefix + messageFormatter(message.getTextContent())
+
+    BasicText(
+        modifier = modifier,
+        text = styledText,
+        style = MaterialTheme.typography.body1.copy(color = textColor),
+        // TODO: should try to cache these
+        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()
+    )
 }
 
 private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> {
@@ -225,6 +240,8 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
             )
         }
 }
+
+private fun Modifier.chatPadding() = padding(horizontal = 8.dp, vertical = 4.dp)
 
 @Preview
 @Composable
