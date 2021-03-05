@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.player.section
+package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.runtime.Composable
@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.di.get
-import com.livetl.android.ui.screen.player.composable.Chat
 
 @Composable
 fun TLPanel(

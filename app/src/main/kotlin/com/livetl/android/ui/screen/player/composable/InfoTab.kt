@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.player.section
+package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
