@@ -6,7 +6,7 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastForEach
 import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
@@ -17,6 +17,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -77,14 +78,16 @@ class ChatService(
     fun receiveMessages(data: String) {
         scope.launch {
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
-            _messages.value =
-                // TODO: consider jumping around when seeking
-                (
-                    _messages.value +
-                        ytChatMessages.messages
-                            .sortedBy { it.timestamp }
-                            .fastMap { it.toChatMessage() }
-                    ).takeLast(250)
+
+            // TODO: consider jumping around when seeking
+            ytChatMessages.messages
+                .sortedBy { it.timestamp }
+                .fastForEach {
+                    delay(it.showtime.toLong())
+                    val message = it.toChatMessage()
+
+                    _messages.value = (_messages.value + message).takeLast(250)
+                }
         }
     }
 
