@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -43,7 +42,7 @@ import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.di.get
-import com.livetl.android.ui.messageFormatter
+import com.livetl.android.ui.textParser
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.toTimestampString
@@ -123,7 +122,7 @@ private fun MinimalMessage(message: ChatMessage) {
         CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
             append(getAuthorName(message.author))
         }
-        append(messageFormatter(message.getTextContent()))
+        append(textParser(message.getTextContent()))
     }
 
     BasicText(
@@ -234,7 +233,7 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
         }
 
         // Actual chat message contents
-        append(messageFormatter(message.getTextContent()))
+        append(textParser(message.getTextContent()))
     }
 
     BasicText(

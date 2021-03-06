@@ -10,12 +10,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 
 // Regex containing the syntax tokens
 val symbolPattern by lazy {
-    Regex("""(https?://[^\s\t\n]+)|(:[\w+]+:)""")
+    Regex("""(https?://[^\s\t\n]+)|(:[\w+]+:)|(#[\w+]+)""")
 }
 
 // Accepted annotations for the ClickableTextWrapper
 enum class SymbolAnnotationType {
-    LINK
+    LINK, HASHTAG
 }
 typealias StringAnnotation = AnnotatedString.Range<String>
 
@@ -31,7 +31,7 @@ typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
  * @return AnnotatedString with annotations used inside the ClickableText wrapper
  */
 @Composable
-fun messageFormatter(text: String): AnnotatedString {
+fun textParser(text: String): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 
     return buildAnnotatedString {
@@ -90,6 +90,20 @@ private fun getSymbolAnnotation(
                 start = matchResult.range.first,
                 end = matchResult.range.last,
                 tag = SymbolAnnotationType.LINK.name
+            )
+        )
+        '#' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value,
+                spanStyle = SpanStyle(
+                    color = colors.primary
+                )
+            ),
+            StringAnnotation(
+                item = matchResult.value.substring(1),
+                start = matchResult.range.first,
+                end = matchResult.range.last,
+                tag = SymbolAnnotationType.HASHTAG.name
             )
         )
         else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)

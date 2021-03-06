@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.SymbolAnnotationType
-import com.livetl.android.ui.messageFormatter
+import com.livetl.android.ui.textParser
 
 @Composable
 fun InfoTab(
@@ -48,7 +48,7 @@ fun InfoTab(
             Divider()
             Spacer(modifier = Modifier.requiredHeight(8.dp))
 
-            val styledDescription = messageFormatter(streamInfo.shortDescription)
+            val styledDescription = textParser(streamInfo.shortDescription)
             ClickableText(
                 text = styledDescription,
                 style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
@@ -59,6 +59,7 @@ fun InfoTab(
                         ?.let { annotation ->
                             when (annotation.tag) {
                                 SymbolAnnotationType.LINK.name -> uriHandler.openUri(annotation.item)
+                                SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
                                 else -> Unit
                             }
                         }
