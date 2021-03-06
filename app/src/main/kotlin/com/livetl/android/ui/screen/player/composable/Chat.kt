@@ -114,11 +114,28 @@ fun Chat(
 
 @Composable
 private fun MinimalMessage(message: ChatMessage) {
-    Text(
-        text = messageFormatter(message.getTextContent()),
+    val text = buildAnnotatedString {
+        append(
+            AnnotatedString(
+                text = "${message.author.name} ",
+                spanStyle = SpanStyle(
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                    fontSize = 12.sp,
+                    letterSpacing = 0.4.sp
+                )
+            )
+        )
+
+        append(messageFormatter(message.getTextContent()))
+    }
+
+    BasicText(
         modifier = Modifier
             .fillMaxWidth()
-            .chatPadding()
+            .chatPadding(),
+        text = text,
+        style = MaterialTheme.typography.body1,
+        inlineContent = message.getEmoteInlineContent()
     )
 }
 
@@ -176,7 +193,7 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
         else -> emptyMap()
     }
 
-    val textPrefix = buildAnnotatedString {
+    val text = buildAnnotatedString {
         if (showTimestamp) {
             append(
                 AnnotatedString(
@@ -225,14 +242,14 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
                 )
             )
         }
-    }
 
-    // Actual chat message contents
-    val styledText = textPrefix + messageFormatter(message.getTextContent())
+        // Actual chat message contents
+        append(messageFormatter(message.getTextContent()))
+    }
 
     BasicText(
         modifier = modifier,
-        text = styledText,
+        text = text,
         style = MaterialTheme.typography.body1.copy(color = textColor),
         // TODO: should try to cache these
         inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()

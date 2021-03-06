@@ -24,7 +24,7 @@ fun SettingsTab(
                 nameRes = R.string.setting_show_mod_messages,
                 preference = prefs.showModMessages()
             )
-            // TODO: actually implement UI for timestamps
+
             // Show timestamps
             SwitchPreference(
                 nameRes = R.string.setting_show_timestamps,
