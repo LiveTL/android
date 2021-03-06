@@ -26,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -115,17 +116,7 @@ fun Chat(
 @Composable
 private fun MinimalMessage(message: ChatMessage) {
     val text = buildAnnotatedString {
-        append(
-            AnnotatedString(
-                text = "${message.author.name} ",
-                spanStyle = SpanStyle(
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                    fontSize = 12.sp,
-                    letterSpacing = 0.4.sp
-                )
-            )
-        )
-
+        append(getAuthorName(message.author))
         append(messageFormatter(message.getTextContent()))
     }
 
@@ -134,7 +125,7 @@ private fun MinimalMessage(message: ChatMessage) {
             .fillMaxWidth()
             .chatPadding(),
         text = text,
-        style = MaterialTheme.typography.body1,
+        style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
         inlineContent = message.getEmoteInlineContent()
     )
 }
@@ -161,7 +152,7 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
 
     val authorPicInlineContent = mapOf(
         message.author.photoUrl to InlineTextContent(
-            placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
+            placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
             children = {
                 CoilImage(
                     data = message.author.photoUrl,
@@ -211,16 +202,7 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
         appendInlineContent(message.author.photoUrl, message.author.name)
 
         // Username
-        append(
-            AnnotatedString(
-                text = " ${message.author.name} ",
-                spanStyle = SpanStyle(
-                    color = textColor.copy(alpha = ContentAlpha.medium),
-                    fontSize = 12.sp,
-                    letterSpacing = 0.4.sp
-                )
-            )
-        )
+        append(getAuthorName(message.author))
 
         // Badge icon
         if (message.author.membershipRank != null) {
@@ -253,6 +235,24 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
         style = MaterialTheme.typography.body1.copy(color = textColor),
         // TODO: should try to cache these
         inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()
+    )
+}
+
+@Composable
+private fun getAuthorName(author: MessageAuthor): AnnotatedString {
+    val color = when {
+        author.isModerator -> Color(0xFF5D84F1)
+        author.membershipRank != null -> Color(0xFF2BA640)
+        else -> LocalContentColor.current
+    }
+
+    return AnnotatedString(
+        text = "${author.name} ",
+        spanStyle = SpanStyle(
+            color = color.copy(alpha = ContentAlpha.medium),
+            fontSize = 12.sp,
+            letterSpacing = 0.4.sp
+        )
     )
 }
 
