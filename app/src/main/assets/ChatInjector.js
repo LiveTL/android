@@ -62,6 +62,7 @@ const messageReceiveCallback = async (response) => {
     }
 
     const messages = [];
+    const date = new Date();
     (response.continuationContents.liveChatContinuation.actions || []).forEach((action, i) => {
       try {
         let currentElement = action.addChatItemAction;
@@ -124,7 +125,6 @@ const messageReceiveCallback = async (response) => {
 
         const timestampUsec = parseInt(messageItem.timestampUsec);
         const timestampText = (messageItem.timestampText || {}).simpleText;
-        const date = new Date();
         const authorThumbnails = messageItem.authorPhoto.thumbnails;
         const item = {
           author: {

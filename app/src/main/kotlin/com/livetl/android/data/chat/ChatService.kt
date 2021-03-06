@@ -17,9 +17,11 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -50,11 +52,15 @@ class ChatService(
     private var currentSecond: Long = 0
 
     private val scope = CoroutineScope(Dispatchers.IO)
+    private var jobs: List<Job> = mutableListOf()
     private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
     val messages: StateFlow<List<ChatMessage>>
         get() = _messages
 
     suspend fun load(videoId: String, isLive: Boolean) {
+        // Clear out previous chat contents, just in case
+        stop()
+
         val chatUrl = getChatUrl(videoId, isLive)
         Log.d("ChatService", "Loading URL: $chatUrl")
         webview.loadUrl(chatUrl)
@@ -70,25 +76,32 @@ class ChatService(
 
     fun stop() {
         webview.loadUrl("")
+        jobs.forEach { it.cancel() }
         _messages.value = emptyList()
     }
 
     @Suppress("Unused")
     @JavascriptInterface
     fun receiveMessages(data: String) {
-        scope.launch {
+        val job = scope.launch {
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
 
             // TODO: consider jumping around when seeking
             ytChatMessages.messages
-                .sortedBy { it.timestamp }
                 .fastForEach {
-                    // TODO: cancel these on stop
                     delay(it.showtime.toLong())
-                    val message = it.toChatMessage()
+                    if (!isActive) {
+                        return@launch
+                    }
 
+                    val message = it.toChatMessage()
                     _messages.value = (_messages.value + message).takeLast(250)
                 }
+        }
+
+        jobs += job
+        job.invokeOnCompletion {
+            jobs -= job
         }
     }
 

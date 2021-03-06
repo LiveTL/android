@@ -243,13 +243,13 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     val color = when {
         author.isModerator -> Color(0xFF5D84F1)
         author.membershipRank != null -> Color(0xFF2BA640)
-        else -> LocalContentColor.current
+        else -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
     }
 
     return AnnotatedString(
         text = "${author.name} ",
         spanStyle = SpanStyle(
-            color = color.copy(alpha = ContentAlpha.medium),
+            color = color,
             fontSize = 12.sp,
             letterSpacing = 0.4.sp
         )
