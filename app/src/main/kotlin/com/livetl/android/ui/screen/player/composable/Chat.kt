@@ -39,7 +39,11 @@ import androidx.compose.ui.unit.sp
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
+import com.livetl.android.di.get
 import com.livetl.android.ui.messageFormatter
+import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.collectAsState
+import com.livetl.android.util.toTimestampString
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
 
@@ -49,8 +53,11 @@ fun Chat(
     messages: List<ChatMessage>,
     minimalMode: Boolean = false,
     showJumpToBottomButton: Boolean = false,
+    prefs: PreferencesHelper = get(),
 ) {
     val scope = rememberCoroutineScope()
+
+    val showTimestamp by prefs.showTimestamps().collectAsState()
 
     val scrollState = rememberLazyListState()
     var isScrolledToBottom by remember { mutableStateOf(true) }
@@ -91,7 +98,7 @@ fun Chat(
         items(_messages) { message ->
             when (minimalMode) {
                 true -> MinimalMessage(message)
-                false -> Message(message)
+                false -> Message(message, showTimestamp)
             }
         }
     }
@@ -116,7 +123,7 @@ private fun MinimalMessage(message: ChatMessage) {
 }
 
 @Composable
-private fun Message(message: ChatMessage) {
+private fun Message(message: ChatMessage, showTimestamp: Boolean) {
     val modifier = when (message) {
         is ChatMessage.RegularChat ->
             Modifier
@@ -170,7 +177,18 @@ private fun Message(message: ChatMessage) {
     }
 
     val textPrefix = buildAnnotatedString {
-        // message.timestamp.toString()
+        if (showTimestamp) {
+            append(
+                AnnotatedString(
+                    text = " ${message.timestamp.toTimestampString()} ",
+                    spanStyle = SpanStyle(
+                        color = textColor.copy(alpha = ContentAlpha.medium),
+                        fontSize = 12.sp,
+                        letterSpacing = 0.4.sp
+                    )
+                )
+            )
+        }
 
         // Profile picture
         appendInlineContent(message.author.photoUrl, message.author.name)
@@ -255,8 +273,9 @@ private fun RegularChatPreview() {
                 isModerator = false,
             ),
             content = listOf(ChatMessageContent.Text("Hello world")),
-            timestamp = 1234,
-        )
+            timestamp = 1615001105,
+        ),
+        showTimestamp = true,
     )
 }
 
@@ -272,9 +291,10 @@ private fun SuperChatPreview() {
                 isModerator = true,
             ),
             content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
-            timestamp = 1234,
+            timestamp = 1615001105,
             amount = "$100.00",
             level = ChatMessage.SuperChat.Level.RED,
-        )
+        ),
+        showTimestamp = true,
     )
 }

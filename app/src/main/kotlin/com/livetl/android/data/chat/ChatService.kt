@@ -83,6 +83,7 @@ class ChatService(
             ytChatMessages.messages
                 .sortedBy { it.timestamp }
                 .fastForEach {
+                    // TODO: cancel these on stop
                     delay(it.showtime.toLong())
                     val message = it.toChatMessage()
 

@@ -43,7 +43,10 @@ fun PlayerTabs(
     }
     when (selectedTab) {
         Tabs.Info -> InfoTab(streamInfo = streamInfo)
-        Tabs.Chat -> Chat(messages = chatMessages, showJumpToBottomButton = true)
+        Tabs.Chat -> Chat(
+            messages = chatMessages,
+            showJumpToBottomButton = true,
+        )
         Tabs.Settings -> SettingsTab()
     }
 }
