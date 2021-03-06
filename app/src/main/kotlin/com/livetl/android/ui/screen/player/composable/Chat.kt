@@ -18,7 +18,9 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,10 +115,14 @@ fun Chat(
     }
 }
 
+val LocalAuthorNameColor = compositionLocalOf { Color.White }
+
 @Composable
 private fun MinimalMessage(message: ChatMessage) {
     val text = buildAnnotatedString {
-        append(getAuthorName(message.author))
+        CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
+            append(getAuthorName(message.author))
+        }
         append(messageFormatter(message.getTextContent()))
     }
 
@@ -202,7 +208,9 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
         appendInlineContent(message.author.photoUrl, message.author.name)
 
         // Username
-        append(getAuthorName(message.author))
+        CompositionLocalProvider(LocalAuthorNameColor provides textColor) {
+            append(getAuthorName(message.author))
+        }
 
         // Badge icon
         if (message.author.membershipRank != null) {
@@ -243,7 +251,7 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     val color = when {
         author.isModerator -> Color(0xFF5D84F1)
         author.membershipRank != null -> Color(0xFF2BA640)
-        else -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+        else -> LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium)
     }
 
     return AnnotatedString(
