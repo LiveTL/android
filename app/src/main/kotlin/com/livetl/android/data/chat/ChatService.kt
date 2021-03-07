@@ -25,6 +25,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlin.time.ExperimentalTime
+import kotlin.time.microseconds
 
 @SuppressLint("SetJavaScriptEnabled")
 class ChatService(
@@ -80,16 +82,17 @@ class ChatService(
         _messages.value = emptyList()
     }
 
+    @ExperimentalTime
     @Suppress("Unused")
     @JavascriptInterface
     fun receiveMessages(data: String) {
         val job = scope.launch {
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
 
-            // TODO: consider jumping around when seeking
+            // TODO: for archive replays, consider jumping around when seeking, pausing, etc.
             ytChatMessages.messages
                 .fastForEach {
-                    delay(it.showtime.toLong())
+                    delay(it.delay.microseconds)
                     if (!isActive) {
                         return@launch
                     }

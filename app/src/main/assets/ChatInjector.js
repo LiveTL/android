@@ -28,19 +28,11 @@ window.addEventListener('messagePostProcess', d => window.Android.receiveMessage
 
 const isReplay = window.location.href.startsWith('https://www.youtube.com/live_chat_replay');
 
-const formatTimestamp = (timestamp) => {
-  return (new Date(parseInt(timestamp) / 1000)).toLocaleTimeString(navigator.language, {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-};
-
-const getMillis = (timestamp, usec) => {
-  let secs = Array.from(timestamp.split(':'), t => parseInt(t)).reverse();
+const getUsec = (timestamp, usec) => {
+  let secs = Array.from(timestamp.split(':'), t => parseInt(t, 10)).reverse();
   secs = secs[0] + (secs[1] ? secs[1] * 60 : 0) + (secs[2] ? secs[2] * 60 * 60 : 0);
   secs *= 1000;
   secs += usec % 1000;
-  secs /= 1000;
   return secs;
 };
 
@@ -123,8 +115,7 @@ const messageReceiveCallback = async (response) => {
           });
         }
 
-        const timestampUsec = parseInt(messageItem.timestampUsec);
-        const timestampText = (messageItem.timestampText || {}).simpleText;
+        const timestampUsec = parseInt(messageItem.timestampUsec, 10);
         const authorThumbnails = messageItem.authorPhoto.thumbnails;
         const item = {
           author: {
@@ -136,9 +127,10 @@ const messageReceiveCallback = async (response) => {
           },
           index: i,
           messages: runs,
-          timestamp: Math.round(parseInt(timestampUsec) / 1000),
-          showtime: isReplay ? getMillis(timestampText, timestampUsec) :
-            date.getTime() - Math.round(timestampUsec / 1000)
+          timestamp: timestampUsec,
+          delay: isReplay
+            ? getUsec(messageItem.timestampText.simpleText, timestampUsec)
+            : (date.getTime() * 1000) - timestampUsec
         };
 
         if (currentElement.liveChatPaidMessageRenderer) {

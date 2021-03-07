@@ -71,7 +71,7 @@ data class YTChatMessage(
     val index: Int,
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
-    val showtime: Double,
+    val delay: Long,
     val superchat: YTSuperChat? = null,
 ) {
     fun toChatMessage(): ChatMessage {
