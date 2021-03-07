@@ -60,6 +60,7 @@ fun Chat(
     val scope = rememberCoroutineScope()
 
     val showTimestamp by prefs.showTimestamps().collectAsState()
+    val debugTimestamp by prefs.debugTimestamps().collectAsState()
 
     val scrollState = rememberLazyListState()
     var isScrolledToBottom by remember { mutableStateOf(true) }
@@ -100,7 +101,7 @@ fun Chat(
         items(_messages) { message ->
             when (minimalMode) {
                 true -> MinimalMessage(message)
-                false -> Message(message, showTimestamp)
+                false -> Message(message, showTimestamp, debugTimestamp)
             }
         }
     }
@@ -136,7 +137,11 @@ private fun MinimalMessage(message: ChatMessage) {
 }
 
 @Composable
-private fun Message(message: ChatMessage, showTimestamp: Boolean) {
+private fun Message(
+    message: ChatMessage,
+    showTimestamp: Boolean = false,
+    debugTimestamp: Boolean = false,
+) {
     val modifier = when (message) {
         is ChatMessage.RegularChat ->
             Modifier
@@ -191,9 +196,13 @@ private fun Message(message: ChatMessage, showTimestamp: Boolean) {
 
     val text = buildAnnotatedString {
         if (showTimestamp) {
+            val timestamp = when (debugTimestamp) {
+                true -> message.timestamp.toString()
+                false -> message.timestamp.toTimestampString()
+            }
             append(
                 AnnotatedString(
-                    text = " ${message.timestamp.toTimestampString()} ",
+                    text = " $timestamp ",
                     spanStyle = SpanStyle(
                         color = textColor.copy(alpha = ContentAlpha.medium),
                         fontSize = 12.sp,

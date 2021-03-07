@@ -22,6 +22,15 @@ fun SwitchPreference(
     @StringRes nameRes: Int,
     preference: Preference<Boolean>,
 ) {
+    SwitchPreference(modifier, stringResource(nameRes), preference)
+}
+
+@Composable
+fun SwitchPreference(
+    modifier: Modifier = Modifier,
+    name: String,
+    preference: Preference<Boolean>,
+) {
     val value by preference.collectAsState()
 
     Row(
@@ -31,7 +40,7 @@ fun SwitchPreference(
             .padding(8.dp),
     ) {
         Text(
-            text = stringResource(nameRes),
+            text = name,
             modifier = Modifier.weight(1f),
         )
 

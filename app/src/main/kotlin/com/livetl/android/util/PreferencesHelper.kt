@@ -18,6 +18,8 @@ class PreferencesHelper(context: Context) {
     fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
     fun allowedUsers() = flowPrefs.getStringSet("allowed_users", setOf())
     fun blockedUsers() = flowPrefs.getStringSet("blocked_users", setOf())
+
+    fun debugTimestamps() = flowPrefs.getBoolean("debug_timestamps", false)
 }
 
 fun Preference<Boolean>.toggle() {

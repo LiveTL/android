@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.di.get
 import com.livetl.android.ui.preference.SwitchPreference
@@ -30,6 +31,12 @@ fun SettingsTab(
                 nameRes = R.string.setting_show_timestamps,
                 preference = prefs.showTimestamps()
             )
+            if (BuildConfig.DEBUG) {
+                SwitchPreference(
+                    name = "Debug mode timestamps",
+                    preference = prefs.debugTimestamps()
+                )
+            }
 
             // TODO
             // Allowlisted users
