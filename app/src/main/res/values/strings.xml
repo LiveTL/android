@@ -19,4 +19,6 @@
     <string name="setting_show_tl_panel">Show TL Panel</string>
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_timestamps">Timestamps</string>
+
+    <string name="error_chat_load">Failed to load chat</string>
 </resources>

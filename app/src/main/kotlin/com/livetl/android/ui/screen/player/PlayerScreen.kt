@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.livetl.android.R
 import com.livetl.android.data.chat.ChatService
+import com.livetl.android.data.chat.NoChatContinuationFoundException
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.di.get
@@ -20,6 +25,7 @@ import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
+import com.livetl.android.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,6 +38,7 @@ fun PlayerScreen(
     chatService: ChatService = get(),
     prefs: PreferencesHelper = get(),
 ) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val showFilteredMessages by prefs.showTlPanel().collectAsState()
@@ -51,6 +58,7 @@ fun PlayerScreen(
         onDispose { setKeepScreenOn(false) }
     }
 
+    val errorChatLoadMessage = stringResource(R.string.error_chat_load)
     DisposableEffect(videoId) {
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
@@ -59,7 +67,12 @@ fun PlayerScreen(
                     streamInfo = newStream
                 }
 
-                chatService.load(videoId, newStream.isLive)
+                try {
+                    chatService.load(videoId, newStream.isLive)
+                } catch (e: NoChatContinuationFoundException) {
+                    Log.e("PlayerScreen", e.toString())
+                    context.toast(errorChatLoadMessage)
+                }
             }
         }
 
