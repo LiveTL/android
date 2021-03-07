@@ -1,7 +1,7 @@
 package com.livetl.android.util
 
 import android.text.format.DateUtils
-import android.util.Log
+import timber.log.Timber
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -44,6 +44,6 @@ fun Long.toTimestampString(): String {
  */
 fun getMicroDifferenceFromNow(time: Long): Long {
     val nowMicro = System.nanoTime() * 1000
-    Log.d("Time", "Now: $nowMicro, time: $time, diff: ${time - nowMicro}")
+    Timber.d("Now: $nowMicro, time: $time, diff: ${time - nowMicro}")
     return time - nowMicro
 }

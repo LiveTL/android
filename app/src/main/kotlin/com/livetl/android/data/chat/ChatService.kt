@@ -2,7 +2,6 @@ package com.livetl.android.data.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -26,6 +25,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import kotlin.time.ExperimentalTime
 import kotlin.time.microseconds
 
@@ -67,13 +67,13 @@ class ChatService(
 
         this.isLive = isLive
         val chatUrl = getChatUrl(videoId, isLive)
-        Log.d("ChatService", "Loading URL: $chatUrl")
+        Timber.d("Loading URL: $chatUrl")
         webview.loadUrl(chatUrl)
     }
 
     fun seekTo(videoId: String, second: Long) {
         if (second != currentSecond) {
-            Log.d("ChatService", "Seeking to $second for video $videoId")
+            Timber.d("Seeking to $second for video $videoId")
             webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
             currentSecond = second
         }

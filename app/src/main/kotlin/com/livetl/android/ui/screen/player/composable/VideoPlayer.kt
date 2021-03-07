@@ -1,6 +1,5 @@
 package com.livetl.android.ui.screen.player.composable
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -11,6 +10,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import timber.log.Timber
 
 @Composable
 fun VideoPlayer(
@@ -58,10 +58,10 @@ fun VideoPlayer(
 
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 super.onError(youTubePlayer, error)
-                Log.w("VideoPlayer", "Error: ${error.name}")
+                Timber.w("Error: ${error.name}")
                 if (videoId != null && videoAttemptedRetries < 3) {
                     videoAttemptedRetries++
-                    Log.d("VideoPlayer", "Retry #$videoAttemptedRetries to load $videoId")
+                    Timber.d("Retry #$videoAttemptedRetries to load $videoId")
                     loadVideo()
                 }
             }

@@ -1,7 +1,6 @@
 package com.livetl.android.ui.screen.player
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -33,6 +32,7 @@ import com.livetl.android.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 @Composable
 fun PlayerScreen(
@@ -71,7 +71,7 @@ fun PlayerScreen(
                 try {
                     chatService.load(videoId, newStream.isLive)
                 } catch (e: NoChatContinuationFoundException) {
-                    Log.e("PlayerScreen", e.toString())
+                    Timber.e(e)
                     context.toast(errorChatLoadMessage)
                 }
             }
