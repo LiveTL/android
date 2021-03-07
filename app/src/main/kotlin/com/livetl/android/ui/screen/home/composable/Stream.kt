@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.ui.screen.player.composable.LocalAuthorNameColor
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -72,6 +74,7 @@ fun Stream(
                         .padding(start = 8.dp, end = 8.dp)
                         .weight(1f),
                     style = MaterialTheme.typography.caption,
+                    color = LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -85,6 +88,7 @@ fun Stream(
                     Text(
                         timestampString,
                         style = MaterialTheme.typography.caption,
+                        color = LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium),
                     )
                 }
             }
