@@ -55,7 +55,6 @@ const messageReceiveCallback = async (response) => {
     }
 
     const messages = [];
-    const now = new Date();
     (response.continuationContents.liveChatContinuation.actions || []).forEach(action => {
       try {
         let currentElement = action.addChatItemAction;
@@ -130,7 +129,7 @@ const messageReceiveCallback = async (response) => {
           timestamp: timestampUsec,
           delay: isReplay
             ? getUsec(messageItem.timestampText.simpleText, timestampUsec)
-            : (now.getTime() * 1000) - timestampUsec
+            : null
         };
 
         if (currentElement.liveChatPaidMessageRenderer) {

@@ -70,7 +70,7 @@ data class YTChatMessage(
     val author: YTChatAuthor,
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
-    val delay: Long,
+    val delay: Long? = null,
     val superchat: YTSuperChat? = null,
 ) {
     fun toChatMessage(): ChatMessage {

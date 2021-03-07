@@ -7,6 +7,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.ui.util.fastForEach
+import com.livetl.android.util.getMicroDifferenceFromNow
 import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
@@ -51,6 +52,7 @@ class ChatService(
         }
     }
 
+    private var isLive: Boolean = false
     private var currentSecond: Long = 0
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -63,6 +65,7 @@ class ChatService(
         // Clear out previous chat contents, just in case
         stop()
 
+        this.isLive = isLive
         val chatUrl = getChatUrl(videoId, isLive)
         Log.d("ChatService", "Loading URL: $chatUrl")
         webview.loadUrl(chatUrl)
@@ -91,8 +94,14 @@ class ChatService(
 
             // TODO: for archive replays, consider jumping around when seeking, pausing, etc.
             ytChatMessages.messages
+                .sortedBy { it.timestamp }
                 .fastForEach {
-                    delay(it.delay.microseconds)
+                    if (isLive) {
+                        delay(getMicroDifferenceFromNow(it.timestamp).microseconds)
+                    } else {
+                        delay(it.delay!!.microseconds)
+                    }
+
                     if (!isActive) {
                         return@launch
                     }

@@ -1,6 +1,7 @@
 package com.livetl.android.util
 
 import android.text.format.DateUtils
+import android.util.Log
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -36,4 +37,13 @@ fun Long.toTimestampString(): String {
         .atZone(ZoneId.systemDefault())
         .toLocalTime()
     return formatter.format(time)
+}
+
+/**
+ * Calculates number of microseconds until [time] from now.
+ */
+fun getMicroDifferenceFromNow(time: Long): Long {
+    val nowMicro = System.nanoTime() * 1000
+    Log.d("Time", "Now: $nowMicro, time: $time, diff: ${time - nowMicro}")
+    return time - nowMicro
 }
