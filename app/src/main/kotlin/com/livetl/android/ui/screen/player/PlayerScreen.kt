@@ -1,7 +1,9 @@
 package com.livetl.android.ui.screen.player
 
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -11,7 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
@@ -36,12 +40,9 @@ fun PlayerScreen(
     setKeepScreenOn: (Boolean) -> Unit,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
-    prefs: PreferencesHelper = get(),
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
-    val showFilteredMessages by prefs.showTlPanel().collectAsState()
 
     var streamInfo by rememberSaveable { mutableStateOf<StreamInfo?>(null) }
 
@@ -81,11 +82,30 @@ fun PlayerScreen(
         }
     }
 
+    when (LocalConfiguration.current.orientation) {
+        ORIENTATION_LANDSCAPE -> {
+            LandscapeLayout(videoId, streamInfo, { onCurrentSecond(it) })
+        }
+        else -> {
+            PortraitLayout(videoId, streamInfo, { onCurrentSecond(it) })
+        }
+    }
+}
+
+@Composable
+private fun PortraitLayout(
+    videoId: String,
+    streamInfo: StreamInfo?,
+    onCurrentSecond: (Long) -> Unit,
+    prefs: PreferencesHelper = get(),
+) {
+    val showFilteredMessages by prefs.showTlPanel().collectAsState()
+
     Column {
         VideoPlayer(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(16 / 9F),
+                .aspectRatio(16 / 9f),
             videoId = videoId,
             isLive = streamInfo?.isLive,
             onCurrentSecond = { onCurrentSecond(it.toLong()) },
@@ -96,5 +116,35 @@ fun PlayerScreen(
         }
 
         PlayerTabs(streamInfo)
+    }
+}
+
+@Composable
+private fun LandscapeLayout(
+    videoId: String,
+    streamInfo: StreamInfo?,
+    onCurrentSecond: (Long) -> Unit,
+    prefs: PreferencesHelper = get(),
+) {
+    val showFilteredMessages by prefs.showTlPanel().collectAsState()
+
+    Row {
+        VideoPlayer(
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .aspectRatio(16 / 9f)
+                .align(Alignment.CenterVertically),
+            videoId = videoId,
+            isLive = streamInfo?.isLive,
+            onCurrentSecond = { onCurrentSecond(it.toLong()) },
+        )
+
+        Column {
+            if (showFilteredMessages) {
+                TLPanel()
+            }
+
+            PlayerTabs(streamInfo)
+        }
     }
 }

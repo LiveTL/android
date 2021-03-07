@@ -107,7 +107,7 @@ class ChatService(
                     }
 
                     val message = it.toChatMessage()
-                    _messages.value = (_messages.value + message).takeLast(250)
+                    _messages.value = (_messages.value + message).takeLast(MAX_MESSAGE_QUEUE_SIZE)
                 }
         }
 
@@ -139,6 +139,8 @@ class ChatService(
 }
 
 class NoChatContinuationFoundException : Exception()
+
+private const val MAX_MESSAGE_QUEUE_SIZE = 500
 
 private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
