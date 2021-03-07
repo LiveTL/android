@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.about
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.livetl.android.BuildConfig
 import com.livetl.android.R
 
 @Composable
@@ -32,6 +34,9 @@ fun AboutScreen(
             )
         }
     ) {
-        Text("About")
+        Column {
+            Text(BuildConfig.APPLICATION_ID)
+            Text(BuildConfig.VERSION_NAME)
+        }
     }
 }

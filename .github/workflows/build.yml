@@ -46,7 +46,7 @@ jobs:
       - name: Build and test app
         uses: eskatos/gradle-command-action@v1
         with:
-          arguments: assembleDebug
+          arguments: assembleGithubRelease
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true

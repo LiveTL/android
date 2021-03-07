@@ -34,6 +34,18 @@ android {
         }
     }
 
+    flavorDimensions 'variant'
+
+    productFlavors {
+        playstore {
+            dimension 'variant'
+        }
+        github {
+            dimension 'variant'
+            applicationIdSuffix '.github'
+        }
+    }
+
     buildFeatures {
         compose true
         viewBinding true
