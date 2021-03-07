@@ -17,7 +17,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
     }
 
     sourceSets {
@@ -31,18 +31,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    flavorDimensions 'variant'
-
-    productFlavors {
-        playstore {
-            dimension 'variant'
-        }
-        github {
-            dimension 'variant'
-            applicationIdSuffix '.github'
         }
     }
 
