@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -278,15 +280,18 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
         .distinct()
         .associate { emote ->
             emote.id to InlineTextContent(
-                placeholder = Placeholder(1.em, 1.em, PlaceholderVerticalAlign.Center),
+                placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
                 children = {
-                    CoilImage(
-                        data = emote.src,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .requiredWidth(18.dp)
-                            .aspectRatio(1f)
-                    )
+                    Column {
+                        CoilImage(
+                            data = emote.src,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .requiredWidth(20.dp)
+                                .aspectRatio(1f)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
                 }
             )
         }

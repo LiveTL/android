@@ -36,7 +36,7 @@ sealed class ChatMessage {
 
     fun getTextContent(): String {
         return content
-            .joinToString { it.toString() }
+            .joinToString("") { it.toString() }
             .trim()
     }
 }
