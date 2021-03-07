@@ -68,7 +68,6 @@ data class YTChatMessages(
 @Serializable
 data class YTChatMessage(
     val author: YTChatAuthor,
-    val index: Int,
     val messages: List<YTChatMessageData>,
     val timestamp: Long,
     val delay: Long,

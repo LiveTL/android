@@ -8,10 +8,11 @@ window.fetch = async (...args) => {
   const result = await window.fetchFallback(...args);
 
   if (url.startsWith('https://www.youtube.com/youtubei/v1/live_chat/get_live_chat')) {
-    const response = await (await result.clone()).json();
+    const response = await result.clone();
+    const json = await response.json();
     try {
       window.dispatchEvent(new CustomEvent('messageReceive', {
-        detail: response
+        detail: json
       }));
     } catch (e) {
       console.error('Failed to dispatch data', e);
@@ -54,8 +55,8 @@ const messageReceiveCallback = async (response) => {
     }
 
     const messages = [];
-    const date = new Date();
-    (response.continuationContents.liveChatContinuation.actions || []).forEach((action, i) => {
+    const now = new Date();
+    (response.continuationContents.liveChatContinuation.actions || []).forEach(action => {
       try {
         let currentElement = action.addChatItemAction;
         if (action.replayChatItemAction != null) {
@@ -74,7 +75,7 @@ const messageReceiveCallback = async (response) => {
           return;
         }
         if (!messageItem.authorName) {
-          console.log(currentElement);
+          console.debug('Missing authorName', JSON.stringify(currentElement));
           return;
         }
 
@@ -125,12 +126,11 @@ const messageReceiveCallback = async (response) => {
             isModerator: isAuthorModerator,
             membershipBadge: authorMembership,
           },
-          index: i,
           messages: runs,
           timestamp: timestampUsec,
           delay: isReplay
             ? getUsec(messageItem.timestampText.simpleText, timestampUsec)
-            : (date.getTime() * 1000) - timestampUsec
+            : (now.getTime() * 1000) - timestampUsec
         };
 
         if (currentElement.liveChatPaidMessageRenderer) {
@@ -150,6 +150,6 @@ const messageReceiveCallback = async (response) => {
       detail: JSON.stringify({ messages, isReplay })
     }));
   } catch (e) {
-    console.debug(e);
+    console.error(e);
   }
 };
