@@ -47,6 +47,7 @@ import com.livetl.android.di.get
 import com.livetl.android.ui.textParser
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
+import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
@@ -199,7 +200,7 @@ private fun Message(
     val text = buildAnnotatedString {
         if (showTimestamp) {
             val timestamp = when (debugTimestamp) {
-                true -> message.timestamp.toString()
+                true -> message.timestamp.toDebugTimestampString()
                 false -> message.timestamp.toTimestampString()
             }
             append(

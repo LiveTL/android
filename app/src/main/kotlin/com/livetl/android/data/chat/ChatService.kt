@@ -6,10 +6,11 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.ui.util.fastForEach
-import com.livetl.android.util.getMicroDifferenceFromNow
+import com.livetl.android.util.epochMicro
 import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
+import com.livetl.android.util.toDebugTimestampString
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -28,6 +29,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import kotlin.time.ExperimentalTime
 import kotlin.time.microseconds
+import kotlin.time.seconds
 
 @SuppressLint("SetJavaScriptEnabled")
 class ChatService(
@@ -90,14 +92,16 @@ class ChatService(
     @JavascriptInterface
     fun receiveMessages(data: String) {
         val job = scope.launch {
+            val nowMicro = epochMicro() - CHAT_DELAY_OFFSET_SECS.seconds.inMicroseconds
+
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
 
             // TODO: for archive replays, consider jumping around when seeking, pausing, etc.
             ytChatMessages.messages
-                .sortedBy { it.timestamp }
                 .fastForEach {
                     if (isLive) {
-                        delay(getMicroDifferenceFromNow(it.timestamp).microseconds)
+                        delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp).microseconds)
+                        Timber.d("Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}")
                     } else {
                         delay(it.delay!!.microseconds)
                     }
@@ -136,11 +140,22 @@ class ChatService(
             throw NoChatContinuationFoundException()
         }
     }
+
+    /**
+     * Calculates number of microseconds from [now] until [microseconds].
+     */
+    private fun getMicrosecondDiff(now: Long, microseconds: Long): Long {
+        val diff = now - microseconds
+        Timber.d("Now: $now (${now.toDebugTimestampString()}), time: $microseconds (${microseconds.toDebugTimestampString()}), diff: $diff")
+        return diff
+    }
 }
 
 class NoChatContinuationFoundException : Exception()
 
 private const val MAX_MESSAGE_QUEUE_SIZE = 500
+
+private const val CHAT_DELAY_OFFSET_SECS = 3L
 
 private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
