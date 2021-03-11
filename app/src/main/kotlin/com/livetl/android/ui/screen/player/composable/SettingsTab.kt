@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.di.get
 import com.livetl.android.ui.preference.SwitchPreference
 import com.livetl.android.util.PreferencesHelper
+import org.koin.androidx.compose.get
 
 @Composable
 fun SettingsTab(

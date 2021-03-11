@@ -33,12 +33,12 @@ import com.livetl.android.R
 import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.di.get
 import com.livetl.android.ui.core.SwipeToRefreshLayout
 import com.livetl.android.ui.screen.home.composable.Stream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.compose.get
 
 @Composable
 fun HomeScreen(

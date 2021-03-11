@@ -22,7 +22,6 @@ import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.chat.NoChatContinuationFoundException
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
-import com.livetl.android.di.get
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
@@ -32,6 +31,7 @@ import com.livetl.android.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.compose.get
 import timber.log.Timber
 
 @Composable

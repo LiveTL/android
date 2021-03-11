@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
-import com.livetl.android.di.get
 import com.livetl.android.ui.textParser
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
@@ -51,6 +50,7 @@ import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
 
 @Composable
 fun Chat(

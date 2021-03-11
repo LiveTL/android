@@ -15,7 +15,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
-import com.livetl.android.di.get
+import org.koin.androidx.compose.get
 
 enum class Tabs(@StringRes val nameRes: Int) {
     Info(R.string.info),

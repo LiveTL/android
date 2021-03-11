@@ -63,9 +63,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
 
     // DI
-    final koin_version = '2.2.2'
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-compose:$koin_version"
+    final koin_version = '3.0.1-beta-1'
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
