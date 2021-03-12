@@ -39,8 +39,51 @@ class ChatFilterService(
             return false
         }
 
-        // TODO: proper language filtering
-        return message.getTextContent()
-            .startsWith("[EN]")
+        val (lang, parsedMessage) = parseMessage(message)
+        if (lang != null && prefs.tlLanguages().get().contains(lang.id)) {
+            // TODO: return parsedMessage
+            return true
+        }
+
+        return false
+    }
+
+    private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage?, ChatMessage> {
+        val trimmedMessage = message.getTextContent().trim()
+
+        // We assume anything that roughly starts with something like "[EN]" is a translation
+        val leftToken = trimmedMessage[0]
+        val rightToken = LANG_TOKENS[leftToken]
+        val isTagged = rightToken != null && trimmedMessage.indexOf(rightToken) < 5
+
+        if (isTagged) {
+            val (lang, text) = trimmedMessage.split(rightToken!!)
+
+            val trimmedLang = lang.removePrefix(leftToken.toString()).trim()
+            val trimmedText = text.trim()
+                .removePrefix("-")
+                .removePrefix(":")
+                .trim()
+
+            // TODO: return trimmedText
+            return Pair(TranslatedLanguage.fromId(trimmedLang), message)
+        }
+
+        return Pair(null, message)
     }
 }
+
+private val LANG_TOKENS = mapOf(
+    '[' to ']',
+    '{' to '}',
+    '(' to ')',
+    '|' to '|',
+    '<' to '>',
+    '【' to '】',
+    '「' to '」',
+    '『' to '』',
+    '〚' to '〛',
+    '（' to '）',
+    '〈' to '〉',
+    '⁽' to '₎',
+)

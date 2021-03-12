@@ -59,6 +59,24 @@ data class MessageAuthor(
     val membershipBadgeUrl: String? = null,
 )
 
+enum class TranslatedLanguage(val id: String) {
+    ENGLISH("en"),
+    JAPANESE("jp"),
+    SPANISH("es"),
+    INDONESIAN("id"),
+    KOREAN("kr"),
+    CHINESE("zh"),
+    RUSSIAN("ru"),
+    FRENCH("fr"),
+    ;
+
+    companion object {
+        fun fromId(id: String): TranslatedLanguage? {
+            return values().find { it.id == id.toLowerCase() }
+        }
+    }
+}
+
 @Serializable
 data class YTChatMessages(
     val messages: List<YTChatMessage>,
