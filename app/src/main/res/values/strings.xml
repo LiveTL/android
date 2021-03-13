@@ -23,4 +23,9 @@
     <string name="setting_show_timestamps">Timestamps</string>
 
     <string name="error_chat_load">Failed to load chat</string>
+
+    <string name="about_version">Version %s</string>
+    <string name="about_website">Website</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_donate">Donate</string>
 </resources>
