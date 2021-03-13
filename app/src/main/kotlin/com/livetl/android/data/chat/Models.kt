@@ -54,9 +54,9 @@ data class MessageAuthor(
     val id: String,
     val name: String,
     val photoUrl: String,
-    val isModerator: Boolean,
-    val isVerified: Boolean,
-    val isOwner: Boolean,
+    val isModerator: Boolean = false,
+    val isVerified: Boolean = false,
+    val isOwner: Boolean = false,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
 )

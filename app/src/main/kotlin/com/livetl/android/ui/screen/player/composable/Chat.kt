@@ -260,13 +260,19 @@ private fun Message(
 @Composable
 private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     val color = when {
-        author.isModerator -> Color(0xFF5D84F1)
+        author.isModerator || author.isVerified -> Color(0xFF5D84F1)
+        author.isOwner -> Color(0xFFFED500)
         author.membershipRank != null -> Color(0xFF2BA640)
         else -> LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium)
     }
 
+    val name = when {
+        author.isVerified -> author.name + " ✓"
+        else -> author.name
+    }
+
     return AnnotatedString(
-        text = "${author.name} ",
+        text = "$name ",
         spanStyle = SpanStyle(
             color = color,
             fontSize = 12.sp,
@@ -302,20 +308,50 @@ private fun Modifier.chatPadding() = padding(horizontal = 8.dp, vertical = 4.dp)
 
 @Preview
 @Composable
-private fun RegularChatPreview() {
-    Message(
-        message = ChatMessage.RegularChat(
-            author = MessageAuthor(
-                id = "1",
-                name = "Name",
-                photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
-                isModerator = false,
-            ),
-            content = listOf(ChatMessageContent.Text("Hello world")),
-            timestamp = 1615001105,
-        ),
-        showTimestamp = true,
+private fun RegularChatPreviews() {
+    val author = MessageAuthor(
+        id = "1",
+        name = "Name",
+        photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
     )
+
+    Column {
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author,
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            showTimestamp = true,
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isModerator = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            showTimestamp = true,
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isVerified = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            showTimestamp = true,
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isOwner = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            showTimestamp = true,
+        )
+    }
 }
 
 @Preview
@@ -327,7 +363,6 @@ private fun SuperChatPreview() {
                 id = "2",
                 name = "Pekora Shachou",
                 photoUrl = "https://yt3.ggpht.com/ytc/AAUvwng37V0l-NwF3bu7QA4XmOP5EZFwk5zJE-78OHP9=s176-c-k-c0x00ffffff-no-rj",
-                isModerator = true,
             ),
             content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
             timestamp = 1615001105,
