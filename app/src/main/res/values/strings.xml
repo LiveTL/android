@@ -28,4 +28,6 @@
     <string name="about_website">Website</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_donate">Donate</string>
+
+    <string name="licenses">Licenses</string>
 </resources>

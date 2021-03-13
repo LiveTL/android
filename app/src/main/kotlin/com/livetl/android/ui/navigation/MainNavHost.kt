@@ -16,6 +16,7 @@ import com.livetl.android.data.stream.StreamService
 import com.livetl.android.ui.BroadcastReceiver
 import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
+import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 import org.koin.androidx.compose.get
@@ -61,6 +62,13 @@ fun MainNavHost(
 
             composable(Route.About.id) {
                 AboutScreen(
+                    onBackPressed = { navigateBack() },
+                    navigateToLicenses = { navController.navigate(Route.Licenses.id) },
+                )
+            }
+
+            composable(Route.Licenses.id) {
+                LicensesScreen(
                     onBackPressed = { navigateBack() }
                 )
             }

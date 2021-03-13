@@ -30,6 +30,7 @@ import com.livetl.android.R
 @Composable
 fun AboutScreen(
     onBackPressed: () -> Unit,
+    navigateToLicenses: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -77,8 +78,13 @@ fun AboutScreen(
             /*
             Credits
             Holotools stream info
-            OSS Licenses
              */
+
+            Text(
+                text = stringResource(R.string.licenses),
+                modifier = Modifier
+                    .clickable { navigateToLicenses() }
+            )
         }
     }
 }
@@ -108,5 +114,8 @@ private fun LinkIcon(
 @Preview
 @Composable
 private fun AboutScreenPreview() {
-    AboutScreen(onBackPressed = {})
+    AboutScreen(
+        onBackPressed = {},
+        navigateToLicenses = {}
+    )
 }
