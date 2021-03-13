@@ -55,6 +55,8 @@ data class MessageAuthor(
     val name: String,
     val photoUrl: String,
     val isModerator: Boolean,
+    val isVerified: Boolean,
+    val isOwner: Boolean,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
 )
@@ -116,6 +118,8 @@ data class YTChatAuthor(
     val id: String,
     val photo: String,
     val isModerator: Boolean,
+    val isVerified: Boolean,
+    val isOwner: Boolean,
     val membershipBadge: YTChatMembershipBadge?,
 ) {
     fun toMessageAuthor(): MessageAuthor {
@@ -124,6 +128,8 @@ data class YTChatAuthor(
             name = name,
             photoUrl = photo,
             isModerator = isModerator,
+            isVerified = isVerified,
+            isOwner = isOwner,
             membershipRank = membershipBadge?.name,
             membershipBadgeUrl = membershipBadge?.thumbnailSrc,
         )

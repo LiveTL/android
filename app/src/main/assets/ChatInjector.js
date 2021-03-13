@@ -79,13 +79,24 @@ const messageReceiveCallback = async (response) => {
         }
 
         let isAuthorModerator = false;
+        let isAuthorVerified = false;
+        let isAuthorOwner = false;
         let authorMembership = null;
         (messageItem.authorBadges || []).forEach((badge) => {
-          if (badge.liveChatAuthorBadgeRenderer.tooltip === 'Moderator') {
+          const tooltip = badge.liveChatAuthorBadgeRenderer.tooltip;
+          if (tooltip === 'Moderator') {
             isAuthorModerator = true;
           }
 
-          if (badge.liveChatAuthorBadgeRenderer.tooltip.startsWith('Member')) {
+          if (tooltip === 'Verified') {
+            isAuthorVerified = true;
+          }
+
+          if (tooltip === 'Owner') {
+            isAuthorOwner = true;
+          }
+
+          if (tooltip.startsWith('Member')) {
             const thumbnails = badge.liveChatAuthorBadgeRenderer.customThumbnail.thumbnails;
             authorMembership = {
               name: badge.liveChatAuthorBadgeRenderer.tooltip,
@@ -123,6 +134,8 @@ const messageReceiveCallback = async (response) => {
             id: messageItem.authorExternalChannelId,
             photo: authorThumbnails[authorThumbnails.length - 1].url,
             isModerator: isAuthorModerator,
+            isVerified: isAuthorVerified,
+            isOwner: isAuthorOwner,
             membershipBadge: authorMembership,
           },
           messages: runs,

@@ -30,11 +30,16 @@ class ChatFilterService(
         if (prefs.showModMessages().get() && message.author.isModerator) {
             return true
         }
+        if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
+            return true
+        }
+        if (prefs.showOwnerMesages().get() && message.author.isOwner) {
+            return true
+        }
 
         if (prefs.allowedUsers().get().contains(message.author.id)) {
             return true
         }
-
         if (prefs.blockedUsers().get().contains(message.author.id)) {
             return false
         }

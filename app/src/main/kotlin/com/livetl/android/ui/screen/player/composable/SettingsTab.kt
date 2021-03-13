@@ -20,10 +20,18 @@ fun SettingsTab(
             // Languages
 //            prefs.tlLanguages()
 
-            // Show mod messages
+            // Include author types
             SwitchPreference(
                 nameRes = R.string.setting_show_mod_messages,
                 preference = prefs.showModMessages()
+            )
+            SwitchPreference(
+                nameRes = R.string.setting_show_verified_messages,
+                preference = prefs.showVerifiedMesages()
+            )
+            SwitchPreference(
+                nameRes = R.string.setting_show_owner_messages,
+                preference = prefs.showOwnerMesages()
             )
 
             // Show timestamps
