@@ -26,12 +26,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
+import com.livetl.android.ui.preference.BasicPreference
+import com.livetl.android.ui.preference.PreferenceGroup
 
 @Composable
 fun AboutScreen(
     onBackPressed: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,16 +79,16 @@ fun AboutScreen(
                 )
             }
 
-            /*
-            Credits
-            Holotools stream info
-             */
-
-            Text(
-                text = stringResource(R.string.licenses),
-                modifier = Modifier
-                    .clickable { navigateToLicenses() }
-            )
+            PreferenceGroup(nameRes = R.string.credits) {
+                BasicPreference(
+                    nameRes = R.string.holotools_stream_info,
+                    onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
+                )
+                BasicPreference(
+                    nameRes = R.string.licenses,
+                    onClick = { navigateToLicenses() },
+                )
+            }
         }
     }
 }

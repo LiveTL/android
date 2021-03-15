@@ -29,5 +29,7 @@
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_donate">Donate</string>
 
-    <string name="licenses">Licenses</string>
+    <string name="credits">Credits</string>
+    <string name="holotools_stream_info">Streams feed from HoloTools</string>
+    <string name="licenses">Open source licenses</string>
 </resources>
