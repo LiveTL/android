@@ -19,7 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,10 +64,8 @@ fun HomeScreen(
         }
     }
 
-    DisposableEffect(Unit) {
+    LaunchedEffect(Unit) {
         refreshFeed()
-
-        onDispose { }
     }
 
     Scaffold(

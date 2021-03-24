@@ -21,13 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.CoilImage
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.player.composable.LocalAuthorNameColor
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun Stream(

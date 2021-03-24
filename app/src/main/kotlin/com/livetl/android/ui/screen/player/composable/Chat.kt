@@ -19,7 +19,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.coil.CoilImage
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
@@ -48,7 +49,6 @@ import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
-import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
@@ -87,13 +87,11 @@ fun Chat(
         }
     }
 
-    DisposableEffect(messages) {
+    LaunchedEffect(messages) {
         isScrolledToBottom = checkIfAtBottom()
         _messages = messages
 
         scrollToBottom()
-
-        onDispose { }
     }
 
     LazyColumn(
