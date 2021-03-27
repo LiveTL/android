@@ -101,9 +101,14 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0'
 
+    final accompanist_version = '0.7.0'
+
     // Image loading
     implementation 'io.coil-kt:coil:1.1.1'
-    implementation 'com.google.accompanist:accompanist-coil:0.7.0'
+    implementation "com.google.accompanist:accompanist-coil:$accompanist_version"
+
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
