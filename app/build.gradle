@@ -2,7 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
 
 plugins {
     id 'com.android.application'
-    id 'com.mikepenz.aboutlibraries.plugin'
+    // TODO: currently failing; see https://github.com/mikepenz/AboutLibraries/issues/631
+    // id 'com.mikepenz.aboutlibraries.plugin'
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
@@ -88,7 +89,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-viewbinding:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation 'androidx.navigation:navigation-compose:1.0.0-alpha09'
+    implementation 'androidx.navigation:navigation-compose:1.0.0-alpha10'
 
     // Video player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
@@ -101,7 +102,7 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0'
 
-    final accompanist_version = '0.7.0'
+    final accompanist_version = '0.7.1'
 
     // Image loading
     implementation 'io.coil-kt:coil:1.1.1'
