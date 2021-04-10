@@ -49,7 +49,10 @@ fun PlayerTabs(
     val chatMessages by chatService.messages.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(pageCount = tabs.size)
+    val pagerState = rememberPagerState(
+        initialPage = tabs.indexOf(Tabs.Chat),
+        pageCount = tabs.size,
+    )
 
     Column(Modifier.fillMaxSize()) {
         TabRow(
