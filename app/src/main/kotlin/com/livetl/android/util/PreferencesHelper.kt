@@ -25,6 +25,22 @@ class PreferencesHelper(context: Context) {
     fun debugTimestamps() = flowPrefs.getBoolean("debug_timestamps", false)
 }
 
+fun <T> Preference<Set<T>>.toggle(item: T) {
+    if (item in get()) {
+        minusAssign(item)
+    } else {
+        plusAssign(item)
+    }
+}
+
+operator fun <T> Preference<Set<T>>.plusAssign(item: T) {
+    set(get() + item)
+}
+
+operator fun <T> Preference<Set<T>>.minusAssign(item: T) {
+    set(get() - item)
+}
+
 fun Preference<Boolean>.toggle() {
     set(!get())
 }

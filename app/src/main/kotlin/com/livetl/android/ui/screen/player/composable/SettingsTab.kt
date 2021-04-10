@@ -1,47 +1,60 @@
 package com.livetl.android.ui.screen.player.composable
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.ui.preference.SwitchPreference
+import com.livetl.android.data.chat.TranslatedLanguage
+import com.livetl.android.ui.preference.PreferencesScrollableColumn
+import com.livetl.android.ui.preference.SwitchPref
 import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.collectAsState
 import org.koin.androidx.compose.get
+import java.util.Locale
 
 @Composable
 fun SettingsTab(
     prefs: PreferencesHelper = get(),
 ) {
-    Column {
-        SwitchPreference(nameRes = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
+    val showTlPanelSettings by prefs.showTlPanel().collectAsState()
 
-        if (prefs.showTlPanel().get()) {
-            // TODO
-            // Languages
-//            prefs.tlLanguages()
+    PreferencesScrollableColumn {
+        SwitchPref(title = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
+
+        if (showTlPanelSettings) {
+            // Filtered languages
+            MultiChoicePref(
+                title = stringResource(R.string.setting_tl_languages),
+                preference = prefs.tlLanguages(),
+                choices = TranslatedLanguage.values().map {
+                    val locale = Locale(it.id)
+                    it.id to locale.getDisplayName(locale).capitalize()
+                }.toMap()
+            )
 
             // Include author types
-            SwitchPreference(
-                nameRes = R.string.setting_show_mod_messages,
+            SwitchPref(
+                title = R.string.setting_show_mod_messages,
                 preference = prefs.showModMessages()
             )
-            SwitchPreference(
-                nameRes = R.string.setting_show_verified_messages,
+            SwitchPref(
+                title = R.string.setting_show_verified_messages,
                 preference = prefs.showVerifiedMesages()
             )
-            SwitchPreference(
-                nameRes = R.string.setting_show_owner_messages,
+            SwitchPref(
+                title = R.string.setting_show_owner_messages,
                 preference = prefs.showOwnerMesages()
             )
 
             // Show timestamps
-            SwitchPreference(
-                nameRes = R.string.setting_show_timestamps,
+            SwitchPref(
+                title = R.string.setting_show_timestamps,
                 preference = prefs.showTimestamps()
             )
             if (BuildConfig.DEBUG) {
-                SwitchPreference(
-                    name = "Debug mode timestamps",
+                SwitchPref(
+                    title = "Debug mode timestamps",
                     preference = prefs.debugTimestamps()
                 )
             }
