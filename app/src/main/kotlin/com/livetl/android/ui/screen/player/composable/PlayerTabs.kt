@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,11 +22,11 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
+import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatService
-import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.data.stream.StreamInfo
-import com.livetl.android.ui.screen.player.composable.chat.AuthorActionDialog
 import com.livetl.android.ui.screen.player.composable.chat.Chat
+import com.livetl.android.ui.screen.player.composable.chat.MessageActionsDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
@@ -44,7 +43,7 @@ fun PlayerTabs(
     streamInfo: StreamInfo?,
     chatService: ChatService = get(),
 ) {
-    val actioningAuthor = remember { mutableStateOf<MessageAuthor?>(null) }
+    val actioningMessage = remember { mutableStateOf<ChatMessage?>(null) }
     val chatMessages by chatService.messages.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
@@ -84,7 +83,7 @@ fun PlayerTabs(
                 Tabs.Info.ordinal -> InfoTab(streamInfo = streamInfo)
                 Tabs.Chat.ordinal -> Chat(
                     messages = chatMessages,
-                    onClickMessage = { actioningAuthor.value = it.author },
+                    onClickMessage = { actioningMessage.value = it },
                     showJumpToBottomButton = true,
                 )
                 Tabs.Settings.ordinal -> SettingsTab()
@@ -92,5 +91,5 @@ fun PlayerTabs(
         }
     }
 
-    AuthorActionDialog(actioningAuthor)
+    MessageActionsDialog(actioningMessage)
 }

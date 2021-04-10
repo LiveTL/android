@@ -28,6 +28,10 @@
 
     <string name="error_chat_load">Failed to load chat</string>
 
+    <string name="action_allow_author">Always show author</string>
+    <string name="action_block_author">Always hide author</string>
+    <string name="action_copy_text">Copy text</string>
+
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>
     <string name="about_github" translatable="false">GitHub</string>
