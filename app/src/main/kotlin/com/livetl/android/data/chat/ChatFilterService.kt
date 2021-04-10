@@ -24,7 +24,7 @@ class ChatFilterService(
 
         chatService.messages
             .onEach {
-                _messages.value = it.filter(this::shouldFilter)
+                _messages.value = it.mapNotNull(this::filterMessage)
             }
             .launchIn(scope)
     }
@@ -32,32 +32,31 @@ class ChatFilterService(
     fun stop() {
         _messages.value = emptyList()
     }
-    
-    private fun shouldFilter(message: ChatMessage): Boolean {
-        if (prefs.showModMessages().get() && message.author.isModerator) {
-            return true
-        }
-        if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
-            return true
-        }
-        if (prefs.showOwnerMesages().get() && message.author.isOwner) {
-            return true
-        }
 
+    private fun filterMessage(message: ChatMessage): ChatMessage? {
         if (prefs.allowedUsers().get().contains(message.author.id)) {
-            return true
+            return message
         }
         if (prefs.blockedUsers().get().contains(message.author.id)) {
-            return false
+            return null
+        }
+
+        if (prefs.showModMessages().get() && message.author.isModerator) {
+            return message
+        }
+        if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
+            return message
+        }
+        if (prefs.showOwnerMesages().get() && message.author.isOwner) {
+            return null
         }
 
         val (lang, parsedMessage) = parseMessage(message)
         if (lang != null && prefs.tlLanguages().get().contains(lang.id)) {
-            // TODO: return parsedMessage
-            return true
+            return parsedMessage
         }
 
-        return false
+        return null
     }
 
     private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage?, ChatMessage> {
@@ -77,7 +76,7 @@ class ChatFilterService(
                 .removePrefix(":")
                 .trim()
 
-            // TODO: return trimmedText
+            // TODO: return message with trimmedText instead
             return Pair(TranslatedLanguage.fromId(trimmedLang), message)
         }
 
