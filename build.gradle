@@ -2,7 +2,7 @@ buildscript {
     ext {
         kotlin_version = '1.4.31'
         compose_version = '1.0.0-beta04'
-        about_libs_version = '8.8.4'
+        about_libs_version = '8.8.5'
     }
     repositories {
         mavenCentral()
