@@ -26,6 +26,7 @@ import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.player.composable.LocalAuthorNameColor
+import com.livetl.android.util.escapeHtmlEntities
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString
 
@@ -61,7 +62,7 @@ fun Stream(
                 false -> 8.dp
             }
             Text(
-                stream.title,
+                stream.title.escapeHtmlEntities(),
                 modifier = Modifier.padding(start = titleOffset),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

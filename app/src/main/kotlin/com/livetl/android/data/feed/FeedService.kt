@@ -1,6 +1,5 @@
 package com.livetl.android.data.feed
 
-import com.livetl.android.util.escapeHtmlEntities
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
@@ -14,7 +13,7 @@ class FeedService(private val client: HttpClient, private val json: Json) {
 
     suspend fun getFeed(): Feed = withContext(Dispatchers.IO) {
         val result = client.get<HttpResponse>(SCHEDULE_API)
-        json.decodeFromString(result.readText().escapeHtmlEntities())
+        json.decodeFromString(result.readText())
     }
 }
 
