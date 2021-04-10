@@ -13,6 +13,7 @@ class PreferencesHelper(context: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private val flowPrefs = FlowSharedPreferences(prefs)
 
+    fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
     fun showTlPanel() = flowPrefs.getBoolean("show_tl_panel", true)
     fun tlLanguages() = flowPrefs.getStringSet("tl_langs", setOf(TranslatedLanguage.ENGLISH.id))
     fun showModMessages() = flowPrefs.getBoolean("show_mod_messages", false)

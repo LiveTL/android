@@ -21,6 +21,8 @@ fun SettingsTab(
     val showTlPanelSettings by prefs.showTlPanel().collectAsState()
 
     PreferencesScrollableColumn {
+        SwitchPref(title = R.string.setting_fullscreen, preference = prefs.showFullscreen())
+
         SwitchPref(title = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
 
         if (showTlPanelSettings) {

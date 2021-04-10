@@ -38,13 +38,16 @@ import timber.log.Timber
 fun PlayerScreen(
     videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
+    setFullscreen: (Boolean) -> Unit,
     streamService: StreamService = get(),
     chatService: ChatService = get(),
+    prefs: PreferencesHelper = get(),
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var streamInfo by rememberSaveable { mutableStateOf<StreamInfo?>(null) }
+    val showFullscreen by prefs.showFullscreen().collectAsState()
 
     fun onCurrentSecond(second: Long) {
         // Live chats don't need to be progressed manually
@@ -57,6 +60,14 @@ fun PlayerScreen(
         setKeepScreenOn(true)
 
         onDispose { setKeepScreenOn(false) }
+    }
+
+    DisposableEffect(showFullscreen) {
+        setFullscreen(showFullscreen)
+
+        onDispose {
+            setFullscreen(false)
+        }
     }
 
     val errorChatLoadMessage = stringResource(R.string.error_chat_load)

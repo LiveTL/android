@@ -24,6 +24,7 @@ import org.koin.androidx.compose.get
 @Composable
 fun MainNavHost(
     setKeepScreenOn: (Boolean) -> Unit,
+    setFullscreen: (Boolean) -> Unit,
     streamService: StreamService = get(),
 ) {
     val navController = rememberNavController()
@@ -57,7 +58,7 @@ fun MainNavHost(
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
                 val videoId = streamService.getVideoId(urlOrId)
-                PlayerScreen(videoId, setKeepScreenOn)
+                PlayerScreen(videoId, setKeepScreenOn, setFullscreen)
             }
 
             composable(Route.About.id) {
