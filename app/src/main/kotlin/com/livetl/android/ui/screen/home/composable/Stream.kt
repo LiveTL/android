@@ -25,7 +25,7 @@ import com.google.accompanist.coil.CoilImage
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.ui.screen.player.composable.LocalAuthorNameColor
+import com.livetl.android.ui.screen.player.composable.chat.LocalAuthorNameColor
 import com.livetl.android.util.escapeHtmlEntities
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString

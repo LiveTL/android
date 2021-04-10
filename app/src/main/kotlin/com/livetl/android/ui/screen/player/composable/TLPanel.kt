@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.chat.ChatFilterService
+import com.livetl.android.ui.screen.player.composable.chat.Chat
 import org.koin.androidx.compose.get
 
 @Composable

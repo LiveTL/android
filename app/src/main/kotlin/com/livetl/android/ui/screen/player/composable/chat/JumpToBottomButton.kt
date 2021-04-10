@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.player.composable
+package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition

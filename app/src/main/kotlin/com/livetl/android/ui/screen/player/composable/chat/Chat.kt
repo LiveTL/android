@@ -1,6 +1,7 @@
-package com.livetl.android.ui.screen.player.composable
+package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,6 +58,7 @@ fun Chat(
     modifier: Modifier = Modifier,
     messages: List<ChatMessage>,
     minimalMode: Boolean = false,
+    onClickMessage: (ChatMessage) -> Unit = {},
     showJumpToBottomButton: Boolean = false,
     prefs: PreferencesHelper = get(),
 ) {
@@ -100,9 +102,13 @@ fun Chat(
         state = scrollState,
     ) {
         items(_messages) { message ->
+            val baseMessageModifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClickMessage(message) }
+
             when (minimalMode) {
-                true -> MinimalMessage(message)
-                false -> Message(message, showTimestamp, debugTimestamp)
+                true -> MinimalMessage(baseMessageModifier, message)
+                false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
             }
         }
     }
@@ -119,7 +125,10 @@ fun Chat(
 val LocalAuthorNameColor = compositionLocalOf { Color.White }
 
 @Composable
-private fun MinimalMessage(message: ChatMessage) {
+private fun MinimalMessage(
+    modifier: Modifier = Modifier,
+    message: ChatMessage,
+) {
     val text = buildAnnotatedString {
         CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
             append(getAuthorName(message.author))
@@ -128,9 +137,7 @@ private fun MinimalMessage(message: ChatMessage) {
     }
 
     BasicText(
-        modifier = Modifier
-            .fillMaxWidth()
-            .chatPadding(),
+        modifier = modifier.chatPadding(),
         text = text,
         style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
         inlineContent = message.getEmoteInlineContent()
@@ -139,23 +146,11 @@ private fun MinimalMessage(message: ChatMessage) {
 
 @Composable
 private fun Message(
+    modifier: Modifier = Modifier,
     message: ChatMessage,
     showTimestamp: Boolean = false,
     debugTimestamp: Boolean = false,
 ) {
-    val modifier = when (message) {
-        is ChatMessage.RegularChat ->
-            Modifier
-                .fillMaxWidth()
-                .chatPadding()
-        is ChatMessage.SuperChat ->
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
-                .background(color = message.level.backgroundColor)
-                .chatPadding()
-    }
-
     val textColor = when (message) {
         is ChatMessage.RegularChat -> LocalContentColor.current
         is ChatMessage.SuperChat -> message.level.textColor
@@ -247,7 +242,15 @@ private fun Message(
     }
 
     BasicText(
-        modifier = modifier,
+        modifier = when (message) {
+            is ChatMessage.RegularChat ->
+                modifier.chatPadding()
+            is ChatMessage.SuperChat ->
+                modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(color = message.level.backgroundColor)
+                    .chatPadding()
+        },
         text = text,
         style = MaterialTheme.typography.body1.copy(color = textColor),
         // TODO: should try to cache these
