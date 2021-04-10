@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -14,6 +15,12 @@ fun TLPanel(
     chatFilterService: ChatFilterService = get(),
 ) {
     val filteredMessages by chatFilterService.messages.collectAsState()
+
+    DisposableEffect(Unit) {
+        onDispose {
+            chatFilterService.stop()
+        }
+    }
 
     Chat(
         modifier = Modifier.requiredHeight(96.dp),

@@ -19,6 +19,9 @@ class ChatFilterService(
         get() = _messages
 
     init {
+        // Clear out previous chat contents, just in case
+        stop()
+
         chatService.messages
             .onEach {
                 _messages.value = it.filter(this::shouldFilter)
@@ -26,6 +29,10 @@ class ChatFilterService(
             .launchIn(scope)
     }
 
+    fun stop() {
+        _messages.value = emptyList()
+    }
+    
     private fun shouldFilter(message: ChatMessage): Boolean {
         if (prefs.showModMessages().get() && message.author.isModerator) {
             return true
