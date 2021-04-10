@@ -3,12 +3,7 @@ package com.livetl.android.ui.screen.player.composable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Tab
-import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
@@ -18,14 +13,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatService
@@ -91,30 +83,4 @@ fun PlayerTabs(
             }
         }
     }
-}
-
-@OptIn(ExperimentalPagerApi::class)
-fun Modifier.pagerTabIndicatorOffset(
-    pagerState: PagerState,
-    tabPositions: List<TabPosition>,
-): Modifier = composed {
-    val targetIndicatorOffset: Dp
-    val indicatorWidth: Dp
-
-    val currentTab = tabPositions[pagerState.currentPage]
-    val nextTab = tabPositions.getOrNull(pagerState.currentPage + 1)
-    if (nextTab != null) {
-        // If we have a next tab, lerp between the size and offset
-        targetIndicatorOffset = lerp(currentTab.left, nextTab.left, pagerState.currentPageOffset)
-        indicatorWidth = lerp(currentTab.width, nextTab.width, pagerState.currentPageOffset)
-    } else {
-        // Otherwise we just use the current tab/page
-        targetIndicatorOffset = currentTab.left
-        indicatorWidth = currentTab.width
-    }
-
-    fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
-        .offset(x = targetIndicatorOffset)
-        .width(indicatorWidth)
 }
