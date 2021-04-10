@@ -2,16 +2,15 @@ package com.livetl.android.ui.preference
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,6 +46,7 @@ fun PreferencesScrollableColumn(
     Box {
         Column(
             modifier = modifier
+                .fillMaxSize()
                 .scrollable(
                     state = rememberScrollState(),
                     orientation = Orientation.Vertical
@@ -75,7 +73,8 @@ class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
 
         Pref(
             title = title,
-//            subtitle = if (subtitle == null) choices[preference.value] else null,
+            subtitle = subtitle
+                ?: choices.filter { it.key in state }.map { it.value }.joinToString(),
             onClick = {
                 dialog = {
                     MultiChoiceDialog(
@@ -146,11 +145,27 @@ class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
 }
 
 @Composable
+fun PrefGroup(
+    modifier: Modifier = Modifier,
+    @StringRes title: Int,
+    content: @Composable () -> Unit,
+) {
+    Column(modifier) {
+        Text(
+            text = stringResource(title),
+            color = MaterialTheme.colors.secondary,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+
+        content()
+    }
+}
+
+@Composable
 fun Pref(
     title: String,
-    icon: ImageVector? = null,
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     subtitle: String? = null,
     action: @Composable (() -> Unit)? = null,
 ) {
@@ -160,22 +175,9 @@ fun Pref(
         modifier = Modifier
             .fillMaxWidth()
             .requiredHeight(height)
-            .combinedClickable(
-                onLongClick = onLongClick,
-                onClick = onClick
-            ),
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (icon != null) {
-            Icon(
-                imageVector = icon,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
-                tint = MaterialTheme.colors.primary,
-                contentDescription = null
-            )
-        }
         Column(
             Modifier
                 .padding(horizontal = 16.dp)
@@ -208,13 +210,11 @@ fun Pref(
 @Composable
 fun Pref(
     @StringRes title: Int,
-    icon: ImageVector? = null,
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     subtitle: String? = null,
     action: @Composable (() -> Unit)? = null,
 ) {
-    Pref(stringResource(title), icon, onClick, onLongClick, subtitle, action)
+    Pref(stringResource(title), onClick, subtitle, action)
 }
 
 @Composable
@@ -222,14 +222,12 @@ fun SwitchPref(
     preference: Preference<Boolean>,
     title: String,
     subtitle: String? = null,
-    icon: ImageVector? = null,
 ) {
     val state by preference.collectAsState()
 
     Pref(
         title = title,
         subtitle = subtitle,
-        icon = icon,
         action = { Switch(checked = state, onCheckedChange = null) },
         onClick = { preference.toggle() }
     )
@@ -240,7 +238,6 @@ fun SwitchPref(
     preference: Preference<Boolean>,
     @StringRes title: Int,
     subtitle: Int? = null,
-    icon: ImageVector? = null,
 ) {
-    SwitchPref(preference, stringResource(title), subtitle?.let { stringResource(it) }, icon)
+    SwitchPref(preference, stringResource(title), subtitle?.let { stringResource(it) })
 }

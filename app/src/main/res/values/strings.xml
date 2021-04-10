@@ -17,10 +17,12 @@
     <string name="streamed">Streamed %s</string>
 
     <string name="setting_show_tl_panel">Show TL Panel</string>
-    <string name="setting_tl_languages">Filtered languages</string>
+    <string name="setting_group_filter">Filtered messages</string>
+    <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_verified_messages">Verified messages</string>
     <string name="setting_show_owner_messages">Owner messages</string>
+    <string name="setting_display">Display</string>
     <string name="setting_show_timestamps">Timestamps</string>
 
     <string name="error_chat_load">Failed to load chat</string>

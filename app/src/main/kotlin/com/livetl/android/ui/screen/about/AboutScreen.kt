@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.ui.preference.Pref
+import com.livetl.android.ui.preference.PrefGroup
 
 @Composable
 fun AboutScreen(
@@ -78,16 +79,16 @@ fun AboutScreen(
                 )
             }
 
-//            PreferenceGroup(nameRes = R.string.credits) {
-            Pref(
-                title = R.string.holotools_stream_info,
-                onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
-            )
-            Pref(
-                title = R.string.licenses,
-                onClick = { navigateToLicenses() },
-            )
-//            }
+            PrefGroup(title = R.string.credits) {
+                Pref(
+                    title = R.string.holotools_stream_info,
+                    onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
+                )
+                Pref(
+                    title = R.string.licenses,
+                    onClick = { navigateToLicenses() },
+                )
+            }
         }
     }
 }

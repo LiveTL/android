@@ -74,6 +74,7 @@ enum class TranslatedLanguage(val id: String) {
 
     companion object {
         fun fromId(id: String): TranslatedLanguage? {
+            // People usually write "JP" rather than the official code of "JA"
             if (id == "jp") {
                 return JAPANESE
             }
