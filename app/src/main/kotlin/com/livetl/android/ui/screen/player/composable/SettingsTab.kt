@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.data.chat.TranslatedLanguage
-import com.livetl.android.ui.preference.PrefGroup
+import com.livetl.android.ui.preference.PrefGroupHeader
 import com.livetl.android.ui.preference.PreferencesScrollableColumn
 import com.livetl.android.ui.preference.SwitchPref
 import com.livetl.android.util.PreferencesHelper
@@ -26,44 +26,44 @@ fun SettingsTab(
         SwitchPref(title = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
 
         if (showTlPanelSettings) {
-            PrefGroup(title = R.string.setting_group_filter) {
-                // Filtered languages
-                MultiChoicePref(
-                    title = stringResource(R.string.setting_tl_languages),
-                    preference = prefs.tlLanguages(),
-                    choices = TranslatedLanguage.values().map {
-                        val locale = Locale(it.id)
-                        it.id to locale.getDisplayName(locale).capitalize()
-                    }.toMap()
-                )
+            PrefGroupHeader(title = R.string.setting_group_filter)
 
-                // Include author types
-                SwitchPref(
-                    title = R.string.setting_show_mod_messages,
-                    preference = prefs.showModMessages()
-                )
-                SwitchPref(
-                    title = R.string.setting_show_verified_messages,
-                    preference = prefs.showVerifiedMesages()
-                )
-                SwitchPref(
-                    title = R.string.setting_show_owner_messages,
-                    preference = prefs.showOwnerMesages()
-                )
-            }
+            // Filtered languages
+            MultiChoicePref(
+                title = stringResource(R.string.setting_tl_languages),
+                preference = prefs.tlLanguages(),
+                choices = TranslatedLanguage.values().map {
+                    val locale = Locale(it.id)
+                    it.id to locale.getDisplayName(locale).capitalize()
+                }.toMap()
+            )
 
-            PrefGroup(title = R.string.setting_group_filter) {
-                // Show timestamps
+            // Include author types
+            SwitchPref(
+                title = R.string.setting_show_mod_messages,
+                preference = prefs.showModMessages()
+            )
+            SwitchPref(
+                title = R.string.setting_show_verified_messages,
+                preference = prefs.showVerifiedMesages()
+            )
+            SwitchPref(
+                title = R.string.setting_show_owner_messages,
+                preference = prefs.showOwnerMesages()
+            )
+
+            PrefGroupHeader(title = R.string.setting_group_display)
+
+            // Show timestamps
+            SwitchPref(
+                title = R.string.setting_show_timestamps,
+                preference = prefs.showTimestamps()
+            )
+            if (BuildConfig.DEBUG) {
                 SwitchPref(
-                    title = R.string.setting_show_timestamps,
-                    preference = prefs.showTimestamps()
+                    title = "Debug mode timestamps",
+                    preference = prefs.debugTimestamps()
                 )
-                if (BuildConfig.DEBUG) {
-                    SwitchPref(
-                        title = "Debug mode timestamps",
-                        preference = prefs.debugTimestamps()
-                    )
-                }
             }
 
             // TODO

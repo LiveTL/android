@@ -161,7 +161,7 @@ private fun LazyListScope.streamItems(
         }
 
         items(sortedStreams) { stream ->
-            Stream(stream, timestampFormatStringRes, timestampSupplier, navigateToStream)
+            Stream(Modifier, stream, timestampFormatStringRes, timestampSupplier, navigateToStream)
         }
     }
 }

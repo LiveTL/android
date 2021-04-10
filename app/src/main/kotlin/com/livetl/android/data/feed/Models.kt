@@ -27,7 +27,7 @@ data class Stream(
     val live_viewers: Int? = null,
     val channel: Channel,
 ) : Parcelable {
-//    val thumbnail = "https://img.youtube.com/vi/$yt_video_key/hqdefault.jpg"
+    fun getThumbnail() = "https://img.youtube.com/vi/$yt_video_key/hqdefault.jpg"
 }
 
 @Parcelize

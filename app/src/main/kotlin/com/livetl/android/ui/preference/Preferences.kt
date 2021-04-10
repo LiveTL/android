@@ -7,7 +7,6 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -31,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.livetl.android.util.collectAsState
@@ -43,20 +43,19 @@ fun PreferencesScrollableColumn(
     content: @Composable PreferenceScope.() -> Unit
 ) {
     val dialog = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
-    Box {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .scrollable(
-                    state = rememberScrollState(),
-                    orientation = Orientation.Vertical
-                )
-        ) {
-            val scope = PreferenceScope(dialog)
-            scope.content()
-        }
-        dialog.value?.invoke()
+
+    Column(
+        modifier = modifier
+            .scrollable(
+                state = rememberScrollState(),
+                orientation = Orientation.Vertical
+            )
+    ) {
+        val scope = PreferenceScope(dialog)
+        scope.content()
     }
+
+    dialog.value?.invoke()
 }
 
 class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
@@ -126,9 +125,7 @@ class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
                             modifier = Modifier
                                 .requiredHeight(48.dp)
                                 .fillMaxWidth()
-                                .clickable(
-                                    onClick = { onSelected(value) }
-                                ),
+                                .clickable { onSelected(value) },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Checkbox(
@@ -145,21 +142,19 @@ class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
 }
 
 @Composable
-fun PrefGroup(
+fun PrefGroupHeader(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    content: @Composable () -> Unit,
 ) {
-    Column(modifier) {
-        Text(
-            text = stringResource(title),
-            color = MaterialTheme.colors.secondary,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-
-        content()
-    }
+    Text(
+        text = stringResource(title),
+        color = MaterialTheme.colors.secondary,
+        fontSize = MaterialTheme.typography.subtitle1.fontSize,
+        fontWeight = FontWeight.Medium,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    )
 }
 
 @Composable

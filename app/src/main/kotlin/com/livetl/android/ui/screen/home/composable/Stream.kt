@@ -32,13 +32,14 @@ import com.livetl.android.util.toRelativeString
 
 @Composable
 fun Stream(
+    modifier: Modifier = Modifier,
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
     navigateToStream: (Stream) -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { navigateToStream(stream) }
             .padding(horizontal = 16.dp, vertical = 8.dp)
