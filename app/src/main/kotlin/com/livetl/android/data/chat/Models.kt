@@ -63,7 +63,7 @@ data class MessageAuthor(
 
 enum class TranslatedLanguage(val id: String) {
     ENGLISH("en"),
-    JAPANESE("jp"),
+    JAPANESE("ja"),
     SPANISH("es"),
     INDONESIAN("id"),
     KOREAN("kr"),
@@ -74,6 +74,10 @@ enum class TranslatedLanguage(val id: String) {
 
     companion object {
         fun fromId(id: String): TranslatedLanguage? {
+            if (id == "jp") {
+                return JAPANESE
+            }
+
             return values().find { it.id == id.toLowerCase() }
         }
     }
