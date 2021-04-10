@@ -5,12 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
+import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.data.chat.TranslatedLanguage
 import com.livetl.android.ui.preference.PrefGroupHeader
 import com.livetl.android.ui.preference.PreferencesScrollableColumn
 import com.livetl.android.ui.preference.SwitchPref
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
+import com.livetl.android.util.quantityStringResource
 import org.koin.androidx.compose.get
 import java.util.Locale
 
@@ -52,6 +54,30 @@ fun SettingsTab(
                 preference = prefs.showOwnerMesages()
             )
 
+            // Allow/block list
+            with(prefs.allowedUsers()) {
+                MultiChoicePref(
+                    title = stringResource(R.string.setting_allowed_authors),
+                    subtitle = quantityStringResource(R.plurals.num_items, get().size),
+                    preference = this,
+                    choices = this.get().map {
+                        val author = MessageAuthor.fromPrefItem(it)
+                        author.id to author.name
+                    }.toMap()
+                )
+            }
+            with(prefs.blockedUsers()) {
+                MultiChoicePref(
+                    title = stringResource(R.string.setting_blocked_authors),
+                    subtitle = quantityStringResource(R.plurals.num_items, get().size),
+                    preference = this,
+                    choices = this.get().map {
+                        val author = MessageAuthor.fromPrefItem(it)
+                        author.id to author.name
+                    }.toMap()
+                )
+            }
+
             PrefGroupHeader(title = R.string.setting_group_display)
 
             // Show timestamps
@@ -65,12 +91,6 @@ fun SettingsTab(
                     preference = prefs.debugTimestamps()
                 )
             }
-
-            // TODO
-            // Allowlisted users
-//            prefs.allowedUsers()
-            // Blocklisted users
-//            prefs.blockedUsers()
         }
     }
 }

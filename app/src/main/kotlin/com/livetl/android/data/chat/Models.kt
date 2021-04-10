@@ -53,13 +53,27 @@ sealed class ChatMessageContent {
 data class MessageAuthor(
     val id: String,
     val name: String,
-    val photoUrl: String,
+    val photoUrl: String = "",
     val isModerator: Boolean = false,
     val isVerified: Boolean = false,
     val isOwner: Boolean = false,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
-)
+) {
+    fun toPrefItem(): String {
+        return "$id;;$name"
+    }
+
+    companion object {
+        fun fromPrefItem(prefString: String): MessageAuthor {
+            val (id, name) = prefString.split(";;", limit = 2)
+            return MessageAuthor(
+                id = id,
+                name = name,
+            )
+        }
+    }
+}
 
 enum class TranslatedLanguage(val id: String) {
     ENGLISH("en"),

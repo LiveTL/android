@@ -13,6 +13,7 @@ import androidx.compose.ui.text.AnnotatedString
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.minusAssign
 import com.livetl.android.util.plusAssign
 import org.koin.androidx.compose.get
 
@@ -38,23 +39,29 @@ fun MessageActionsDialog(
                 TextButton(
                     onClick = {
                         message?.let {
-                            prefs.allowedUsers() += it.author.id
+                            val item = it.author.toPrefItem()
+                            prefs.allowedUsers() += item
+                            prefs.blockedUsers() -= item
                         }
                         onDismiss()
                     }
                 ) {
                     Text(stringResource(R.string.action_allow_author))
                 }
+
                 TextButton(
                     onClick = {
                         message?.let {
-                            prefs.blockedUsers() += it.author.id
+                            val item = it.author.toPrefItem()
+                            prefs.blockedUsers() += item
+                            prefs.allowedUsers() -= item
                         }
                         onDismiss()
                     }
                 ) {
                     Text(stringResource(R.string.action_block_author))
                 }
+
                 TextButton(
                     onClick = {
                         message?.let {

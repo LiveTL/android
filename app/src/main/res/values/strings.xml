@@ -23,10 +23,16 @@
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_verified_messages">Verified messages</string>
     <string name="setting_show_owner_messages">Owner messages</string>
+    <string name="setting_allowed_authors">Allowed message authors</string>
+    <string name="setting_blocked_authors">Blocked message authors</string>
+    <plurals name="num_items">
+        <item quantity="one">1 item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
     <string name="setting_group_display">Display</string>
     <string name="setting_show_timestamps">Timestamps</string>
 
-    <string name="error_chat_load">Failed to load chat</string>
+    <string name="error_chat_load">Failed to connect to chat</string>
 
     <string name="action_allow_author">Always show author</string>
     <string name="action_block_author">Always hide author</string>
