@@ -21,7 +21,7 @@ data class Stream(
     val yt_video_key: String,
     val title: String,
     // e.g. "2021-02-19T13:00:00.000Z"
-    val live_schedule: String,
+    val live_schedule: String? = null,
     val live_start: String? = null,
     val live_end: String? = null,
     val live_viewers: Int? = null,
