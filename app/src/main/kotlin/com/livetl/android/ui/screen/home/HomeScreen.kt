@@ -3,12 +3,9 @@ package com.livetl.android.ui.screen.home
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -29,11 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.ui.core.SwipeToRefreshLayout
 import com.livetl.android.ui.screen.home.composable.Stream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,18 +46,18 @@ fun HomeScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    var refreshingFeed by rememberSaveable { mutableStateOf(false) }
+    val refreshingFeed = rememberSwipeRefreshState(false)
     var feed by rememberSaveable { mutableStateOf<Feed?>(null) }
 
     val navigateToStream = { stream: Stream -> navigateToPlayer(stream.yt_video_key) }
 
     fun refreshFeed() {
         coroutineScope.launch {
-            refreshingFeed = true
+            refreshingFeed.isRefreshing = true
             val newFeed = feedService.getFeed()
             withContext(Dispatchers.Main) {
                 feed = newFeed
-                refreshingFeed = false
+                refreshingFeed.isRefreshing = false
             }
         }
     }
@@ -91,20 +89,10 @@ fun HomeScreen(
             )
         }
     ) {
-        SwipeToRefreshLayout(
+        SwipeRefresh(
             modifier = Modifier.fillMaxWidth(),
-            refreshingState = refreshingFeed,
+            state = refreshingFeed,
             onRefresh = { refreshFeed() },
-            refreshIndicator = {
-                Surface(elevation = 10.dp, shape = CircleShape) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(8.dp),
-                        strokeWidth = 2.dp,
-                    )
-                }
-            },
         ) {
             if (feed != null) {
                 LazyColumn {

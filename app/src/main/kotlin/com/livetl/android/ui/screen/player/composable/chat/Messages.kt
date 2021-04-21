@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player.composable.chat
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
@@ -73,8 +74,8 @@ fun Message(
         message.author.photoUrl to InlineTextContent(
             placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
             children = {
-                CoilImage(
-                    data = message.author.photoUrl,
+                Image(
+                    painter = rememberCoilPainter(message.author.photoUrl),
                     contentDescription = null,
                     modifier = Modifier
                         .requiredWidth(16.dp)
@@ -90,8 +91,8 @@ fun Message(
             message.author.membershipBadgeUrl!! to InlineTextContent(
                 placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
                 children = {
-                    CoilImage(
-                        data = message.author.membershipBadgeUrl!!,
+                    Image(
+                        painter = rememberCoilPainter(message.author.membershipBadgeUrl!!),
                         contentDescription = null,
                         modifier = Modifier
                             .requiredWidth(16.dp)
@@ -204,8 +205,8 @@ private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> 
                 placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
                 children = {
                     Column {
-                        CoilImage(
-                            data = emote.src,
+                        Image(
+                            painter = rememberCoilPainter(emote.src),
                             contentDescription = null,
                             modifier = Modifier
                                 .requiredWidth(20.dp)
