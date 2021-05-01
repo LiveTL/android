@@ -8,14 +8,14 @@ import android.os.Looper
 import android.os.PowerManager
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.livetl.android.ui.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.powerManager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private var wakeLock: PowerManager.WakeLock? = null
 
