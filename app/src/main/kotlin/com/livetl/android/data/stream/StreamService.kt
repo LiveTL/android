@@ -10,7 +10,12 @@ class StreamService(context: Context) {
 
     fun getVideoId(pageUrl: String): String {
         return when {
-            LIVETL_URI_REGEX.matches(pageUrl) -> LIVETL_URI_REGEX.find(pageUrl)!!.groupValues[1]
+            LIVETL_URI_REGEX.matches(pageUrl) -> {
+                val videoIdWithQuery = LIVETL_URI_REGEX.find(pageUrl)!!.groupValues[1]
+                // We don't do anything with the query parameters right now
+                val (videoId, _) = videoIdWithQuery.split('?', limit = 2)
+                videoId
+            }
             else -> extractor.getVideoId(pageUrl)
         }
     }
@@ -31,5 +36,5 @@ class StreamService(context: Context) {
 }
 
 private val LIVETL_URI_REGEX by lazy {
-    "livetl://translate/(.*)".toRegex()
+    "livetl://translate/(.+)".toRegex()
 }
