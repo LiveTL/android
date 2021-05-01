@@ -19,7 +19,9 @@ class App : Application() {
         }
 
         startKoin {
-            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.INFO)
+            androidLogger(Level.ERROR)
+            // TODO: https://github.com/InsertKoinIO/koin/issues/1076
+//            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.INFO)
             androidContext(this@App)
 
             modules(appModule)
