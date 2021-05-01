@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -26,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.ui.preference.Pref
-import com.livetl.android.ui.preference.PrefGroupHeader
+import com.livetl.android.ui.preference.PreferenceGroupHeader
+import com.livetl.android.ui.preference.PreferenceRow
 
 @Composable
 fun AboutScreen(
@@ -53,41 +54,51 @@ fun AboutScreen(
             )
         }
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             /* logo */
 
-            Text(stringResource(R.string.about_version, BuildConfig.VERSION_NAME))
-
-            Row {
-                LinkIcon(
-                    labelRes = R.string.about_website,
-                    url = "https://livetl.app/",
-                    icon = Icons.Filled.Public,
-                )
-                LinkIcon(
-                    labelRes = R.string.about_github,
-                    url = "https://github.com/LiveTL/android",
-                    icon = Icons.Filled.Code,
-                )
-                LinkIcon(
-                    labelRes = R.string.about_donate,
-                    url = "https://opencollective.com/livetl",
-                    icon = Icons.Filled.Savings,
-                )
+            item {
+                Text(stringResource(R.string.about_version, BuildConfig.VERSION_NAME))
             }
 
-            PrefGroupHeader(title = R.string.credits)
-            Pref(
-                title = R.string.holotools_stream_info,
-                onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
-            )
-            Pref(
-                title = R.string.licenses,
-                onClick = { navigateToLicenses() },
-            )
+            item {
+                Row {
+                    LinkIcon(
+                        labelRes = R.string.about_website,
+                        url = "https://livetl.app/",
+                        icon = Icons.Filled.Public,
+                    )
+                    LinkIcon(
+                        labelRes = R.string.about_github,
+                        url = "https://github.com/LiveTL/android",
+                        icon = Icons.Filled.Code,
+                    )
+                    LinkIcon(
+                        labelRes = R.string.about_donate,
+                        url = "https://opencollective.com/livetl",
+                        icon = Icons.Filled.Savings,
+                    )
+                }
+            }
+
+            item {
+                PreferenceGroupHeader(title = R.string.credits)
+            }
+            item {
+                PreferenceRow(
+                    title = R.string.holotools_stream_info,
+                    onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
+                )
+            }
+            item {
+                PreferenceRow(
+                    title = R.string.licenses,
+                    onClick = { navigateToLicenses() },
+                )
+            }
         }
     }
 }

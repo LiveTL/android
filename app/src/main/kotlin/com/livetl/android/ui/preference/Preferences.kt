@@ -2,8 +2,6 @@ package com.livetl.android.ui.preference
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
@@ -22,7 +19,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,111 +34,87 @@ import com.livetl.android.util.toggle
 import com.tfcporciuncula.flow.Preference
 
 @Composable
-fun PreferencesScrollableColumn(
-    modifier: Modifier = Modifier,
-    content: @Composable PreferenceScope.() -> Unit
+fun <Key> MultiChoicePreferenceRow(
+    preference: Preference<Set<Key>>,
+    choices: Map<Key, String>,
+    title: String,
+    subtitle: String? = null,
 ) {
-    val dialog = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+    val state by preference.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-            .scrollable(
-                state = rememberScrollState(),
-                orientation = Orientation.Vertical
-            )
-    ) {
-        val scope = PreferenceScope(dialog)
-        scope.content()
-    }
+    PreferenceRow(
+        title = title,
+        subtitle = subtitle
+            ?: choices.filter { it.key in state }.map { it.value }.joinToString(),
+        onClick = { showDialog = true }
+    )
 
-    dialog.value?.invoke()
-}
-
-class PreferenceScope(dialog: MutableState<(@Composable () -> Unit)?>) {
-    var dialog by dialog
-
-    @Composable
-    fun <Key> MultiChoicePref(
-        preference: Preference<Set<Key>>,
-        choices: Map<Key, String>,
-        title: String,
-        subtitle: String? = null
-    ) {
-        val state by preference.collectAsState()
-
-        Pref(
-            title = title,
-            subtitle = subtitle
-                ?: choices.filter { it.key in state }.map { it.value }.joinToString(),
-            onClick = {
-                dialog = {
-                    MultiChoiceDialog(
-                        items = choices.toList(),
-                        selected = state,
-                        title = { Text(title) },
-                        onDismissRequest = { dialog = null },
-                        onSelected = { selected ->
-                            preference.toggle(selected)
-                        }
-                    )
-                }
-            }
-        )
-    }
-
-    @Composable
-    fun <Key> MultiChoicePref(
-        preference: Preference<Set<Key>>,
-        choices: Map<Key, Int>,
-        @StringRes title: Int,
-        subtitle: String? = null
-    ) {
-        MultiChoicePref(
-            preference,
-            choices.mapValues { stringResource(it.value) },
-            stringResource(title),
-            subtitle
-        )
-    }
-
-    @Composable
-    private fun <T> MultiChoiceDialog(
-        items: List<Pair<T, String>>,
-        selected: Set<T>?,
-        onDismissRequest: () -> Unit,
-        onSelected: (T) -> Unit,
-        title: (@Composable () -> Unit)? = null,
-        buttons: @Composable () -> Unit = {}
-    ) {
-        AlertDialog(
-            onDismissRequest = onDismissRequest,
-            buttons = buttons,
-            title = title,
-            text = {
-                LazyColumn {
-                    items(items) { (value, text) ->
-                        Row(
-                            modifier = Modifier
-                                .requiredHeight(48.dp)
-                                .fillMaxWidth()
-                                .clickable { onSelected(value) },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = selected?.contains(value) ?: false,
-                                onCheckedChange = { onSelected(value) },
-                            )
-                            Text(text = text, modifier = Modifier.padding(start = 24.dp))
-                        }
-                    }
-                }
+    if (showDialog) {
+        MultiChoiceDialog(
+            items = choices.toList(),
+            selected = state,
+            title = { Text(title) },
+            onDismissRequest = { showDialog = false },
+            onSelected = { selected ->
+                preference.toggle(selected)
             }
         )
     }
 }
 
 @Composable
-fun PrefGroupHeader(
+fun <Key> MultiChoicePreferenceRow(
+    preference: Preference<Set<Key>>,
+    choices: Map<Key, Int>,
+    @StringRes title: Int,
+    subtitle: String? = null,
+) {
+    MultiChoicePreferenceRow(
+        preference,
+        choices.mapValues { stringResource(it.value) },
+        stringResource(title),
+        subtitle
+    )
+}
+
+@Composable
+private fun <T> MultiChoiceDialog(
+    items: List<Pair<T, String>>,
+    selected: Set<T>?,
+    onDismissRequest: () -> Unit,
+    onSelected: (T) -> Unit,
+    title: (@Composable () -> Unit)? = null,
+    buttons: @Composable () -> Unit = {},
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        buttons = buttons,
+        title = title,
+        text = {
+            LazyColumn {
+                items(items) { (value, text) ->
+                    Row(
+                        modifier = Modifier
+                            .requiredHeight(48.dp)
+                            .fillMaxWidth()
+                            .clickable { onSelected(value) },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = selected?.contains(value) ?: false,
+                            onCheckedChange = { onSelected(value) },
+                        )
+                        Text(text = text, modifier = Modifier.padding(start = 24.dp))
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun PreferenceGroupHeader(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
 ) {
@@ -158,7 +130,7 @@ fun PrefGroupHeader(
 }
 
 @Composable
-fun Pref(
+fun PreferenceRow(
     title: String,
     onClick: () -> Unit = {},
     subtitle: String? = null,
@@ -203,24 +175,24 @@ fun Pref(
 }
 
 @Composable
-fun Pref(
+fun PreferenceRow(
     @StringRes title: Int,
     onClick: () -> Unit = {},
     subtitle: String? = null,
     action: @Composable (() -> Unit)? = null,
 ) {
-    Pref(stringResource(title), onClick, subtitle, action)
+    PreferenceRow(stringResource(title), onClick, subtitle, action)
 }
 
 @Composable
-fun SwitchPref(
+fun SwitchPreferenceRow(
     preference: Preference<Boolean>,
     title: String,
     subtitle: String? = null,
 ) {
     val state by preference.collectAsState()
 
-    Pref(
+    PreferenceRow(
         title = title,
         subtitle = subtitle,
         action = { Switch(checked = state, onCheckedChange = null) },
@@ -229,10 +201,10 @@ fun SwitchPref(
 }
 
 @Composable
-fun SwitchPref(
+fun SwitchPreferenceRow(
     preference: Preference<Boolean>,
     @StringRes title: Int,
     subtitle: Int? = null,
 ) {
-    SwitchPref(preference, stringResource(title), subtitle?.let { stringResource(it) })
+    SwitchPreferenceRow(preference, stringResource(title), subtitle?.let { stringResource(it) })
 }
