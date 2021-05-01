@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -60,19 +63,27 @@ private fun LicenseItem(library: Library) {
 
     val website = library.libraryWebsite
     val modifier = when {
-        website.isNullOrEmpty() -> Modifier
+        website.isEmpty() -> Modifier
         else -> Modifier.clickable { uriHandler.openUri(website) }
     }
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text("${library.libraryName} ${library.libraryVersion}")
-        Text(library.libraryArtifactId)
+        Text(
+            text = library.libraryArtifactId,
+            style = MaterialTheme.typography.caption,
+            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+        )
         library.licenses?.let { licenses ->
-            Text(licenses.joinToString { it.licenseName })
+            Text(
+                text = licenses.joinToString { it.licenseName },
+                style = MaterialTheme.typography.caption,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+            )
         }
     }
 }
