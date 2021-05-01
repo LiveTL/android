@@ -37,8 +37,10 @@ import com.tfcporciuncula.flow.Preference
 fun <Key> MultiChoicePreferenceRow(
     preference: Preference<Set<Key>>,
     choices: Map<Key, String>,
+    selected: Set<Key>? = null,
     title: String,
     subtitle: String? = null,
+    onSelected: ((Key) -> Unit)? = null,
 ) {
     val state by preference.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -47,35 +49,18 @@ fun <Key> MultiChoicePreferenceRow(
         title = title,
         subtitle = subtitle
             ?: choices.filter { it.key in state }.map { it.value }.joinToString(),
-        onClick = { showDialog = true }
+        onClick = { showDialog = true },
     )
 
     if (showDialog) {
         MultiChoiceDialog(
             items = choices.toList(),
-            selected = state,
+            selected = selected ?: state,
             title = { Text(title) },
             onDismissRequest = { showDialog = false },
-            onSelected = { selected ->
-                preference.toggle(selected)
-            }
+            onSelected = onSelected ?: { preference.toggle(it) }
         )
     }
-}
-
-@Composable
-fun <Key> MultiChoicePreferenceRow(
-    preference: Preference<Set<Key>>,
-    choices: Map<Key, Int>,
-    @StringRes title: Int,
-    subtitle: String? = null,
-) {
-    MultiChoicePreferenceRow(
-        preference,
-        choices.mapValues { stringResource(it.value) },
-        stringResource(title),
-        subtitle
-    )
 }
 
 @Composable
@@ -99,7 +84,7 @@ private fun <T> MultiChoiceDialog(
                             .requiredHeight(48.dp)
                             .fillMaxWidth()
                             .clickable { onSelected(value) },
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
                             checked = selected?.contains(value) ?: false,
@@ -109,7 +94,7 @@ private fun <T> MultiChoiceDialog(
                     }
                 }
             }
-        }
+        },
     )
 }
 
@@ -125,7 +110,7 @@ fun PreferenceGroupHeader(
         fontWeight = FontWeight.Medium,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     )
 }
 
@@ -143,12 +128,12 @@ fun PreferenceRow(
             .fillMaxWidth()
             .requiredHeight(height)
             .clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             Modifier
                 .padding(horizontal = 16.dp)
-                .weight(1f)
+                .weight(1f),
         ) {
             Text(
                 text = title,
@@ -162,7 +147,7 @@ fun PreferenceRow(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.subtitle1,
                 )
             }
         }
@@ -196,7 +181,7 @@ fun SwitchPreferenceRow(
         title = title,
         subtitle = subtitle,
         action = { Switch(checked = state, onCheckedChange = null) },
-        onClick = { preference.toggle() }
+        onClick = { preference.toggle() },
     )
 }
 

@@ -65,9 +65,7 @@ fun PlayerScreen(
     DisposableEffect(showFullscreen) {
         setFullscreen(showFullscreen)
 
-        onDispose {
-            setFullscreen(false)
-        }
+        onDispose { setFullscreen(false) }
     }
 
     val errorChatLoadMessage = stringResource(R.string.error_chat_load)

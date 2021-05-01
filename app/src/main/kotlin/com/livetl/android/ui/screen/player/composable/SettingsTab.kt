@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player.composable
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +15,7 @@ import com.livetl.android.ui.preference.SwitchPreferenceRow
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.quantityStringResource
+import com.tfcporciuncula.flow.Preference
 import org.koin.androidx.compose.get
 import java.util.Locale
 
@@ -67,30 +69,16 @@ fun SettingsTab(
 
             // Allow/block list
             item {
-                prefs.allowedUsers().let { pref ->
-                    MultiChoicePreferenceRow(
-                        title = stringResource(R.string.setting_allowed_authors),
-                        subtitle = quantityStringResource(R.plurals.num_items, pref.get().size),
-                        preference = pref,
-                        choices = pref.get().map {
-                            val author = MessageAuthor.fromPrefItem(it)
-                            author.id to author.name
-                        }.toMap()
-                    )
-                }
+                AuthorListDialog(
+                    title = R.string.setting_allowed_authors,
+                    preference = prefs.allowedUsers(),
+                )
             }
             item {
-                prefs.blockedUsers().let { pref ->
-                    MultiChoicePreferenceRow(
-                        title = stringResource(R.string.setting_blocked_authors),
-                        subtitle = quantityStringResource(R.plurals.num_items, pref.get().size),
-                        preference = pref,
-                        choices = pref.get().map {
-                            val author = MessageAuthor.fromPrefItem(it)
-                            author.id to author.name
-                        }.toMap()
-                    )
-                }
+                AuthorListDialog(
+                    title = R.string.setting_blocked_authors,
+                    preference = prefs.blockedUsers(),
+                )
             }
         }
 
@@ -118,4 +106,32 @@ fun SettingsTab(
             }
         }
     }
+}
+
+@Composable
+private fun AuthorListDialog(
+    @StringRes title: Int,
+    preference: Preference<Set<String>>,
+) {
+    val authors by preference.collectAsState()
+
+    fun getAuthors() = authors.map {
+        val author = MessageAuthor.fromPrefItem(it)
+        author.id to author.name
+    }.toMap()
+
+    MultiChoicePreferenceRow(
+        title = stringResource(title),
+        subtitle = quantityStringResource(R.plurals.num_items, authors.size),
+        preference = preference,
+        choices = getAuthors(),
+        selected = getAuthors().keys,
+        onSelected = { authorId ->
+            preference.set(
+                preference.get()
+                    .filterNot { MessageAuthor.getPrefItemId(it) == authorId }
+                    .toSet()
+            )
+        },
+    )
 }

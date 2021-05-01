@@ -65,6 +65,10 @@ data class MessageAuthor(
     }
 
     companion object {
+        fun getPrefItemId(prefString: String): String {
+            return prefString.split(";;", limit = 2)[0]
+        }
+
         fun fromPrefItem(prefString: String): MessageAuthor {
             val (id, name) = prefString.split(";;", limit = 2)
             return MessageAuthor(
