@@ -101,7 +101,7 @@ dependencies {
     // Video player
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
-    implementation 'com.github.arkon:android-youtubeExtractor:76e4e8c'
+    implementation 'com.github.arkon:android-youtubeExtractor:9ad6b06'
 
     // Networking
     final ktor_version = '1.5.1'

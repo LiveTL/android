@@ -46,6 +46,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <!-- URLs handled by YouTube app -->
                 <data
                     android:host="youtu.be"
                     android:scheme="https" />
@@ -58,6 +59,11 @@
                 <data
                     android:host="www.youtube.com"
                     android:scheme="https" />
+
+                <!-- LiveTL URI; e.g. livetl://translate/123456 -->
+                <data
+                    android:host="translate"
+                    android:scheme="livetl" />
             </intent-filter>
         </activity>
     </application>

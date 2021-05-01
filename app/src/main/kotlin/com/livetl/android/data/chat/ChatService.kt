@@ -137,7 +137,7 @@ class ChatService(
         if (matches.find()) {
             return "${urlPrefix}_replay?v=$videoId&continuation=${matches.group(1)}&embed_domain=www.livetl.app&app=desktop"
         } else {
-            throw NoChatContinuationFoundException()
+            throw NoChatContinuationFoundException(videoId)
         }
     }
 
@@ -151,7 +151,7 @@ class ChatService(
     }
 }
 
-class NoChatContinuationFoundException : Exception()
+class NoChatContinuationFoundException(videoId: String) : Exception("Continuation not found for $videoId")
 
 private const val MAX_MESSAGE_QUEUE_SIZE = 500
 
