@@ -17,20 +17,20 @@
     <string name="streamed">Streamed %s</string>
 
     <string name="setting_fullscreen">Fullscreen</string>
+    <string name="setting_group_filter">TL Panel</string>
     <string name="setting_show_tl_panel">Show TL Panel</string>
-    <string name="setting_group_filter">Filtered messages</string>
     <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_verified_messages">Verified messages</string>
     <string name="setting_show_owner_messages">Owner messages</string>
-    <string name="setting_allowed_authors">Allowed message authors</string>
-    <string name="setting_blocked_authors">Blocked message authors</string>
+    <string name="setting_allowed_authors">Always shown authors</string>
+    <string name="setting_blocked_authors">Always hidden authors</string>
     <plurals name="num_items">
         <item quantity="one">%1$d item</item>
         <item quantity="other">%1$d items</item>
     </plurals>
     <string name="setting_group_display">Display</string>
-    <string name="setting_show_timestamps">Timestamps</string>
+    <string name="setting_show_timestamps">Message timestamps</string>
 
     <string name="error_chat_load">Failed to connect to chat</string>
 

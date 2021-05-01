@@ -25,7 +25,7 @@ fun SettingsTab(
 
     LazyColumn {
         item {
-            SwitchPreferenceRow(title = R.string.setting_fullscreen, preference = prefs.showFullscreen())
+            PreferenceGroupHeader(title = R.string.setting_group_filter)
         }
 
         item {
@@ -33,10 +33,6 @@ fun SettingsTab(
         }
 
         if (showTlPanelSettings) {
-            item {
-                PreferenceGroupHeader(title = R.string.setting_group_filter)
-            }
-
             // Filtered languages
             item {
                 MultiChoicePreferenceRow(
@@ -96,25 +92,29 @@ fun SettingsTab(
                     )
                 }
             }
+        }
 
-            item {
-                PreferenceGroupHeader(title = R.string.setting_group_display)
-            }
+        item {
+            PreferenceGroupHeader(title = R.string.setting_group_display)
+        }
 
-            // Show timestamps
+        item {
+            SwitchPreferenceRow(title = R.string.setting_fullscreen, preference = prefs.showFullscreen())
+        }
+
+        // Show timestamps
+        item {
+            SwitchPreferenceRow(
+                title = R.string.setting_show_timestamps,
+                preference = prefs.showTimestamps()
+            )
+        }
+        if (BuildConfig.DEBUG) {
             item {
                 SwitchPreferenceRow(
-                    title = R.string.setting_show_timestamps,
-                    preference = prefs.showTimestamps()
+                    title = "Debug mode timestamps",
+                    preference = prefs.debugTimestamps()
                 )
-            }
-            if (BuildConfig.DEBUG) {
-                item {
-                    SwitchPreferenceRow(
-                        title = "Debug mode timestamps",
-                        preference = prefs.debugTimestamps()
-                    )
-                }
             }
         }
     }
