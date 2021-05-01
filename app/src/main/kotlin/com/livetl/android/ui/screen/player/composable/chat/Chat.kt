@@ -1,11 +1,14 @@
 package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,20 +16,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
+import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
+sealed class ChatState {
+    object LOADING : ChatState()
+    object LOADED : ChatState()
+    object ERROR : ChatState()
+}
+
 @Composable
 fun Chat(
     modifier: Modifier = Modifier,
     messages: List<ChatMessage>,
+    state: ChatState? = ChatState.LOADED,
     minimalMode: Boolean = false,
     onClickMessage: (ChatMessage) -> Unit = {},
     showJumpToBottomButton: Boolean = false,
@@ -66,29 +80,46 @@ fun Chat(
         scrollToBottom()
     }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth(),
-        state = scrollState,
-    ) {
-        items(_messages) { message ->
-            val baseMessageModifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClickMessage(message) }
+    when (state) {
+        ChatState.LOADING -> {
+            LoadingIndicator()
+        }
 
-            when (minimalMode) {
-                true -> MinimalMessage(baseMessageModifier, message)
-                false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
+        ChatState.ERROR -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(stringResource(R.string.error_chat_load))
             }
         }
-    }
 
-    if (showJumpToBottomButton) {
-        JumpToBottomButton(
-            enabled = !isScrolledToBottom,
-            onClicked = ::scrollToBottom,
+        ChatState.LOADED -> {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxWidth(),
+                state = scrollState,
+            ) {
+                items(_messages) { message ->
+                    val baseMessageModifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onClickMessage(message) }
+
+                    when (minimalMode) {
+                        true -> MinimalMessage(baseMessageModifier, message)
+                        false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
+                    }
+                }
+            }
+
+            if (showJumpToBottomButton) {
+                JumpToBottomButton(
+                    enabled = !isScrolledToBottom,
+                    onClicked = ::scrollToBottom,
 //        modifier = Modifier.align(Alignment.BottomCenter)
-        )
+                )
+            }
+        }
     }
 }
 

@@ -26,6 +26,7 @@ import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.chat.Chat
+import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.MessageActionsDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -41,6 +42,7 @@ val tabs = Tabs.values().toList()
 @Composable
 fun PlayerTabs(
     streamInfo: StreamInfo?,
+    chatState: ChatState,
     chatService: ChatService = get(),
 ) {
     val actioningMessage = remember { mutableStateOf<ChatMessage?>(null) }
@@ -83,6 +85,7 @@ fun PlayerTabs(
                 Tabs.Info.ordinal -> InfoTab(streamInfo = streamInfo)
                 Tabs.Chat.ordinal -> Chat(
                     messages = chatMessages,
+                    state = chatState,
                     onClickMessage = { actioningMessage.value = it },
                     showJumpToBottomButton = true,
                 )

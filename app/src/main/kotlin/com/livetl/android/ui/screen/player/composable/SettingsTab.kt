@@ -9,9 +9,9 @@ import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.data.chat.TranslatedLanguage
-import com.livetl.android.ui.preference.MultiChoicePreferenceRow
-import com.livetl.android.ui.preference.PreferenceGroupHeader
-import com.livetl.android.ui.preference.SwitchPreferenceRow
+import com.livetl.android.ui.common.MultiChoicePreferenceRow
+import com.livetl.android.ui.common.PreferenceGroupHeader
+import com.livetl.android.ui.common.SwitchPreferenceRow
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.quantityStringResource

@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.ui.preference.PreferenceGroupHeader
-import com.livetl.android.ui.preference.PreferenceRow
+import com.livetl.android.ui.common.PreferenceGroupHeader
+import com.livetl.android.ui.common.PreferenceRow
 
 @Composable
 fun AboutScreen(

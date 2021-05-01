@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -25,9 +26,9 @@ import com.livetl.android.data.stream.StreamService
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
+import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
-import com.livetl.android.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,6 +48,7 @@ fun PlayerScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var streamInfo by rememberSaveable { mutableStateOf<StreamInfo?>(null) }
+    var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
     val showFullscreen by prefs.showFullscreen().collectAsState()
 
     fun onCurrentSecond(second: Long) {
@@ -78,10 +80,12 @@ fun PlayerScreen(
                 }
 
                 try {
+                    chatState = ChatState.LOADING
                     chatService.load(videoId, newStream.isLive)
+                    chatState = ChatState.LOADED
                 } catch (e: NoChatContinuationFoundException) {
                     Timber.e(e)
-                    context.toast(errorChatLoadMessage)
+                    chatState = ChatState.ERROR
                 }
             }
         }
@@ -93,10 +97,10 @@ fun PlayerScreen(
 
     when (LocalConfiguration.current.orientation) {
         ORIENTATION_LANDSCAPE -> {
-            LandscapeLayout(videoId, streamInfo, { onCurrentSecond(it) })
+            LandscapeLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) })
         }
         else -> {
-            PortraitLayout(videoId, streamInfo, { onCurrentSecond(it) })
+            PortraitLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) })
         }
     }
 }
@@ -105,6 +109,7 @@ fun PlayerScreen(
 private fun PortraitLayout(
     videoId: String,
     streamInfo: StreamInfo?,
+    chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
     prefs: PreferencesHelper = get(),
 ) {
@@ -124,7 +129,7 @@ private fun PortraitLayout(
             TLPanel()
         }
 
-        PlayerTabs(streamInfo)
+        PlayerTabs(streamInfo, chatState)
     }
 }
 
@@ -132,6 +137,7 @@ private fun PortraitLayout(
 private fun LandscapeLayout(
     videoId: String,
     streamInfo: StreamInfo?,
+    chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
     prefs: PreferencesHelper = get(),
 ) {
@@ -153,7 +159,7 @@ private fun LandscapeLayout(
                 TLPanel()
             }
 
-            PlayerTabs(streamInfo)
+            PlayerTabs(streamInfo, chatState)
         }
     }
 }
