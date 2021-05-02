@@ -34,7 +34,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
-import com.livetl.android.ui.textParser
+import com.livetl.android.ui.common.textParser
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
 

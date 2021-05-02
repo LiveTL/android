@@ -1,4 +1,4 @@
-package com.livetl.android.ui
+package com.livetl.android.ui.common
 
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Colors
@@ -8,14 +8,15 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 
-// Regex containing the syntax tokens
-val symbolPattern by lazy {
-    Regex("""(https?://[^\s\t\n]+)|(:[\w+]+:)|(#[\w+]+)""")
+private val symbolPattern by lazy {
+    """(https?://[^\s\t\n]+)|(:[\w+]+:)|(#[\w+]+)""".toRegex()
 }
 
-// Accepted annotations for the ClickableTextWrapper
-enum class SymbolAnnotationType {
-    LINK, HASHTAG
+// Accepted annotations
+enum class SymbolAnnotationType(val firstToken: Char) {
+    LINK('h'),
+    EMOJI(':'),
+    HASHTAG('#'),
 }
 typealias StringAnnotation = AnnotatedString.Range<String>
 
@@ -23,9 +24,11 @@ typealias StringAnnotation = AnnotatedString.Range<String>
 typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
 /**
- * Format a message following Markdown-lite syntax
- * | http(s)://... -> clickable link, opening it into the browser
- * | :_text: -> emote
+ * Parses a string so that it's renderable with its content.
+ *
+ * http(s)://... -> clickable link, opening in a browser
+ * :_text:       -> custom chat emote
+ * #text         -> hashtag
  *
  * @param text contains message to be parsed
  * @return AnnotatedString with annotations used inside the ClickableText wrapper
@@ -40,7 +43,7 @@ fun textParser(text: String): AnnotatedString {
         for (token in tokens) {
             append(text.slice(cursorPosition until token.range.first))
 
-            if (token.value.first() == ':') {
+            if (token.value.first() == SymbolAnnotationType.EMOJI.firstToken) {
                 // Emotes are replaced with placeholders later
                 appendInlineContent(token.value, token.value)
             } else {
@@ -78,7 +81,7 @@ private fun getSymbolAnnotation(
     colors: Colors,
 ): SymbolAnnotation {
     return when (matchResult.value.first()) {
-        'h' -> SymbolAnnotation(
+        SymbolAnnotationType.LINK.firstToken -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
@@ -92,7 +95,7 @@ private fun getSymbolAnnotation(
                 tag = SymbolAnnotationType.LINK.name
             )
         )
-        '#' -> SymbolAnnotation(
+        SymbolAnnotationType.HASHTAG.firstToken -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
