@@ -46,7 +46,7 @@ jobs:
       - name: Build app
         uses: eskatos/gradle-command-action@v1
         with:
-          arguments: assembleRelease
+          arguments: assemblePlaystoreRelease
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
