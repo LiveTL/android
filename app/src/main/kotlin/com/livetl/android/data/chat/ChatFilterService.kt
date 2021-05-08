@@ -62,6 +62,10 @@ class ChatFilterService(
     private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage?, ChatMessage> {
         val trimmedMessage = message.getTextContent().trim()
 
+        if (trimmedMessage.isBlank()) {
+            return Pair(null, message)
+        }
+
         // We assume anything that roughly starts with something like "[EN]" is a translation
         val leftToken = trimmedMessage[0]
         val rightToken = LANG_TOKENS[leftToken]
