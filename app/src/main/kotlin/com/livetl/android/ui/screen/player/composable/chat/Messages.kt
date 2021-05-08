@@ -32,6 +32,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
+import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
@@ -47,7 +48,7 @@ fun MinimalMessage(
         CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
             append(getAuthorName(message.author))
         }
-        append(textParser(message.getTextContent()))
+        append(textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes))
     }
 
     BasicText(
@@ -153,7 +154,7 @@ fun Message(
         }
 
         // Actual chat message contents
-        append(textParser(message.getTextContent()))
+        append(textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes))
     }
 
     BasicText(
@@ -206,3 +207,8 @@ private fun ChatMessage.getEmoteInlineContent(emojiCache: EmojiCache): Map<Strin
 val LocalAuthorNameColor = compositionLocalOf { Color.White }
 
 private fun Modifier.chatPadding() = padding(horizontal = 8.dp, vertical = 4.dp)
+
+private val parsedContentTypes = setOf(
+    SymbolAnnotationType.LINK.name,
+    SymbolAnnotationType.EMOJI.name,
+)

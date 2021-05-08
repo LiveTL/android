@@ -34,7 +34,10 @@ typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
  * @return AnnotatedString with annotations used inside the ClickableText wrapper
  */
 @Composable
-fun textParser(text: String): AnnotatedString {
+fun textParser(
+    text: String,
+    parsedContentTypes: Collection<String> = SymbolAnnotationType.values().map { it.name },
+): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 
     return buildAnnotatedString {
@@ -43,13 +46,14 @@ fun textParser(text: String): AnnotatedString {
         for (token in tokens) {
             append(text.slice(cursorPosition until token.range.first))
 
-            if (token.value.first() == SymbolAnnotationType.EMOJI.firstToken) {
+            if (SymbolAnnotationType.EMOJI.name in parsedContentTypes && token.value.first() == SymbolAnnotationType.EMOJI.firstToken) {
                 // Emotes are replaced with placeholders later
                 appendInlineContent(token.value, token.value)
             } else {
                 val (annotatedString, stringAnnotation) = getSymbolAnnotation(
                     matchResult = token,
                     colors = MaterialTheme.colors,
+                    parsedContentTypes = parsedContentTypes,
                 )
                 append(annotatedString)
 
@@ -79,9 +83,10 @@ fun textParser(text: String): AnnotatedString {
 private fun getSymbolAnnotation(
     matchResult: MatchResult,
     colors: Colors,
+    parsedContentTypes: Collection<String>,
 ): SymbolAnnotation {
-    return when (matchResult.value.first()) {
-        SymbolAnnotationType.LINK.firstToken -> SymbolAnnotation(
+    return when {
+        SymbolAnnotationType.LINK.name in parsedContentTypes && matchResult.value.first() == SymbolAnnotationType.LINK.firstToken -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
@@ -95,7 +100,7 @@ private fun getSymbolAnnotation(
                 tag = SymbolAnnotationType.LINK.name
             )
         )
-        SymbolAnnotationType.HASHTAG.firstToken -> SymbolAnnotation(
+        SymbolAnnotationType.HASHTAG.name in parsedContentTypes && matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
