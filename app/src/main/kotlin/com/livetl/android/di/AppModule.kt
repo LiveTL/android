@@ -4,6 +4,7 @@ import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.stream.StreamService
+import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
 import com.livetl.android.util.PreferencesHelper
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -21,4 +22,6 @@ val appModule = module {
     single { ChatFilterService(get(), get()) }
     single { FeedService(get(), get()) }
     single { StreamService(androidContext()) }
+
+    single { EmojiCache() }
 }

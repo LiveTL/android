@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatService
@@ -27,6 +26,7 @@ import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
+import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +43,8 @@ fun PlayerScreen(
     streamService: StreamService = get(),
     chatService: ChatService = get(),
     prefs: PreferencesHelper = get(),
+    emojiCache: EmojiCache = get(),
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var streamInfo by rememberSaveable { mutableStateOf<StreamInfo?>(null) }
@@ -61,7 +61,10 @@ fun PlayerScreen(
     DisposableEffect(Unit) {
         setKeepScreenOn(true)
 
-        onDispose { setKeepScreenOn(false) }
+        onDispose {
+            setKeepScreenOn(false)
+            emojiCache.cache.evictAll()
+        }
     }
 
     DisposableEffect(showFullscreen) {

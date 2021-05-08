@@ -2,7 +2,6 @@ package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
@@ -17,7 +16,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -37,11 +35,13 @@ import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.common.textParser
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
+import org.koin.androidx.compose.get
 
 @Composable
 fun MinimalMessage(
     modifier: Modifier = Modifier,
     message: ChatMessage,
+    emojiCache: EmojiCache = get(),
 ) {
     val text = buildAnnotatedString {
         CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
@@ -54,7 +54,7 @@ fun MinimalMessage(
         modifier = modifier.chatPadding(),
         text = text,
         style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
-        inlineContent = message.getEmoteInlineContent()
+        inlineContent = message.getEmoteInlineContent(emojiCache)
     )
 }
 
@@ -64,6 +64,7 @@ fun Message(
     message: ChatMessage,
     showTimestamp: Boolean = false,
     debugTimestamp: Boolean = false,
+    emojiCache: EmojiCache = get(),
 ) {
     val textColor = when (message) {
         is ChatMessage.RegularChat -> LocalContentColor.current
@@ -167,8 +168,7 @@ fun Message(
         },
         text = text,
         style = MaterialTheme.typography.body1.copy(color = textColor),
-        // TODO: should try to cache these
-        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent()
+        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent(emojiCache)
     )
 }
 
@@ -196,27 +196,11 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     )
 }
 
-private fun ChatMessage.getEmoteInlineContent(): Map<String, InlineTextContent> {
+private fun ChatMessage.getEmoteInlineContent(emojiCache: EmojiCache): Map<String, InlineTextContent> {
     return content
         .filterIsInstance<ChatMessageContent.Emoji>()
-        .distinct()
-        .associate { emote ->
-            emote.id to InlineTextContent(
-                placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
-                children = {
-                    Column {
-                        Image(
-                            painter = rememberCoilPainter(emote.src),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .requiredWidth(20.dp)
-                                .aspectRatio(1f)
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-                }
-            )
-        }
+        .distinctBy { it.id }
+        .associate { it.id to emojiCache.get(it) }
 }
 
 val LocalAuthorNameColor = compositionLocalOf { Color.White }
