@@ -35,17 +35,17 @@ class ChatFilterService(
 
     private fun filterMessage(message: ChatMessage): ChatMessage? {
         if (prefs.allowedUsers().get().contains(message.author.id)) {
-            return message
+            return parseMessage(message).second
         }
         if (prefs.blockedUsers().get().contains(message.author.id)) {
             return null
         }
 
         if (prefs.showModMessages().get() && message.author.isModerator) {
-            return message
+            return parseMessage(message).second
         }
         if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
-            return message
+            return parseMessage(message).second
         }
         if (prefs.showOwnerMesages().get() && message.author.isOwner) {
             return null
