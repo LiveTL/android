@@ -153,9 +153,8 @@ class ChatService(
 
 class NoChatContinuationFoundException(videoId: String) : Exception("Continuation not found for $videoId")
 
-private const val MAX_MESSAGE_QUEUE_SIZE = 500
-
+private const val MAX_MESSAGE_QUEUE_SIZE = 1000
 private const val CHAT_DELAY_OFFSET_SECS = 3L
 
-private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
+private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
