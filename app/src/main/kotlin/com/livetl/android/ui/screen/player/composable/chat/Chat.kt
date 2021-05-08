@@ -55,29 +55,29 @@ fun Chat(
     var isScrolledToBottom by remember { mutableStateOf(true) }
     var _messages by remember { mutableStateOf<List<ChatMessage>>(emptyList()) }
 
-    fun checkIfAtBottom(): Boolean {
-        if (_messages.isEmpty()) {
-            return true
+    fun checkIfAtBottom() {
+        isScrolledToBottom = if (_messages.isEmpty()) {
+            true
+        } else {
+            val visibleItems = scrollState.layoutInfo.visibleItemsInfo
+            visibleItems.lastOrNull()?.index == _messages.lastIndex
         }
-
-        val visibleItems = scrollState.layoutInfo.visibleItemsInfo
-        return visibleItems.lastOrNull()?.index == _messages.lastIndex
     }
 
-    fun scrollToBottom() {
-//        if (isScrolledToBottom && _messages.isNotEmpty()) {
-        if (_messages.isNotEmpty()) {
+    fun scrollToBottom(force: Boolean) {
+        if ((isScrolledToBottom || force) && _messages.isNotEmpty()) {
             scope.launch {
                 scrollState.scrollToItem(_messages.lastIndex, 0)
+                checkIfAtBottom()
             }
         }
     }
 
     LaunchedEffect(messages) {
-        isScrolledToBottom = checkIfAtBottom()
+        checkIfAtBottom()
         _messages = messages
 
-        scrollToBottom()
+        scrollToBottom(force = false)
     }
 
     when (state) {
@@ -115,7 +115,7 @@ fun Chat(
                 if (showJumpToBottomButton) {
                     JumpToBottomButton(
                         enabled = !isScrolledToBottom,
-                        onClicked = ::scrollToBottom,
+                        onClicked = { scrollToBottom(force = true) },
                         modifier = Modifier.align(Alignment.BottomCenter),
                     )
                 }
