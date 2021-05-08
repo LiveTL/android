@@ -60,31 +60,52 @@ class ChatFilterService(
     }
 
     private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage?, ChatMessage> {
-        val trimmedMessage = message.getTextContent().trim()
+        var isTagged = false
+        var taggedLang: TranslatedLanguage? = null
+        val parsedContent = message.content
+            .map {
+                if (isTagged || it !is ChatMessageContent.Text) {
+                    return@map it
+                }
 
-        if (trimmedMessage.isBlank()) {
-            return Pair(null, message)
+                val trimmedText = it.text.trim()
+                if (trimmedText.isEmpty()) {
+                    return@map it
+                }
+
+                // We assume anything that roughly starts with something like "[EN]" is a translation
+                val leftToken = trimmedText[0]
+                val rightToken = LANG_TOKENS[leftToken]
+                isTagged = rightToken != null && trimmedText.indexOf(rightToken) < 5
+                if (!isTagged) {
+                    return@map it
+                }
+
+                val (lang, text) = trimmedText.split(rightToken!!)
+                taggedLang =
+                    TranslatedLanguage.fromId(lang.removePrefix(leftToken.toString()).trim())
+                return@map it.copy(
+                    text = text.trim()
+                        .removePrefix("-")
+                        .removePrefix(":")
+                        .trim()
+                )
+            }
+
+        return if (taggedLang == null) {
+            Pair(null, message)
+        } else {
+            val parsedMessage = when (message) {
+                is ChatMessage.RegularChat -> {
+                    message.copy(content = parsedContent)
+                }
+                is ChatMessage.SuperChat -> {
+                    message.copy(content = parsedContent)
+                }
+            }
+
+            Pair(taggedLang, parsedMessage)
         }
-
-        // We assume anything that roughly starts with something like "[EN]" is a translation
-        val leftToken = trimmedMessage[0]
-        val rightToken = LANG_TOKENS[leftToken]
-        val isTagged = rightToken != null && trimmedMessage.indexOf(rightToken) < 5
-
-        if (isTagged) {
-            val (lang, text) = trimmedMessage.split(rightToken!!)
-
-            val trimmedLang = lang.removePrefix(leftToken.toString()).trim()
-            val trimmedText = text.trim()
-                .removePrefix("-")
-                .removePrefix(":")
-                .trim()
-
-            // TODO: return message with trimmedText instead
-            return Pair(TranslatedLanguage.fromId(trimmedLang), message)
-        }
-
-        return Pair(null, message)
     }
 }
 
