@@ -88,36 +88,37 @@ fun Chat(
         ChatState.ERROR -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(stringResource(R.string.error_chat_load))
             }
         }
 
         ChatState.LOADED -> {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth(),
-                state = scrollState,
-            ) {
-                items(_messages) { message ->
-                    val baseMessageModifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onClickMessage(message) }
+            Box {
+                LazyColumn(
+                    modifier = modifier.fillMaxWidth(),
+                    state = scrollState,
+                ) {
+                    items(_messages) { message ->
+                        val baseMessageModifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onClickMessage(message) }
 
-                    when (minimalMode) {
-                        true -> MinimalMessage(baseMessageModifier, message)
-                        false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
+                        when (minimalMode) {
+                            true -> MinimalMessage(baseMessageModifier, message)
+                            false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
+                        }
                     }
                 }
-            }
 
-            if (showJumpToBottomButton) {
-                JumpToBottomButton(
-                    enabled = !isScrolledToBottom,
-                    onClicked = ::scrollToBottom,
-//        modifier = Modifier.align(Alignment.BottomCenter)
-                )
+                if (showJumpToBottomButton) {
+                    JumpToBottomButton(
+                        enabled = !isScrolledToBottom,
+                        onClicked = ::scrollToBottom,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                    )
+                }
             }
         }
     }
