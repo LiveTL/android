@@ -81,7 +81,7 @@ class ChatService(
             // Clear out messages if we seem to be manually seeking
             if (currentSecond - 10 > second || second > currentSecond + 10) {
                 Timber.d("$videoId: manual seek")
-                _messages.value = emptyList()
+                clearMessages()
             }
 
             currentSecond = second
@@ -90,8 +90,7 @@ class ChatService(
 
     fun stop() {
         webview.loadUrl("")
-        jobs.forEach { it.cancel() }
-        _messages.value = emptyList()
+        clearMessages()
     }
 
     @ExperimentalTime
@@ -155,6 +154,11 @@ class ChatService(
         val diff = now - microseconds
         Timber.d("Now: $now (${now.toDebugTimestampString()}), time: $microseconds (${microseconds.toDebugTimestampString()}), diff: $diff")
         return diff
+    }
+
+    private fun clearMessages() {
+        jobs.forEach { it.cancel() }
+        _messages.value = emptyList()
     }
 }
 
