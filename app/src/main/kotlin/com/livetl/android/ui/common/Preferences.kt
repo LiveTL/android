@@ -14,11 +14,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -142,13 +144,16 @@ fun PreferenceRow(
                 style = MaterialTheme.typography.subtitle1,
             )
             if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                    style = MaterialTheme.typography.subtitle1,
-                )
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.subtitle1,
+                    LocalContentAlpha provides ContentAlpha.medium,
+                ) {
+                    Text(
+                        text = subtitle,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                }
             }
         }
         if (action != null) {

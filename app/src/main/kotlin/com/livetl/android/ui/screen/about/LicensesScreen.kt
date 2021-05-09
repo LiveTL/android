@@ -9,7 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -17,6 +18,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -73,17 +75,14 @@ private fun LicenseItem(library: Library) {
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text("${library.libraryName} ${library.libraryVersion}")
-        Text(
-            text = library.libraryArtifactId,
-            style = MaterialTheme.typography.caption,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-        )
-        library.licenses?.let { licenses ->
-            Text(
-                text = licenses.joinToString { it.licenseName },
-                style = MaterialTheme.typography.caption,
-                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-            )
+        CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.caption,
+            LocalContentAlpha provides ContentAlpha.medium,
+        ) {
+            Text(library.libraryArtifactId)
+            library.licenses?.let { licenses ->
+                Text(licenses.joinToString { it.licenseName })
+            }
         }
     }
 }
