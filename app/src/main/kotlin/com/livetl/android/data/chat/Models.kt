@@ -39,6 +39,17 @@ sealed class ChatMessage {
             .joinToString("") { it.toString() }
             .trim()
     }
+
+    fun withContent(newContent: List<ChatMessageContent>): ChatMessage {
+        return when (this) {
+            is RegularChat -> {
+                copy(content = newContent)
+            }
+            is SuperChat -> {
+                copy(content = newContent)
+            }
+        }
+    }
 }
 
 sealed class ChatMessageContent {

@@ -35,77 +35,69 @@ class ChatFilterService(
 
     private fun filterMessage(message: ChatMessage): ChatMessage? {
         if (prefs.allowedUsers().get().contains(message.author.id)) {
-            return parseMessage(message).second
+            return parseMessage(message)?.second ?: message
         }
         if (prefs.blockedUsers().get().contains(message.author.id)) {
             return null
         }
 
         if (prefs.showModMessages().get() && message.author.isModerator) {
-            return parseMessage(message).second
+            return parseMessage(message)?.second ?: message
         }
         if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
-            return parseMessage(message).second
+            return parseMessage(message)?.second ?: message
         }
         if (prefs.showOwnerMesages().get() && message.author.isOwner) {
             return null
         }
 
-        val (lang, parsedMessage) = parseMessage(message)
-        if (lang != null && prefs.tlLanguages().get().contains(lang.id)) {
-            return parsedMessage
+        parseMessage(message)?.let { (lang, parsedMessage) ->
+            if (prefs.tlLanguages().get().contains(lang.id)) {
+                return parsedMessage
+            }
         }
 
         return null
     }
 
-    private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage?, ChatMessage> {
-        var isTagged = false
-        var taggedLang: TranslatedLanguage? = null
-        val parsedContent = message.content
-            .map {
-                if (isTagged || it !is ChatMessageContent.Text) {
-                    return@map it
-                }
+    private fun parseMessage(message: ChatMessage): Pair<TranslatedLanguage, ChatMessage>? {
+        val firstTextContent = message.content.firstOrNull()
 
-                val trimmedText = it.text.trim()
-                if (trimmedText.isEmpty()) {
-                    return@map it
-                }
-
-                // We assume anything that roughly starts with something like "[EN]" is a translation
-                val leftToken = trimmedText[0]
-                val rightToken = LANG_TOKENS[leftToken]
-                isTagged = rightToken != null && trimmedText.indexOf(rightToken) < 5
-                if (!isTagged) {
-                    return@map it
-                }
-
-                val (lang, text) = trimmedText.split(rightToken!!)
-                taggedLang =
-                    TranslatedLanguage.fromId(lang.removePrefix(leftToken.toString()).trim())
-                return@map it.copy(
-                    text = text.trim()
-                        .removePrefix("-")
-                        .removePrefix(":")
-                        .trim()
-                )
-            }
-
-        return if (taggedLang == null) {
-            Pair(null, message)
-        } else {
-            val parsedMessage = when (message) {
-                is ChatMessage.RegularChat -> {
-                    message.copy(content = parsedContent)
-                }
-                is ChatMessage.SuperChat -> {
-                    message.copy(content = parsedContent)
-                }
-            }
-
-            Pair(taggedLang, parsedMessage)
+        // Language tag should be at the beginning as text
+        if (firstTextContent == null || firstTextContent !is ChatMessageContent.Text) {
+            return null
         }
+
+        val trimmedText = firstTextContent.text.trim()
+        if (trimmedText.isEmpty()) {
+            return null
+        }
+
+        // We assume anything that roughly starts with something like "[EN]" is a translation
+        val leftToken = trimmedText[0]
+        val rightToken = LANG_TOKENS[leftToken]
+        val isTagged = rightToken != null && trimmedText.indexOf(rightToken) < 5
+        if (!isTagged) {
+            return null
+        }
+
+        val (lang, text) = trimmedText.split(rightToken!!)
+        val taggedLang = TranslatedLanguage.fromId(lang.removePrefix(leftToken.toString()).trim())
+        val trimmedTextContent = ChatMessageContent.Text(
+            text.trim()
+                .removePrefix("-")
+                .removePrefix(":")
+                .trim()
+        )
+
+        if (taggedLang == null) {
+            return null
+        }
+
+        return Pair(
+            taggedLang,
+            message.withContent(listOf(trimmedTextContent) + message.content.drop(1))
+        )
     }
 }
 
