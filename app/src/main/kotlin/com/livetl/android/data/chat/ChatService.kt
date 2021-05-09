@@ -75,8 +75,15 @@ class ChatService(
 
     fun seekTo(videoId: String, second: Long) {
         if (second != currentSecond) {
-            Timber.d("Seeking to $second for video $videoId")
+            Timber.d("$videoId: seeking to $second")
             webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
+
+            // Clear out messages if we seem to be manually seeking
+            if (currentSecond - 10 > second || second > currentSecond + 10) {
+                Timber.d("$videoId: manual seek")
+                _messages.value = emptyList()
+            }
+
             currentSecond = second
         }
     }
