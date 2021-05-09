@@ -1,3 +1,5 @@
+-dontobfuscate
+
 # Javascript interface
 -keepclassmembers class com.livetl.android.data.chat.ChatService {
    public *;
