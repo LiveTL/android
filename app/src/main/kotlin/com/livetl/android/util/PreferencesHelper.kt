@@ -13,16 +13,16 @@ class PreferencesHelper(context: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private val flowPrefs = FlowSharedPreferences(prefs)
 
-    fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
     fun showTlPanel() = flowPrefs.getBoolean("show_tl_panel", true)
     fun tlLanguages() = flowPrefs.getStringSet("tl_langs", setOf(TranslatedLanguage.ENGLISH.id))
     fun showModMessages() = flowPrefs.getBoolean("show_mod_messages", false)
     fun showVerifiedMesages() = flowPrefs.getBoolean("show_verified_messages", false)
     fun showOwnerMesages() = flowPrefs.getBoolean("show_owner_messages", false)
-    fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
     fun allowedUsers() = flowPrefs.getStringSet("allowed_users", setOf())
     fun blockedUsers() = flowPrefs.getStringSet("blocked_users", setOf())
 
+    fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
+    fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
     fun debugTimestamps() = flowPrefs.getBoolean("debug_timestamps", false)
 }
 

@@ -90,12 +90,15 @@ fun SettingsTab(
             SwitchPreferenceRow(title = R.string.setting_fullscreen, preference = prefs.showFullscreen())
         }
 
+        // TODO: unhide this once message timing is less broken
         // Show timestamps
-        item {
-            SwitchPreferenceRow(
-                title = R.string.setting_show_timestamps,
-                preference = prefs.showTimestamps()
-            )
+        if (BuildConfig.DEBUG) {
+            item {
+                SwitchPreferenceRow(
+                    title = R.string.setting_show_timestamps,
+                    preference = prefs.showTimestamps()
+                )
+            }
         }
         if (BuildConfig.DEBUG) {
             item {
