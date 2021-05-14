@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Savings
@@ -72,6 +73,11 @@ fun AboutScreen(
                         labelRes = R.string.about_website,
                         url = "https://livetl.app/",
                         icon = Icons.Filled.Public,
+                    )
+                    LinkIcon(
+                        labelRes = R.string.about_discord,
+                        url = "https://discord.gg/uJrV3tmthg",
+                        icon = Icons.Filled.Chat,
                     )
                     LinkIcon(
                         labelRes = R.string.about_github,

@@ -40,6 +40,7 @@
 
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>
+    <string name="about_discord" translatable="false">Discord</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_donate">Donate</string>
 
