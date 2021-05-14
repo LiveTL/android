@@ -4,7 +4,6 @@ plugins {
     id 'com.android.application'
     id 'com.mikepenz.aboutlibraries.plugin'
     id 'kotlin-android'
-    id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
     id 'org.jmailen.kotlinter' version '3.3.0'
 }
@@ -28,6 +27,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.dev'
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             shrinkResources true
