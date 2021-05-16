@@ -22,6 +22,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 
     buildTypes {
@@ -75,6 +76,15 @@ android {
     lintOptions {
         disable "MissingTranslation"
         abortOnError false
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
+        }
     }
 }
 
@@ -136,6 +146,12 @@ dependencies {
 
     // OSS licenses
     implementation "com.mikepenz:aboutlibraries-core:$about_libs_version"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.7.2"
+
+    final mockito_version = '3.10.0'
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
 }
 
 kotlinter {

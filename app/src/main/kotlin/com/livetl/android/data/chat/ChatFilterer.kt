@@ -14,14 +14,12 @@ class ChatFilterer(
             return null
         }
 
-        if (prefs.showModMessages().get() && message.author.isModerator) {
+        if (
+            (prefs.showModMessages().get() && message.author.isModerator) ||
+            (prefs.showVerifiedMessages().get() && message.author.isVerified) ||
+            (prefs.showOwnerMessages().get() && message.author.isOwner)
+        ) {
             return parseMessage(message)?.second ?: message
-        }
-        if (prefs.showVerifiedMesages().get() && message.author.isVerified) {
-            return parseMessage(message)?.second ?: message
-        }
-        if (prefs.showOwnerMesages().get() && message.author.isOwner) {
-            return null
         }
 
         parseMessage(message)?.let { (lang, parsedMessage) ->

@@ -57,13 +57,13 @@ fun SettingsTab(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_verified_messages,
-                    preference = prefs.showVerifiedMesages()
+                    preference = prefs.showVerifiedMessages()
                 )
             }
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_owner_messages,
-                    preference = prefs.showOwnerMesages()
+                    preference = prefs.showOwnerMessages()
                 )
             }
 
