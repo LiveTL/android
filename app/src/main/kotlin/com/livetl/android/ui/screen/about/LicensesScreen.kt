@@ -32,7 +32,7 @@ import com.mikepenz.aboutlibraries.entity.Library
 fun LicensesScreen(
     onBackPressed: () -> Unit,
 ) {
-    val libraries = Libs(LocalContext.current).libraries.sortedBy { it.libraryName }
+    val libraries = Libs(LocalContext.current).libraries.sortedBy { it.libraryName.toLowerCase() }
 
     Scaffold(
         topBar = {
