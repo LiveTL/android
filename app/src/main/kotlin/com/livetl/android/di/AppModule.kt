@@ -1,6 +1,7 @@
 package com.livetl.android.di
 
 import com.livetl.android.data.chat.ChatFilterService
+import com.livetl.android.data.chat.ChatFilterer
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.stream.StreamService
@@ -19,6 +20,7 @@ val appModule = module {
     single { PreferencesHelper(androidContext()) }
 
     single { ChatService(androidContext(), get(), get()) }
+    single { ChatFilterer(get()) }
     single { ChatFilterService(get(), get()) }
     single { FeedService(get(), get()) }
     single { StreamService(androidContext()) }
