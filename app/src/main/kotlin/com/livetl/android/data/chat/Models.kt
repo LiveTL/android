@@ -96,8 +96,8 @@ enum class TranslatedLanguage(val id: String, val altTags: Set<String>) {
     JAPANESE("ja", setOf("jp", "日本語")),
     SPANISH("es", setOf("esp")),
     INDONESIAN("id", setOf()),
-    KOREAN("kr", setOf()),
-    CHINESE("zh", setOf("cn")),
+    KOREAN("kr", setOf("한국어")),
+    CHINESE("zh", setOf("cn", "中文")),
     RUSSIAN("ru", setOf()),
     FRENCH("fr", setOf()),
     ;
