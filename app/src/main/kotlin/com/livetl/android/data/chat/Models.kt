@@ -91,21 +91,21 @@ data class MessageAuthor(
     }
 }
 
-enum class TranslatedLanguage(val id: String, val altTags: Set<String>) {
-    ENGLISH("en", setOf("eng", "英訳")),
-    JAPANESE("ja", setOf("jp", "日本語")),
-    SPANISH("es", setOf("esp")),
-    INDONESIAN("id", setOf()),
-    KOREAN("kr", setOf("한국어")),
-    CHINESE("zh", setOf("cn", "中文")),
-    RUSSIAN("ru", setOf()),
-    FRENCH("fr", setOf()),
+enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
+    ENGLISH("en", setOf("en", "eng", "英訳")),
+    JAPANESE("ja", setOf("ja", "jp", "日本語")),
+    SPANISH("es", setOf("es", "esp")),
+    INDONESIAN("id", setOf("id")),
+    KOREAN("kr", setOf("kr", "ko", "한국어")),
+    CHINESE("zh", setOf("zh", "cn", "中文")),
+    RUSSIAN("ru", setOf("ru")),
+    FRENCH("fr", setOf("fr")),
     ;
 
     companion object {
         fun fromId(id: String): TranslatedLanguage? {
             return values().find {
-                (setOf(it.id) + it.altTags).any { tag -> id.toLowerCase().startsWith(tag) }
+                it.tags.any { tag -> id.toLowerCase().startsWith(tag) }
             }
         }
     }

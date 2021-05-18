@@ -96,10 +96,15 @@ class ChatFiltererTests {
     fun `filters message alternate tags`() {
         whenever(sharedPrefs.getStringSet(eq("tl_langs"), any())).thenReturn(setOf(TranslatedLanguage.ENGLISH.id))
 
-        val message = baseChatMessage.copy(
-            content = listOf(ChatMessageContent.Text("[英訳/EN] Hello world")),
+        val messages = listOf(
+            ChatMessageContent.Text("[英訳/EN] Hello world"),
+            ChatMessageContent.Text("[EN TL] Hello world"),
+            ChatMessageContent.Text("[EN_TL] Hello world"),
         )
-        assertNotNull(filterer.filterMessage(message))
+
+        messages.forEach {
+            assertNotNull(filterer.filterMessage(baseChatMessage.copy(content = listOf(it))))
+        }
     }
 
     @Test

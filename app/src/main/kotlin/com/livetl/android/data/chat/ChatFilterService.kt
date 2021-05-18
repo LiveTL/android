@@ -23,7 +23,7 @@ class ChatFilterService(
 
         chatService.messages
             .onEach {
-                _messages.value = it.mapNotNull { message -> chatFilterer.filterMessage(message) }
+                _messages.value = it.mapNotNull(chatFilterer::filterMessage)
             }
             .launchIn(scope)
     }
