@@ -93,6 +93,16 @@ class ChatFiltererTests {
     }
 
     @Test
+    fun `filters message alternate tags`() {
+        whenever(sharedPrefs.getStringSet(eq("tl_langs"), any())).thenReturn(setOf(TranslatedLanguage.ENGLISH.id))
+
+        val message = baseChatMessage.copy(
+            content = listOf(ChatMessageContent.Text("[英訳/EN] Hello world")),
+        )
+        assertNotNull(filterer.filterMessage(message))
+    }
+
+    @Test
     fun `does not filter message if language doesn't match`() {
         whenever(sharedPrefs.getStringSet(eq("tl_langs"), any())).thenReturn(setOf(TranslatedLanguage.FRENCH.id))
 

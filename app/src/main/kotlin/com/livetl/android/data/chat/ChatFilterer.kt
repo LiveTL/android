@@ -47,7 +47,7 @@ class ChatFilterer(
         // We assume anything that roughly starts with something like "[EN]" is a translation
         val leftToken = trimmedText[0]
         val rightToken = LANG_TOKENS[leftToken]
-        val isTagged = rightToken != null && trimmedText.indexOf(rightToken) < 5
+        val isTagged = rightToken != null && trimmedText.indexOf(rightToken) < MAX_LANG_TAG_LEN
         if (!isTagged) {
             return null
         }
@@ -71,6 +71,8 @@ class ChatFilterer(
         )
     }
 }
+
+private const val MAX_LANG_TAG_LEN = 7
 
 private val LANG_TOKENS = mapOf(
     '[' to ']',

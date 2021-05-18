@@ -91,25 +91,22 @@ data class MessageAuthor(
     }
 }
 
-enum class TranslatedLanguage(val id: String) {
-    ENGLISH("en"),
-    JAPANESE("ja"),
-    SPANISH("es"),
-    INDONESIAN("id"),
-    KOREAN("kr"),
-    CHINESE("zh"),
-    RUSSIAN("ru"),
-    FRENCH("fr"),
+enum class TranslatedLanguage(val id: String, val altTags: Set<String>) {
+    ENGLISH("en", setOf("eng", "英訳")),
+    JAPANESE("ja", setOf("jp", "日本語")),
+    SPANISH("es", setOf("esp")),
+    INDONESIAN("id", setOf()),
+    KOREAN("kr", setOf()),
+    CHINESE("zh", setOf("cn")),
+    RUSSIAN("ru", setOf()),
+    FRENCH("fr", setOf()),
     ;
 
     companion object {
         fun fromId(id: String): TranslatedLanguage? {
-            // People usually write "JP" rather than the official code of "JA"
-            if (id == "jp") {
-                return JAPANESE
+            return values().find {
+                (setOf(it.id) + it.altTags).any { tag -> id.toLowerCase().startsWith(tag) }
             }
-
-            return values().find { it.id == id.toLowerCase() }
         }
     }
 }

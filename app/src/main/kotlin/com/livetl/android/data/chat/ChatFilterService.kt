@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ChatFilterService(
     chatService: ChatService,
-    private val chatFilterer: ChatFilterer
+    private val chatFilterer: ChatFilterer,
 ) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
