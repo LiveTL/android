@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.data.chat.MessageAuthor
@@ -12,18 +13,17 @@ import com.livetl.android.data.chat.TranslatedLanguage
 import com.livetl.android.ui.common.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.PreferenceGroupHeader
 import com.livetl.android.ui.common.SwitchPreferenceRow
-import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.quantityStringResource
+import com.livetl.android.vm.PlayerViewModel
 import com.tfcporciuncula.flow.Preference
-import org.koin.androidx.compose.get
 import java.util.Locale
 
 @Composable
 fun SettingsTab(
-    prefs: PreferencesHelper = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
-    val showTlPanelSettings by prefs.showTlPanel().collectAsState()
+    val showTlPanelSettings by playerViewModel.prefs.showTlPanel().collectAsState()
 
     LazyColumn {
         item {
@@ -31,7 +31,7 @@ fun SettingsTab(
         }
 
         item {
-            SwitchPreferenceRow(title = R.string.setting_show_tl_panel, preference = prefs.showTlPanel())
+            SwitchPreferenceRow(title = R.string.setting_show_tl_panel, preference = playerViewModel.prefs.showTlPanel())
         }
 
         if (showTlPanelSettings) {
@@ -39,7 +39,7 @@ fun SettingsTab(
             item {
                 MultiChoicePreferenceRow(
                     title = stringResource(R.string.setting_tl_languages),
-                    preference = prefs.tlLanguages(),
+                    preference = playerViewModel.prefs.tlLanguages(),
                     choices = TranslatedLanguage.values().map {
                         val locale = Locale(it.id)
                         it.id to locale.getDisplayName(locale).capitalize()
@@ -51,19 +51,19 @@ fun SettingsTab(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_mod_messages,
-                    preference = prefs.showModMessages()
+                    preference = playerViewModel.prefs.showModMessages()
                 )
             }
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_verified_messages,
-                    preference = prefs.showVerifiedMessages()
+                    preference = playerViewModel.prefs.showVerifiedMessages()
                 )
             }
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_owner_messages,
-                    preference = prefs.showOwnerMessages()
+                    preference = playerViewModel.prefs.showOwnerMessages()
                 )
             }
 
@@ -71,13 +71,13 @@ fun SettingsTab(
             item {
                 AuthorListDialog(
                     title = R.string.setting_allowed_authors,
-                    preference = prefs.allowedUsers(),
+                    preference = playerViewModel.prefs.allowedUsers(),
                 )
             }
             item {
                 AuthorListDialog(
                     title = R.string.setting_blocked_authors,
-                    preference = prefs.blockedUsers(),
+                    preference = playerViewModel.prefs.blockedUsers(),
                 )
             }
         }
@@ -87,7 +87,7 @@ fun SettingsTab(
         }
 
         item {
-            SwitchPreferenceRow(title = R.string.setting_fullscreen, preference = prefs.showFullscreen())
+            SwitchPreferenceRow(title = R.string.setting_fullscreen, preference = playerViewModel.prefs.showFullscreen())
         }
 
         // TODO: unhide this once message timing is less broken
@@ -96,7 +96,7 @@ fun SettingsTab(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_show_timestamps,
-                    preference = prefs.showTimestamps()
+                    preference = playerViewModel.prefs.showTimestamps()
                 )
             }
         }
@@ -104,7 +104,7 @@ fun SettingsTab(
             item {
                 SwitchPreferenceRow(
                     title = "Debug mode timestamps",
-                    preference = prefs.debugTimestamps()
+                    preference = playerViewModel.prefs.debugTimestamps()
                 )
             }
         }

@@ -8,8 +8,10 @@ import androidx.compose.runtime.collectAsState
 import com.livetl.android.data.chat.TranslatedLanguage
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-open class PreferencesHelper(context: Context) {
+open class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {
     private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
     private val flowPrefs = FlowSharedPreferences(prefs)
 

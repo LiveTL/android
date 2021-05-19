@@ -14,8 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.google.accompanist.coil.rememberCoilPainter
 import com.livetl.android.data.chat.ChatMessageContent
+import javax.inject.Inject
 
-class EmojiCache {
+class EmojiCache @Inject constructor() {
     val cache = LruCache<String, InlineTextContent>(50)
 
     fun get(emote: ChatMessageContent.Emoji): InlineTextContent {

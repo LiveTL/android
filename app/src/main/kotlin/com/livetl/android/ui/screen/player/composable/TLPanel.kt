@@ -7,19 +7,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.livetl.android.data.chat.ChatFilterService
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.ui.screen.player.composable.chat.Chat
-import org.koin.androidx.compose.get
+import com.livetl.android.vm.PlayerViewModel
 
 @Composable
 fun TLPanel(
-    chatFilterService: ChatFilterService = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
-    val filteredMessages by chatFilterService.messages.collectAsState()
+    val filteredMessages by playerViewModel.filteredMessages.collectAsState(initial = emptyList())
 
     DisposableEffect(Unit) {
         onDispose {
-            chatFilterService.stop()
+            playerViewModel.stopChatFilter()
         }
     }
 

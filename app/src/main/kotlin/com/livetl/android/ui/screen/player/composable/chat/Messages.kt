@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
@@ -36,13 +37,13 @@ import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.toTimestampString
-import org.koin.androidx.compose.get
+import com.livetl.android.vm.PlayerViewModel
 
 @Composable
 fun MinimalMessage(
     modifier: Modifier = Modifier,
     message: ChatMessage,
-    emojiCache: EmojiCache = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val text = buildAnnotatedString {
         CompositionLocalProvider(LocalAuthorNameColor provides LocalContentColor.current) {
@@ -55,7 +56,7 @@ fun MinimalMessage(
         modifier = modifier.chatPadding(),
         text = text,
         style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
-        inlineContent = message.getEmoteInlineContent(emojiCache)
+        inlineContent = message.getEmoteInlineContent(playerViewModel.getEmojiCache())
     )
 }
 
@@ -65,7 +66,7 @@ fun Message(
     message: ChatMessage,
     showTimestamp: Boolean = false,
     debugTimestamp: Boolean = false,
-    emojiCache: EmojiCache = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val textColor = when (message) {
         is ChatMessage.RegularChat -> LocalContentColor.current
@@ -169,7 +170,7 @@ fun Message(
         },
         text = text,
         style = MaterialTheme.typography.body1.copy(color = textColor),
-        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent(emojiCache)
+        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent(playerViewModel.getEmojiCache())
     )
 }
 

@@ -6,26 +6,27 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
-import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
 import androidx.navigation.compose.rememberNavController
-import com.livetl.android.data.stream.StreamService
 import com.livetl.android.ui.BroadcastReceiver
 import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
-import org.koin.androidx.compose.get
+import com.livetl.android.vm.HomeViewModel
+import com.livetl.android.vm.PlayerViewModel
+import com.livetl.android.vm.StreamViewModel
 
 @Composable
 fun MainNavHost(
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
-    streamService: StreamService = get(),
+    streamViewModel: StreamViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
 
@@ -46,9 +47,12 @@ fun MainNavHost(
     ) {
         NavHost(navController, startDestination = Route.Home.id) {
             composable(Route.Home.id) {
+                val homeViewModel = hiltViewModel<HomeViewModel>()
+
                 HomeScreen(
                     navigateToPlayer = { navigateToPlayer(it) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
+                    homeViewModel = homeViewModel
                 )
             }
 
@@ -57,8 +61,10 @@ fun MainNavHost(
                 arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                val videoId = streamService.getVideoId(urlOrId)
-                PlayerScreen(videoId, setKeepScreenOn, setFullscreen)
+                val videoId = streamViewModel.getVideoId(urlOrId)
+                val playerViewModel = hiltViewModel<PlayerViewModel>()
+
+                PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
             }
 
             composable(Route.About.id) {

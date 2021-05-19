@@ -31,19 +31,18 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Feed
-import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.composable.Stream
+import com.livetl.android.vm.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.compose.get
 
 @Composable
 fun HomeScreen(
     navigateToPlayer: (String) -> Unit,
     navigateToAbout: () -> Unit,
-    feedService: FeedService = get(),
+    homeViewModel: HomeViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -55,7 +54,7 @@ fun HomeScreen(
     fun refreshFeed() {
         coroutineScope.launch {
             refreshingFeed.isRefreshing = true
-            val newFeed = feedService.getFeed()
+            val newFeed = homeViewModel.getFeed()
             withContext(Dispatchers.Main) {
                 feed = newFeed
                 refreshingFeed.isRefreshing = false

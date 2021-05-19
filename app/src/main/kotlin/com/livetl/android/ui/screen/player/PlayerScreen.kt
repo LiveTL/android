@@ -20,22 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
-import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.chat.NoChatContinuationFoundException
 import com.livetl.android.data.stream.StreamInfo
-import com.livetl.android.data.stream.StreamService
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
-import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
-import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
+import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.compose.get
 import timber.log.Timber
 
 @Composable
@@ -43,21 +40,18 @@ fun PlayerScreen(
     videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
-    streamService: StreamService = get(),
-    chatService: ChatService = get(),
-    prefs: PreferencesHelper = get(),
-    emojiCache: EmojiCache = get(),
+    playerViewModel: PlayerViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
-    val showFullscreen by prefs.showFullscreen().collectAsState()
+    val showFullscreen by playerViewModel.prefs.showFullscreen().collectAsState()
 
     fun onCurrentSecond(second: Long) {
         // Live chats don't need to be progressed manually
         if (streamInfo?.isLive == false) {
-            chatService.seekTo(videoId, second)
+            playerViewModel.seekTo(videoId, second)
         }
     }
 
@@ -66,7 +60,7 @@ fun PlayerScreen(
 
         onDispose {
             setKeepScreenOn(false)
-            emojiCache.cache.evictAll()
+            playerViewModel.clearEmojiCache()
         }
     }
 
@@ -80,14 +74,14 @@ fun PlayerScreen(
     DisposableEffect(videoId) {
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
-                val newStream = streamService.getStreamInfo(videoId)
+                val newStream = playerViewModel.getStreamInfo(videoId)
                 withContext(Dispatchers.Main) {
                     streamInfo = newStream
                 }
 
                 try {
                     chatState = ChatState.LOADING
-                    chatService.load(videoId, newStream.isLive)
+                    playerViewModel.loadChat(videoId, newStream.isLive)
                     chatState = ChatState.LOADED
                 } catch (e: NoChatContinuationFoundException) {
                     Timber.e(e)
@@ -97,7 +91,7 @@ fun PlayerScreen(
         }
 
         onDispose {
-            chatService.stop()
+            playerViewModel.stopChat()
         }
     }
 
@@ -117,9 +111,9 @@ private fun PortraitLayout(
     streamInfo: StreamInfo?,
     chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
-    prefs: PreferencesHelper = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
-    val showFilteredMessages by prefs.showTlPanel().collectAsState()
+    val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
 
     Column {
         VideoPlayer(
@@ -145,9 +139,9 @@ private fun LandscapeLayout(
     streamInfo: StreamInfo?,
     chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
-    prefs: PreferencesHelper = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
-    val showFilteredMessages by prefs.showTlPanel().collectAsState()
+    val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
 
     Row {
         Box(

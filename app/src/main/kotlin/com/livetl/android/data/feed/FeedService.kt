@@ -8,8 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
-class FeedService(private val client: HttpClient, private val json: Json) {
+class FeedService @Inject constructor(private val client: HttpClient, private val json: Json) {
 
     suspend fun getFeed(): Feed = withContext(Dispatchers.IO) {
         val result = client.get<HttpResponse>(SCHEDULE_API)

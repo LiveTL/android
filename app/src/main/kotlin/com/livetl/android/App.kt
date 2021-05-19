@@ -1,14 +1,11 @@
 package com.livetl.android
 
 import android.app.Application
-import com.livetl.android.di.appModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
@@ -16,15 +13,6 @@ class App : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
-        }
-
-        startKoin {
-            androidLogger(Level.ERROR)
-            // TODO: https://github.com/InsertKoinIO/koin/issues/1076
-//            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.INFO)
-            androidContext(this@App)
-
-            modules(appModule)
         }
     }
 }

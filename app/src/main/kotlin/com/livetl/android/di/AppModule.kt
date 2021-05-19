@@ -1,29 +1,23 @@
 package com.livetl.android.di
 
-import com.livetl.android.data.chat.ChatFilterService
-import com.livetl.android.data.chat.ChatFilterer
-import com.livetl.android.data.chat.ChatService
-import com.livetl.android.data.feed.FeedService
-import com.livetl.android.data.stream.StreamService
-import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
-import com.livetl.android.util.PreferencesHelper
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import kotlinx.serialization.json.Json
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import javax.inject.Singleton
 
-val appModule = module {
-    single { HttpClient(Android) }
-    single { Json { ignoreUnknownKeys = true } }
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
 
-    single { PreferencesHelper(androidContext()) }
+    @Provides
+    @Singleton
+    fun httpClient() = HttpClient(Android)
 
-    single { ChatService(androidContext(), get(), get()) }
-    single { ChatFilterer(get()) }
-    single { ChatFilterService(get(), get()) }
-    single { FeedService(get(), get()) }
-    single { StreamService(androidContext()) }
-
-    single { EmojiCache() }
+    @Provides
+    @Singleton
+    fun json() = Json { ignoreUnknownKeys = true }
 }

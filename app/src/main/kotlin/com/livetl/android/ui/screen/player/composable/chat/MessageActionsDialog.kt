@@ -10,17 +10,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
-import com.livetl.android.util.PreferencesHelper
-import com.livetl.android.util.minusAssign
-import com.livetl.android.util.plusAssign
-import org.koin.androidx.compose.get
+import com.livetl.android.vm.PlayerViewModel
 
 @Composable
 fun MessageActionsDialog(
     message: MutableState<ChatMessage?>,
-    prefs: PreferencesHelper = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val clipboardManager = LocalClipboardManager.current
     var message by message
@@ -38,11 +36,7 @@ fun MessageActionsDialog(
             buttons = {
                 TextButton(
                     onClick = {
-                        message?.let {
-                            val item = it.author.toPrefItem()
-                            prefs.allowedUsers() += item
-                            prefs.blockedUsers() -= item
-                        }
+                        message?.let { playerViewModel.allowUser(it.author) }
                         onDismiss()
                     }
                 ) {
@@ -51,11 +45,7 @@ fun MessageActionsDialog(
 
                 TextButton(
                     onClick = {
-                        message?.let {
-                            val item = it.author.toPrefItem()
-                            prefs.blockedUsers() += item
-                            prefs.allowedUsers() -= item
-                        }
+                        message?.let { playerViewModel.blockUser(it.author) }
                         onDismiss()
                     }
                 ) {

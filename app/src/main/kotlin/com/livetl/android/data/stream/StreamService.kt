@@ -1,10 +1,12 @@
 package com.livetl.android.data.stream
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import me.echeung.youtubeextractor.YouTubeExtractor
 import timber.log.Timber
+import javax.inject.Inject
 
-class StreamService(context: Context) {
+class StreamService @Inject constructor(@ApplicationContext context: Context) {
 
     private val extractor = YouTubeExtractor(context)
 

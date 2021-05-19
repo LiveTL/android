@@ -2,8 +2,9 @@ package com.livetl.android.data.chat
 
 import androidx.compose.ui.util.fastFirstOrNull
 import com.livetl.android.util.PreferencesHelper
+import javax.inject.Inject
 
-class ChatFilterer(
+class ChatFilterer @Inject constructor(
     private val prefs: PreferencesHelper,
 ) {
     fun filterMessage(message: ChatMessage): ChatMessage? {

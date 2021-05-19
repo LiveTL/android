@@ -11,6 +11,7 @@ import com.livetl.android.util.injectScript
 import com.livetl.android.util.readFile
 import com.livetl.android.util.runJS
 import com.livetl.android.util.toDebugTimestampString
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -27,13 +28,14 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 import kotlin.time.microseconds
 import kotlin.time.seconds
 
 @SuppressLint("SetJavaScriptEnabled")
-class ChatService(
-    context: Context,
+class ChatService @Inject constructor(
+    @ApplicationContext context: Context,
     private val json: Json,
     private val client: HttpClient,
 ) {

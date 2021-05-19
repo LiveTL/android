@@ -17,19 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
-import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.chat.Chat
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.MessageActionsDialog
+import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.get
 
 enum class Tabs(@StringRes val nameRes: Int) {
     Info(R.string.info),
@@ -43,10 +43,10 @@ val tabs = Tabs.values().toList()
 fun PlayerTabs(
     streamInfo: StreamInfo?,
     chatState: ChatState,
-    chatService: ChatService = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val actioningMessage = remember { mutableStateOf<ChatMessage?>(null) }
-    val chatMessages by chatService.messages.collectAsState()
+    val chatMessages by playerViewModel.messages.collectAsState(initial = emptyList())
 
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(

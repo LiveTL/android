@@ -14,7 +14,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.livetl.android.ui.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.powerManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private var wakeLock: PowerManager.WakeLock? = null

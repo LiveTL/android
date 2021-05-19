@@ -20,15 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.common.LoadingIndicator
-import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.collectAsState
+import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.get
 
 sealed class ChatState {
     object LOADING : ChatState()
@@ -44,12 +44,12 @@ fun Chat(
     minimalMode: Boolean = false,
     onClickMessage: (ChatMessage) -> Unit = {},
     showJumpToBottomButton: Boolean = false,
-    prefs: PreferencesHelper = get(),
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
 
-    val showTimestamp by prefs.showTimestamps().collectAsState()
-    val debugTimestamp by prefs.debugTimestamps().collectAsState()
+    val showTimestamp by playerViewModel.prefs.showTimestamps().collectAsState()
+    val debugTimestamp by playerViewModel.prefs.debugTimestamps().collectAsState()
 
     val scrollState = rememberLazyListState()
     var isScrolledToBottom by remember { mutableStateOf(true) }
