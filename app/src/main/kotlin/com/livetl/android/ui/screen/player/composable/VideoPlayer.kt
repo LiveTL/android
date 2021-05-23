@@ -5,7 +5,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.databinding.VideoPlayerBinding
+import com.livetl.android.vm.PlayerViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -17,19 +19,17 @@ fun VideoPlayer(
     videoId: String?,
     isLive: Boolean?,
     onCurrentSecond: (Float) -> Unit,
+    playerViewModel: PlayerViewModel = viewModel(),
 ) {
-    var videoAttemptedRetries = 0
-
     var player = remember<YouTubePlayer?> { null }
 
     fun loadVideo() {
         if (!videoId.isNullOrBlank()) {
-            player?.loadVideo(videoId, 0F)
+            player?.loadVideo(videoId, playerViewModel.currentSecond)
         }
     }
 
     LaunchedEffect(videoId) {
-        videoAttemptedRetries = 0
         loadVideo()
     }
 
@@ -50,14 +50,15 @@ fun VideoPlayer(
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 super.onError(youTubePlayer, error)
                 Timber.w("Error: ${error.name}")
-                if (videoId != null && videoAttemptedRetries < 3) {
-                    videoAttemptedRetries++
-                    Timber.d("Retry #$videoAttemptedRetries to load $videoId")
+                if (videoId != null && playerViewModel.videoAttemptedRetries < 3) {
+                    playerViewModel.videoAttemptedRetries++
+                    Timber.d("Retry #${playerViewModel.videoAttemptedRetries} to load $videoId")
                     loadVideo()
                 }
             }
 
             override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                playerViewModel.currentSecond = second
                 onCurrentSecond(second)
             }
         })

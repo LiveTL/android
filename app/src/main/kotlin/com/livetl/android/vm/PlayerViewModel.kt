@@ -28,6 +28,9 @@ class PlayerViewModel @Inject constructor(
     val messages = chatService.messages.shareIn(viewModelScope, SharingStarted.Eagerly, 1)
     val filteredMessages = chatFilterService.messages.shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
+    var videoAttemptedRetries = 0
+    var currentSecond: Float = 0f
+
     fun getEmojiCache() = emojiCache
 
     fun clearEmojiCache() {
