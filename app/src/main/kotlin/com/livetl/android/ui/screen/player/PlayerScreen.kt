@@ -19,9 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.livetl.android.R
 import com.livetl.android.data.chat.NoChatContinuationFoundException
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
@@ -70,7 +68,6 @@ fun PlayerScreen(
         onDispose { setFullscreen(false) }
     }
 
-    val errorChatLoadMessage = stringResource(R.string.error_chat_load)
     DisposableEffect(videoId) {
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
