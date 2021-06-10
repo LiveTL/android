@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class ChatFilterService @Inject constructor(
-    chatService: ChatService,
+    private val chatService: ChatService,
     private val chatFilterer: ChatFilterer,
 ) {
 
@@ -18,7 +18,7 @@ class ChatFilterService @Inject constructor(
     val messages: StateFlow<List<ChatMessage>>
         get() = _messages
 
-    init {
+    fun connect() {
         // Clear out previous chat contents, just in case
         stop()
 

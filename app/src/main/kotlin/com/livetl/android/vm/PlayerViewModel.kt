@@ -39,9 +39,6 @@ class PlayerViewModel @Inject constructor(
 
     fun stopChat() {
         chatService.stop()
-    }
-
-    fun stopChatFilter() {
         chatFilterService.stop()
     }
 
@@ -54,7 +51,8 @@ class PlayerViewModel @Inject constructor(
     }
 
     suspend fun loadChat(videoId: String, isLive: Boolean) {
-        chatService.load(videoId, isLive)
+        chatFilterService.connect()
+        chatService.connect(videoId, isLive)
     }
 
     fun allowUser(author: MessageAuthor) {

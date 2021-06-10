@@ -65,7 +65,7 @@ class ChatService @Inject constructor(
     val messages: StateFlow<List<ChatMessage>>
         get() = _messages
 
-    suspend fun load(videoId: String, isLive: Boolean) {
+    suspend fun connect(videoId: String, isLive: Boolean) {
         // Clear out previous chat contents, just in case
         stop()
 
