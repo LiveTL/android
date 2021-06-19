@@ -1,7 +1,6 @@
 package com.livetl.android.vm
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatService
 import com.livetl.android.data.chat.MessageAuthor
@@ -12,8 +11,6 @@ import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.minusAssign
 import com.livetl.android.util.plusAssign
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +22,8 @@ class PlayerViewModel @Inject constructor(
     val prefs: PreferencesHelper,
 ) : ViewModel() {
 
-    val messages = chatService.messages.shareIn(viewModelScope, SharingStarted.Eagerly, 1)
-    val filteredMessages = chatFilterService.messages.shareIn(viewModelScope, SharingStarted.Eagerly, 1)
+    val messages = chatService.messages
+    val filteredMessages = chatFilterService.messages
 
     var videoAttemptedRetries = 0
     var currentSecond: Float = 0f

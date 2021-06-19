@@ -22,7 +22,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -59,11 +61,16 @@ class ChatService @Inject constructor(
     private var isLive: Boolean = false
     private var currentSecond: Long = 0
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    val scope = CoroutineScope(Dispatchers.IO)
     private var jobs: List<Job> = mutableListOf()
+
     private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
-    val messages: StateFlow<List<ChatMessage>>
-        get() = _messages
+    val messages: SharedFlow<List<ChatMessage>>
+        get() = _messages.shareIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            replay = 1,
+        )
 
     suspend fun connect(videoId: String, isLive: Boolean) {
         // Clear out previous chat contents, just in case

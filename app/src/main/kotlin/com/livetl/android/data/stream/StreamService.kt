@@ -22,7 +22,6 @@ class StreamService @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    // TODO: handle exceptions
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
         Timber.d("Fetching stream: $pageUrl")
 

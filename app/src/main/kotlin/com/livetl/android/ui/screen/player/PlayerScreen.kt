@@ -76,7 +76,6 @@ fun PlayerScreen(
                         streamInfo = newStream
                     }
 
-                    Timber.d("FILTER PLAYERSCREEN EFFECT")
                     chatState = ChatState.LOADING
                     playerViewModel.loadChat(videoId, newStream.isLive)
                     chatState = ChatState.LOADED
