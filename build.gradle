@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.5.10'
-        compose_version = '1.0.0-beta08'
+        compose_version = '1.0.0-beta09'
         about_libs_version = '8.9.0'
         hilt_version = '2.36'
     }
@@ -23,6 +23,9 @@ allprojects {
         mavenCentral()
         google()
         maven { url "https://jitpack.io" }
+
+        // For Accompanist snapshots
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
 
