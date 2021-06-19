@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.livetl.android.data.chat.NoChatContinuationFoundException
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
@@ -71,16 +70,17 @@ fun PlayerScreen(
     DisposableEffect(videoId) {
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
-                val newStream = playerViewModel.getStreamInfo(videoId)
-                withContext(Dispatchers.Main) {
-                    streamInfo = newStream
-                }
-
                 try {
+                    val newStream = playerViewModel.getStreamInfo(videoId)
+                    withContext(Dispatchers.Main) {
+                        streamInfo = newStream
+                    }
+
+                    Timber.d("FILTER PLAYERSCREEN EFFECT")
                     chatState = ChatState.LOADING
                     playerViewModel.loadChat(videoId, newStream.isLive)
                     chatState = ChatState.LOADED
-                } catch (e: NoChatContinuationFoundException) {
+                } catch (e: Throwable) {
                     Timber.e(e)
                     chatState = ChatState.ERROR
                 }
