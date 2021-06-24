@@ -7,7 +7,6 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
@@ -26,7 +25,6 @@ import com.livetl.android.vm.StreamViewModel
 fun MainNavHost(
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
-    streamViewModel: StreamViewModel = viewModel(),
 ) {
     val navController = rememberNavController()
 
@@ -60,9 +58,11 @@ fun MainNavHost(
                 "${Route.Player.id}?urlOrId={urlOrId}",
                 arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
             ) { backStackEntry ->
+                val streamViewModel = hiltViewModel<StreamViewModel>()
+                val playerViewModel = hiltViewModel<PlayerViewModel>()
+
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
                 val videoId = streamViewModel.getVideoId(urlOrId)
-                val playerViewModel = hiltViewModel<PlayerViewModel>()
 
                 PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
             }

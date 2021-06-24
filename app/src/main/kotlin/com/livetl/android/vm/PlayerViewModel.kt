@@ -18,7 +18,7 @@ class PlayerViewModel @Inject constructor(
     private val streamService: StreamService,
     private val chatService: ChatService,
     private val chatFilterService: ChatFilterService,
-    private val emojiCache: EmojiCache,
+    val emojiCache: EmojiCache,
     val prefs: PreferencesHelper,
 ) : ViewModel() {
 
@@ -27,8 +27,6 @@ class PlayerViewModel @Inject constructor(
 
     var videoAttemptedRetries = 0
     var currentSecond: Float = 0f
-
-    fun getEmojiCache() = emojiCache
 
     fun clearEmojiCache() {
         emojiCache.cache.evictAll()

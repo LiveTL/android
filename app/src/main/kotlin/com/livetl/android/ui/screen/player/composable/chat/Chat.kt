@@ -106,8 +106,8 @@ fun Chat(
                             .clickable { onClickMessage(message) }
 
                         when (minimalMode) {
-                            true -> MinimalMessage(baseMessageModifier, message)
-                            false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp)
+                            true -> MinimalMessage(baseMessageModifier, message, playerViewModel.emojiCache)
+                            false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp, playerViewModel.emojiCache)
                         }
                     }
                 }
@@ -140,6 +140,7 @@ private fun RegularChatPreviews() {
                 timestamp = 1615001105,
             ),
             showTimestamp = true,
+            emojiCache = EmojiCache(),
         )
 
         Message(
@@ -149,6 +150,7 @@ private fun RegularChatPreviews() {
                 timestamp = 1615001105,
             ),
             showTimestamp = true,
+            emojiCache = EmojiCache(),
         )
 
         Message(
@@ -158,6 +160,7 @@ private fun RegularChatPreviews() {
                 timestamp = 1615001105,
             ),
             showTimestamp = true,
+            emojiCache = EmojiCache(),
         )
 
         Message(
@@ -167,6 +170,7 @@ private fun RegularChatPreviews() {
                 timestamp = 1615001105,
             ),
             showTimestamp = true,
+            emojiCache = EmojiCache(),
         )
     }
 }
@@ -186,5 +190,6 @@ private fun SuperChatPreview() {
             level = ChatMessage.SuperChat.Level.RED,
         ),
         showTimestamp = true,
+        emojiCache = EmojiCache(),
     )
 }

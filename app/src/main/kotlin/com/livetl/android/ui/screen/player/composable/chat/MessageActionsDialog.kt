@@ -31,7 +31,7 @@ fun MessageActionsDialog(
         AlertDialog(
             onDismissRequest = { onDismiss() },
             text = {
-                message?.let { Message(message = it) }
+                message?.let { Message(message = it, emojiCache = playerViewModel.emojiCache) }
             },
             buttons = {
                 TextButton(
