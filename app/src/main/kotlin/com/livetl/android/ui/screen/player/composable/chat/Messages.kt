@@ -19,6 +19,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
+import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
@@ -69,6 +71,7 @@ fun Message(
     val textColor = when (message) {
         is ChatMessage.RegularChat -> LocalContentColor.current
         is ChatMessage.SuperChat -> message.level.textColor
+        is ChatMessage.NewMember -> message.textColor
     }
 
     val authorPicInlineContent = mapOf(
@@ -153,7 +156,13 @@ fun Message(
         }
 
         // Actual chat message contents
-        append(textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes))
+        if (message is ChatMessage.NewMember) {
+            append(stringResource(R.string.new_member))
+        } else {
+            append(
+                textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes)
+            )
+        }
     }
 
     BasicText(
@@ -164,6 +173,11 @@ fun Message(
                 modifier
                     .clip(RoundedCornerShape(4.dp))
                     .background(color = message.level.backgroundColor)
+                    .chatPadding()
+            is ChatMessage.NewMember ->
+                modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(color = message.backgroundColor)
                     .chatPadding()
         },
         text = text,
@@ -177,7 +191,7 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     val color = when {
         author.isModerator || author.isVerified -> Color(0xFF5D84F1)
         author.isOwner -> Color(0xFFFED500)
-        author.membershipRank != null -> Color(0xFF2BA640)
+        author.membershipRank != null && !author.isNewMember -> Color(0xFF2BA640)
         else -> LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium)
     }
 

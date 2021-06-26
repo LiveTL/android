@@ -69,7 +69,8 @@ const messageReceiveCallback = async (response) => {
 
         const messageItem = currentElement.liveChatTextMessageRenderer ||
           currentElement.liveChatPaidMessageRenderer ||
-          currentElement.liveChatPaidStickerRenderer;
+          currentElement.liveChatPaidStickerRenderer ||
+          currentElement.liveChatMembershipItemRenderer;
         if (!messageItem) {
           return;
         }
@@ -81,6 +82,7 @@ const messageReceiveCallback = async (response) => {
         let isAuthorModerator = false;
         let isAuthorVerified = false;
         let isAuthorOwner = false;
+        let isNewMember = false;
         let authorMembership = null;
         (messageItem.authorBadges || []).forEach((badge) => {
           const tooltip = badge.liveChatAuthorBadgeRenderer.tooltip;
@@ -96,7 +98,11 @@ const messageReceiveCallback = async (response) => {
             isAuthorOwner = true;
           }
 
-          if (tooltip.startsWith('Member')) {
+          if (tooltip === 'New member' && currentElement.liveChatMembershipItemRenderer) {
+            isNewMember = true;
+          }
+
+          if (tooltip.startsWith('Member') || tooltip === 'New member') {
             const thumbnails = badge.liveChatAuthorBadgeRenderer.customThumbnail.thumbnails;
             authorMembership = {
               name: badge.liveChatAuthorBadgeRenderer.tooltip,
@@ -136,6 +142,7 @@ const messageReceiveCallback = async (response) => {
             isModerator: isAuthorModerator,
             isVerified: isAuthorVerified,
             isOwner: isAuthorOwner,
+            isNewMember: isNewMember,
             membershipBadge: authorMembership,
           },
           messages: runs,

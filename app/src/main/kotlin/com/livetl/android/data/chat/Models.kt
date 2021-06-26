@@ -15,7 +15,6 @@ sealed class ChatMessage {
         override val timestamp: Long,
     ) : ChatMessage()
 
-    // TODO: handle new members
     // TODO: handle super stickers
     data class SuperChat(
         override val author: MessageAuthor,
@@ -35,6 +34,16 @@ sealed class ChatMessage {
         }
     }
 
+    data class NewMember(
+        override val author: MessageAuthor,
+        override val timestamp: Long,
+    ) : ChatMessage() {
+        override val content: List<ChatMessageContent> = emptyList()
+
+        val backgroundColor = Color(0xFF0E9D58)
+        val textColor = Color.White
+    }
+
     fun getTextContent(): String {
         return content
             .joinToString("") { it.toString() }
@@ -48,6 +57,9 @@ sealed class ChatMessage {
             }
             is SuperChat -> {
                 copy(content = newContent)
+            }
+            is NewMember -> {
+                this
             }
         }
     }
@@ -69,6 +81,7 @@ data class MessageAuthor(
     val isModerator: Boolean = false,
     val isVerified: Boolean = false,
     val isOwner: Boolean = false,
+    val isNewMember: Boolean = false,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
 ) {
@@ -105,7 +118,7 @@ enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     companion object {
         fun fromId(id: String): TranslatedLanguage? {
             return values().find {
-                it.tags.any { tag -> id.toLowerCase().startsWith(tag) }
+                it.tags.any { tag -> id.lowercase().startsWith(tag) }
             }
         }
     }
@@ -126,20 +139,29 @@ data class YTChatMessage(
     val superchat: YTSuperChat? = null,
 ) {
     fun toChatMessage(): ChatMessage {
-        return if (superchat != null) {
-            ChatMessage.SuperChat(
-                author = author.toMessageAuthor(),
-                content = messages.fastMap { it.toChatMessageContent() },
-                timestamp = timestamp,
-                amount = superchat.amount,
-                level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
-            )
-        } else {
-            ChatMessage.RegularChat(
-                author = author.toMessageAuthor(),
-                content = messages.fastMap { it.toChatMessageContent() },
-                timestamp = timestamp,
-            )
+        return when {
+            superchat != null -> {
+                ChatMessage.SuperChat(
+                    author = author.toMessageAuthor(),
+                    content = messages.fastMap { it.toChatMessageContent() },
+                    timestamp = timestamp,
+                    amount = superchat.amount,
+                    level = ChatMessage.SuperChat.Level.valueOf(superchat.color)
+                )
+            }
+            author.isNewMember -> {
+                ChatMessage.NewMember(
+                    author = author.toMessageAuthor(),
+                    timestamp = timestamp,
+                )
+            }
+            else -> {
+                ChatMessage.RegularChat(
+                    author = author.toMessageAuthor(),
+                    content = messages.fastMap { it.toChatMessageContent() },
+                    timestamp = timestamp,
+                )
+            }
         }
     }
 }
@@ -152,6 +174,7 @@ data class YTChatAuthor(
     val isModerator: Boolean,
     val isVerified: Boolean,
     val isOwner: Boolean,
+    val isNewMember: Boolean,
     val membershipBadge: YTChatMembershipBadge?,
 ) {
     fun toMessageAuthor(): MessageAuthor {
@@ -162,6 +185,7 @@ data class YTChatAuthor(
             isModerator = isModerator,
             isVerified = isVerified,
             isOwner = isOwner,
+            isNewMember = isNewMember,
             membershipRank = membershipBadge?.name,
             membershipBadgeUrl = membershipBadge?.thumbnailSrc,
         )

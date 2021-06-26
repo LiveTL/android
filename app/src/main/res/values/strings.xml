@@ -34,6 +34,8 @@
     <string name="setting_group_display">Display</string>
     <string name="setting_show_timestamps">Message timestamps</string>
 
+    <string name="new_member">New member</string>
+
     <string name="error_chat_load">Failed to connect to chat</string>
 
     <string name="action_allow_author">Always show author</string>
