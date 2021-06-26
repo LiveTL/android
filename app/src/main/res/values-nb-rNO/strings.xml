@@ -1,2 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="setting_group_display">Skjerm</string>
+    <string name="live">Sanntidsvisning</string>
+    <string name="licenses">Friprog-lisenser</string>
+    <string name="holotools_stream_info">Strøm-informasjonskanal fra HoloTools</string>
+    <string name="credits">Bidragsytere</string>
+    <string name="about_donate">Doner</string>
+    <string name="about_website">Nettside</string>
+    <string name="about_version">Versjon %s</string>
+    <string name="action_copy_text">Kopier tekst</string>
+    <string name="action_block_author">Alltid skjul forfatter</string>
+    <string name="action_allow_author">Alltid vis forfatter</string>
+    <string name="error_chat_load">Klarte ikke å koble til sludring</string>
+    <string name="setting_show_timestamps">Tidsstempel</string>
+    <plurals name="num_items">
+        <item quantity="one">ett element</item>
+        <item quantity="other">%1$d elementer</item>
+    </plurals>
+    <string name="setting_blocked_authors">Blokkerte meldingsforfattere</string>
+    <string name="setting_allowed_authors">Tillatte meldingsforfattere</string>
+    <string name="setting_show_owner_messages">Eier-meldinger</string>
+    <string name="setting_show_verified_messages">Bekreftede meldinger</string>
+    <string name="setting_show_mod_messages">Moderatormeldinger</string>
+    <string name="setting_tl_languages">Språk</string>
+    <string name="setting_group_filter">Filtrerte meldinger</string>
+    <string name="setting_show_tl_panel">Vis TL-panel</string>
+    <string name="setting_fullscreen">Fullskjermsvisning</string>
+    <string name="streamed">Strømmet %s</string>
+    <string name="archives">Arkiv</string>
+    <string name="upcoming">Kommende</string>
+    <string name="started_streaming">Startet %s</string>
+    <string name="settings">Innstillinger</string>
+    <string name="chat">Sludre</string>
+    <string name="info">Info</string>
+    <string name="about">Om</string>
+    <string name="refresh">Gjenoppfrisk</string>
+    <string name="cd_back">Tilbake</string>
+</resources>
