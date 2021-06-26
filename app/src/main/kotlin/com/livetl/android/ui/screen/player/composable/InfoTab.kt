@@ -19,6 +19,7 @@ import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
+import com.livetl.android.ui.screen.home.composable.StreamActions
 
 @Composable
 fun InfoTab(
@@ -42,7 +43,11 @@ fun InfoTab(
                 style = MaterialTheme.typography.subtitle1,
             )
             Spacer(modifier = Modifier.requiredHeight(8.dp))
+
             Divider()
+            StreamActions(streamInfo.videoId)
+            Divider()
+
             Spacer(modifier = Modifier.requiredHeight(8.dp))
 
             val styledDescription = textParser(streamInfo.shortDescription)

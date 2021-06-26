@@ -28,6 +28,6 @@ class HomeViewModel @Inject constructor(
 
     suspend fun showSheet(stream: Stream) {
         sheetStream = stream
-        sheetState.show()
+        sheetState.animateTo(ModalBottomSheetValue.Expanded)
     }
 }

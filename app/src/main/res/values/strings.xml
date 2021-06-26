@@ -17,6 +17,9 @@
     <string name="streamed">Streamed %s</string>
 
     <string name="select_a_stream">Select a stream to view details</string>
+    <string name="action_open_in_youtube">Open in…</string>
+    <string name="action_copy_link">Copy</string>
+    <string name="action_share">Share</string>
 
     <string name="setting_fullscreen">Fullscreen</string>
     <string name="setting_group_filter">TL Panel</string>
@@ -51,4 +54,7 @@
     <string name="credits">Credits</string>
     <string name="holotools_stream_info">Streams feed from HoloTools</string>
     <string name="licenses">Open source licenses</string>
+
+    <string name="copied">Copied to clipboard: %s</string>
+    <string name="copied_error">Failed to copy</string>
 </resources>

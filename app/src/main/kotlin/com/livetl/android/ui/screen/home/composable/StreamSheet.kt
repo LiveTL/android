@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -33,8 +34,7 @@ fun StreamSheet(stream: Stream?) {
         )
 
         Column(
-            modifier = Modifier
-                .padding(8.dp),
+            modifier = Modifier.padding(8.dp),
         ) {
             Text(
                 text = stream.title,
@@ -45,6 +45,12 @@ fun StreamSheet(stream: Stream?) {
                 text = stream.channel.name,
                 style = MaterialTheme.typography.subtitle1,
             )
+
+            Spacer(modifier = Modifier.requiredHeight(8.dp))
+            Divider()
+            Spacer(modifier = Modifier.requiredHeight(8.dp))
+
+            StreamActions(stream.yt_video_key)
         }
     }
 }
