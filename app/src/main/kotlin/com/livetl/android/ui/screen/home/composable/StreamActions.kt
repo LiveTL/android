@@ -21,16 +21,19 @@ fun StreamActions(videoId: String) {
 
     Row(Modifier.fillMaxWidth()) {
         LinkIcon(
+            modifier = Modifier.weight(1f),
             labelRes = R.string.action_open_in_youtube,
             icon = Icons.Outlined.OpenInBrowser,
             url = videoUrl,
         )
         LinkIcon(
+            modifier = Modifier.weight(1f),
             labelRes = R.string.action_copy_link,
             icon = Icons.Outlined.CopyAll,
             onClick = { context.copyToClipboard(videoUrl) },
         )
         LinkIcon(
+            modifier = Modifier.weight(1f),
             labelRes = R.string.action_share,
             icon = Icons.Outlined.Share,
             onClick = { context.share(videoUrl) },
