@@ -16,10 +16,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.Savings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,22 +79,22 @@ fun AboutScreen(
                     LinkIcon(
                         labelRes = R.string.about_website,
                         url = "https://livetl.app/",
-                        icon = Icons.Filled.Public,
+                        icon = Icons.Outlined.Public,
                     )
                     LinkIcon(
                         labelRes = R.string.about_discord,
                         url = "https://discord.gg/uJrV3tmthg",
-                        icon = Icons.Filled.Chat,
+                        icon = Icons.Outlined.Chat,
                     )
                     LinkIcon(
                         labelRes = R.string.about_github,
                         url = "https://github.com/LiveTL/android",
-                        icon = Icons.Filled.Code,
+                        icon = Icons.Outlined.Code,
                     )
                     LinkIcon(
                         labelRes = R.string.about_donate,
                         url = "https://opencollective.com/livetl",
-                        icon = Icons.Filled.Savings,
+                        icon = Icons.Outlined.Savings,
                     )
                 }
             }

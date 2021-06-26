@@ -3,10 +3,14 @@ package com.livetl.android.ui.screen.player.composable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Icon
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,10 +36,10 @@ import com.livetl.android.ui.screen.player.composable.chat.MessageActionsDialog
 import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.launch
 
-enum class Tabs(@StringRes val nameRes: Int) {
-    Info(R.string.info),
-    Chat(R.string.chat),
-    Settings(R.string.settings),
+enum class Tabs(@StringRes val nameRes: Int, val icon: ImageVector) {
+    Info(R.string.info, Icons.Outlined.Info),
+    Chat(R.string.chat, Icons.Outlined.Chat),
+    Settings(R.string.settings, Icons.Outlined.Settings),
 }
 val tabs = Tabs.values().toList()
 
@@ -65,7 +70,12 @@ fun PlayerTabs(
         ) {
             tabs.fastForEachIndexed { index, tab ->
                 Tab(
-                    text = { Text(stringResource(tab.nameRes)) },
+                    icon = {
+                        Icon(
+                            imageVector = tab.icon,
+                            contentDescription = stringResource(tab.nameRes)
+                        )
+                    },
                     selected = pagerState.currentPage == index,
                     onClick = {
                         coroutineScope.launch {
