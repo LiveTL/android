@@ -66,32 +66,32 @@ fun HomeScreen(
         refreshFeed()
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.app_name))
-                },
-                actions = {
-                    IconButton(onClick = { refreshFeed() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Refresh,
-                            contentDescription = stringResource(R.string.refresh)
-                        )
-                    }
-                    IconButton(onClick = { navigateToAbout() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = stringResource(R.string.about)
-                        )
-                    }
-                },
-            )
-        }
+    ModalBottomSheetLayout(
+        sheetState = homeViewModel.sheetState,
+        sheetContent = { StreamSheet(homeViewModel.sheetStream) },
     ) {
-        ModalBottomSheetLayout(
-            sheetState = homeViewModel.sheetState,
-            sheetContent = { StreamSheet(homeViewModel.sheetStream) },
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(R.string.app_name))
+                    },
+                    actions = {
+                        IconButton(onClick = { refreshFeed() }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Refresh,
+                                contentDescription = stringResource(R.string.refresh)
+                            )
+                        }
+                        IconButton(onClick = { navigateToAbout() }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = stringResource(R.string.about)
+                            )
+                        }
+                    },
+                )
+            }
         ) {
             SwipeRefresh(
                 modifier = Modifier.fillMaxWidth(),

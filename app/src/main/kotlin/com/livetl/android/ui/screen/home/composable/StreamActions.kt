@@ -3,7 +3,7 @@ package com.livetl.android.ui.screen.home.composable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CopyAll
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.Composable
@@ -29,7 +29,7 @@ fun StreamActions(videoId: String) {
         LinkIcon(
             modifier = Modifier.weight(1f),
             labelRes = R.string.action_copy_link,
-            icon = Icons.Outlined.CopyAll,
+            icon = Icons.Outlined.ContentCopy,
             onClick = { context.copyToClipboard(videoUrl) },
         )
         LinkIcon(
