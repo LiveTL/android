@@ -2,7 +2,7 @@ package com.livetl.android.ui.screen.home.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,12 +39,13 @@ fun Stream(
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
-    navigateToStream: (Stream) -> Unit,
+    onClick: (Stream) -> Unit,
+    onLongClick: (Stream) -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { navigateToStream(stream) }
+            .combinedClickable(onClick = { onClick(stream) }, onLongClick = { onLongClick(stream) })
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .requiredHeight(48.dp)
     ) {
@@ -118,7 +119,8 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
-            navigateToStream = {},
+            onClick = {},
+            onLongClick = {},
         )
         Stream(
             stream = Stream(
@@ -132,7 +134,8 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
-            navigateToStream = {},
+            onClick = {},
+            onLongClick = {},
         )
     }
 }

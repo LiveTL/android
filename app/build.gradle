@@ -165,5 +165,6 @@ tasks.withType(AbstractKotlinCompile).all {
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi",
+            "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
     ]
 }
