@@ -18,11 +18,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.R
-import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.composable.Stream
 import com.livetl.android.vm.HomeViewModel
@@ -47,16 +42,14 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val refreshingFeed = rememberSwipeRefreshState(false)
-    var feed by remember { mutableStateOf<Feed?>(null) }
 
     val navigateToStream = { stream: Stream -> navigateToPlayer(stream.yt_video_key) }
 
     fun refreshFeed() {
         coroutineScope.launch {
             refreshingFeed.isRefreshing = true
-            val newFeed = homeViewModel.getFeed()
+            homeViewModel.loadFeed()
             withContext(Dispatchers.Main) {
-                feed = newFeed
                 refreshingFeed.isRefreshing = false
             }
         }
@@ -94,29 +87,29 @@ fun HomeScreen(
             state = refreshingFeed,
             onRefresh = { refreshFeed() },
         ) {
-            if (feed != null) {
+            if (homeViewModel.feed != null) {
                 LazyColumn {
                     streamItems(
                         headingRes = R.string.live,
-                        streams = feed!!.live,
+                        streams = homeViewModel.feed!!.live,
                         sortByAscending = false,
                         timestampFormatStringRes = R.string.started_streaming,
                         timestampSupplier = { it.live_start },
-                        navigateToStream = navigateToStream
+                        onClick = navigateToStream,
                     )
                     streamItems(
                         headingRes = R.string.upcoming,
-                        streams = feed!!.upcoming,
+                        streams = homeViewModel.feed!!.upcoming,
                         timestampSupplier = { it.live_schedule },
-                        navigateToStream = navigateToStream
+                        onClick = navigateToStream,
                     )
                     streamItems(
                         headingRes = R.string.archives,
-                        streams = feed!!.ended,
+                        streams = homeViewModel.feed!!.ended,
                         sortByAscending = false,
                         timestampFormatStringRes = R.string.streamed,
                         timestampSupplier = { it.live_end },
-                        navigateToStream = navigateToStream
+                        onClick = navigateToStream,
                     )
                 }
             }
@@ -130,7 +123,7 @@ private fun LazyListScope.streamItems(
     sortByAscending: Boolean = true,
     @StringRes timestampFormatStringRes: Int? = null,
     timestampSupplier: (Stream) -> String?,
-    navigateToStream: (Stream) -> Unit,
+    onClick: (Stream) -> Unit,
 ) {
     if (streams.isNotEmpty()) {
         stickyHeader {
@@ -152,7 +145,7 @@ private fun LazyListScope.streamItems(
         }
 
         items(sortedStreams) { stream ->
-            Stream(Modifier, stream, timestampFormatStringRes, timestampSupplier, navigateToStream)
+            Stream(Modifier, stream, timestampFormatStringRes, timestampSupplier, onClick)
         }
     }
 }
