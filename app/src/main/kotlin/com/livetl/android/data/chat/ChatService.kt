@@ -181,5 +181,5 @@ class NoChatContinuationFoundException(videoId: String) : Exception("Continuatio
 private const val MAX_MESSAGE_QUEUE_SIZE = 2500
 private const val CHAT_DELAY_OFFSET_SECS = 3L
 
-private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51"
+private const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.54"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
