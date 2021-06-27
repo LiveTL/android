@@ -56,7 +56,7 @@ fun MinimalMessage(
         modifier = modifier.chatPadding(),
         text = text,
         style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
-        inlineContent = message.getEmoteInlineContent(emojiCache)
+        inlineContent = message.getEmojiInlineContent(emojiCache)
     )
 }
 
@@ -72,40 +72,6 @@ fun Message(
         is ChatMessage.RegularChat -> LocalContentColor.current
         is ChatMessage.SuperChat -> message.level.textColor
         is ChatMessage.NewMember -> message.textColor
-    }
-
-    val authorPicInlineContent = mapOf(
-        message.author.photoUrl to InlineTextContent(
-            placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
-            children = {
-                Image(
-                    painter = rememberCoilPainter(message.author.photoUrl),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .requiredWidth(16.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),
-                )
-            }
-        )
-    )
-
-    val authorBadgeInlineContent = when {
-        message.author.membershipBadgeUrl != null -> mapOf(
-            message.author.membershipBadgeUrl!! to InlineTextContent(
-                placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
-                children = {
-                    Image(
-                        painter = rememberCoilPainter(message.author.membershipBadgeUrl!!),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .requiredWidth(16.dp)
-                            .aspectRatio(1f),
-                    )
-                }
-            )
-        )
-        else -> emptyMap()
     }
 
     val text = buildAnnotatedString {
@@ -171,18 +137,20 @@ fun Message(
                 modifier.chatPadding()
             is ChatMessage.SuperChat ->
                 modifier
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(ChatShape)
                     .background(color = message.level.backgroundColor)
                     .chatPadding()
             is ChatMessage.NewMember ->
                 modifier
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(ChatShape)
                     .background(color = message.backgroundColor)
                     .chatPadding()
         },
         text = text,
         style = MaterialTheme.typography.body1.copy(color = textColor),
-        inlineContent = authorPicInlineContent + authorBadgeInlineContent + message.getEmoteInlineContent(emojiCache)
+        inlineContent = message.author.getPhotoInlineContent() +
+            message.author.getBadgeInlineContent() +
+            message.getEmojiInlineContent(emojiCache)
     )
 }
 
@@ -210,16 +178,49 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
     )
 }
 
-private fun ChatMessage.getEmoteInlineContent(emojiCache: EmojiCache): Map<String, InlineTextContent> {
-    return content
-        .filterIsInstance<ChatMessageContent.Emoji>()
-        .distinctBy { it.id }
-        .associate { it.id to emojiCache.get(it) }
+private fun ChatMessage.getEmojiInlineContent(emojiCache: EmojiCache) = content
+    .filterIsInstance<ChatMessageContent.Emoji>()
+    .distinctBy { it.id }
+    .associate { it.id to emojiCache.get(it) }
+
+private fun MessageAuthor.getPhotoInlineContent() = mapOf(
+    photoUrl to InlineTextContent(
+        placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
+        children = {
+            Image(
+                painter = rememberCoilPainter(photoUrl),
+                contentDescription = null,
+                modifier = Modifier
+                    .requiredWidth(16.dp)
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
+            )
+        }
+    )
+)
+
+private fun MessageAuthor.getBadgeInlineContent() = when {
+    membershipBadgeUrl != null -> mapOf(
+        membershipBadgeUrl to InlineTextContent(
+            placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
+            children = {
+                Image(
+                    painter = rememberCoilPainter(membershipBadgeUrl),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .requiredWidth(16.dp)
+                        .aspectRatio(1f),
+                )
+            }
+        )
+    )
+    else -> emptyMap()
 }
 
 val LocalAuthorNameColor = compositionLocalOf { Color.White }
 
 private fun Modifier.chatPadding() = padding(horizontal = 8.dp, vertical = 4.dp)
+private val ChatShape = RoundedCornerShape(4.dp)
 
 private val parsedContentTypes = setOf(
     SymbolAnnotationType.LINK.name,

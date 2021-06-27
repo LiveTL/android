@@ -23,7 +23,7 @@
 
     <string name="setting_fullscreen">Fullscreen</string>
     <string name="setting_group_filter">TL Panel</string>
-    <string name="setting_show_tl_panel">Show TL Panel</string>
+    <string name="setting_show_tl_panel">Filter translation chat messages</string>
     <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_verified_messages">Verified messages</string>
