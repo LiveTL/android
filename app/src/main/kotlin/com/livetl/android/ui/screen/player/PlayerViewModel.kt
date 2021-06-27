@@ -28,21 +28,14 @@ class PlayerViewModel @Inject constructor(
     var videoAttemptedRetries = 0
     var currentSecond: Float = 0f
 
-    fun getVideoId(urlOrId: String): String {
-        return streamService.getVideoId(urlOrId)
-    }
-
-    fun clearEmojiCache() {
+    override fun onCleared() {
+        chatService.stop()
+        chatFilterService.stop()
         emojiCache.cache.evictAll()
     }
 
-    fun stopChat() {
-        chatService.stop()
-        chatFilterService.stop()
-    }
-
-    fun seekTo(videoId: String, second: Long) {
-        chatService.seekTo(videoId, second)
+    fun getVideoId(urlOrId: String): String {
+        return streamService.getVideoId(urlOrId)
     }
 
     suspend fun getStreamInfo(videoId: String): StreamInfo {
@@ -52,6 +45,10 @@ class PlayerViewModel @Inject constructor(
     suspend fun loadChat(videoId: String, isLive: Boolean) {
         chatFilterService.connect()
         chatService.connect(videoId, isLive)
+    }
+
+    fun seekTo(videoId: String, second: Long) {
+        chatService.seekTo(videoId, second)
     }
 
     fun allowUser(author: MessageAuthor) {

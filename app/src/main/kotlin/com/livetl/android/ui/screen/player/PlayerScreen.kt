@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +57,6 @@ fun PlayerScreen(
 
         onDispose {
             setKeepScreenOn(false)
-            playerViewModel.clearEmojiCache()
         }
     }
 
@@ -66,7 +66,7 @@ fun PlayerScreen(
         onDispose { setFullscreen(false) }
     }
 
-    DisposableEffect(videoId) {
+    LaunchedEffect(videoId) {
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
                 try {
@@ -83,10 +83,6 @@ fun PlayerScreen(
                     chatState = ChatState.ERROR
                 }
             }
-        }
-
-        onDispose {
-            playerViewModel.stopChat()
         }
     }
 
