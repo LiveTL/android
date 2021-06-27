@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.TLPanel
@@ -43,7 +44,10 @@ fun PlayerScreen(
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
+
     val showFullscreen by playerViewModel.prefs.showFullscreen().collectAsState()
+    val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
+    val filteredMessages by playerViewModel.filteredMessages.collectAsState(initial = emptyList())
 
     fun onCurrentSecond(second: Long) {
         // Live chats don't need to be progressed manually
@@ -88,10 +92,10 @@ fun PlayerScreen(
 
     when (LocalConfiguration.current.orientation) {
         ORIENTATION_LANDSCAPE -> {
-            LandscapeLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) })
+            LandscapeLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages)
         }
         else -> {
-            PortraitLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) })
+            PortraitLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages)
         }
     }
 }
@@ -102,10 +106,9 @@ private fun PortraitLayout(
     streamInfo: StreamInfo?,
     chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
-    playerViewModel: PlayerViewModel = viewModel(),
+    showFilteredMessages: Boolean,
+    filteredMessages: List<ChatMessage>,
 ) {
-    val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
-
     Column {
         VideoPlayer(
             modifier = Modifier
@@ -117,7 +120,7 @@ private fun PortraitLayout(
         )
 
         if (showFilteredMessages) {
-            TLPanel()
+            TLPanel(filteredMessages)
         }
 
         PlayerTabs(streamInfo, chatState)
@@ -130,10 +133,9 @@ private fun LandscapeLayout(
     streamInfo: StreamInfo?,
     chatState: ChatState,
     onCurrentSecond: (Long) -> Unit,
-    playerViewModel: PlayerViewModel = viewModel(),
+    showFilteredMessages: Boolean,
+    filteredMessages: List<ChatMessage>,
 ) {
-    val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
-
     Row {
         Box(
             modifier = Modifier
@@ -152,7 +154,7 @@ private fun LandscapeLayout(
 
         Column {
             if (showFilteredMessages) {
-                TLPanel()
+                TLPanel(filteredMessages)
             }
 
             PlayerTabs(streamInfo, chatState)
