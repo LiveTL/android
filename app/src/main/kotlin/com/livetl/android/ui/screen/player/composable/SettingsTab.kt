@@ -13,9 +13,9 @@ import com.livetl.android.data.chat.TranslatedLanguage
 import com.livetl.android.ui.common.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.PreferenceGroupHeader
 import com.livetl.android.ui.common.SwitchPreferenceRow
+import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.quantityStringResource
-import com.livetl.android.vm.PlayerViewModel
 import com.tfcporciuncula.flow.Preference
 import java.util.Locale
 

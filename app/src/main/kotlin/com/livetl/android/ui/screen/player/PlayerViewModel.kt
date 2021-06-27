@@ -1,4 +1,4 @@
-package com.livetl.android.vm
+package com.livetl.android.ui.screen.player
 
 import androidx.lifecycle.ViewModel
 import com.livetl.android.data.chat.ChatFilterService
@@ -27,6 +27,10 @@ class PlayerViewModel @Inject constructor(
 
     var videoAttemptedRetries = 0
     var currentSecond: Float = 0f
+
+    fun getVideoId(urlOrId: String): String {
+        return streamService.getVideoId(urlOrId)
+    }
 
     fun clearEmojiCache() {
         emojiCache.cache.evictAll()

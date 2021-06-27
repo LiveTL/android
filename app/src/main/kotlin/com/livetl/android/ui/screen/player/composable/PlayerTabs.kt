@@ -30,10 +30,10 @@ import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.stream.StreamInfo
+import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.player.composable.chat.Chat
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.MessageActionsDialog
-import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.launch
 
 enum class Tabs(@StringRes val nameRes: Int, val icon: ImageVector) {

@@ -26,8 +26,8 @@ import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.common.LoadingIndicator
+import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.util.collectAsState
-import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.launch
 
 sealed class ChatState {

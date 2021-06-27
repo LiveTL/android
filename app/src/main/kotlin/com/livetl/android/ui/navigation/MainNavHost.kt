@@ -16,10 +16,9 @@ import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
+import com.livetl.android.ui.screen.home.HomeViewModel
 import com.livetl.android.ui.screen.player.PlayerScreen
-import com.livetl.android.vm.HomeViewModel
-import com.livetl.android.vm.PlayerViewModel
-import com.livetl.android.vm.StreamViewModel
+import com.livetl.android.ui.screen.player.PlayerViewModel
 
 @Composable
 fun MainNavHost(
@@ -58,11 +57,10 @@ fun MainNavHost(
                 "${Route.Player.id}?urlOrId={urlOrId}",
                 arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
             ) { backStackEntry ->
-                val streamViewModel = hiltViewModel<StreamViewModel>()
                 val playerViewModel = hiltViewModel<PlayerViewModel>()
 
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                val videoId = streamViewModel.getVideoId(urlOrId)
+                val videoId = playerViewModel.getVideoId(urlOrId)
 
                 PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
             }

@@ -26,7 +26,6 @@ import com.livetl.android.ui.screen.player.composable.TLPanel
 import com.livetl.android.ui.screen.player.composable.VideoPlayer
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.util.collectAsState
-import com.livetl.android.vm.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

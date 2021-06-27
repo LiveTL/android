@@ -1,4 +1,4 @@
-package com.livetl.android.vm
+package com.livetl.android.ui.screen.home
 
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue

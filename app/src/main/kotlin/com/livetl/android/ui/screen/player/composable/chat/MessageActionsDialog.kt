@@ -13,7 +13,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
-import com.livetl.android.vm.PlayerViewModel
+import com.livetl.android.ui.screen.player.PlayerViewModel
 
 @Composable
 fun MessageActionsDialog(

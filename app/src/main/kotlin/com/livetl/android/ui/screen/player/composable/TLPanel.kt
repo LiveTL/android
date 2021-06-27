@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.player.composable.chat.Chat
-import com.livetl.android.vm.PlayerViewModel
 
 @Composable
 fun TLPanel(
