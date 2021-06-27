@@ -31,6 +31,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.microseconds
 import kotlin.time.seconds
@@ -43,20 +45,6 @@ class ChatService @Inject constructor(
 ) {
 
     private val webview = WebView(context)
-    init {
-        with(webview.settings) {
-            javaScriptEnabled = true
-            domStorageEnabled = true
-            userAgentString = USER_AGENT
-        }
-        webview.addJavascriptInterface(this, "Android")
-        webview.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
-                webview.injectScript(context.readFile("ChatInjector.js"))
-            }
-        }
-    }
 
     private var isLive: Boolean = false
     private var currentSecond: Long = 0
@@ -71,6 +59,21 @@ class ChatService @Inject constructor(
             started = SharingStarted.Eagerly,
             replay = 1,
         )
+
+    init {
+        with(webview.settings) {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            userAgentString = USER_AGENT
+        }
+        webview.addJavascriptInterface(this, "Android")
+        webview.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                super.onPageFinished(view, url)
+                webview.injectScript(context.readFile("ChatInjector.js"))
+            }
+        }
+    }
 
     suspend fun connect(videoId: String, isLive: Boolean) {
         // Clear out previous chat contents, just in case
@@ -107,7 +110,8 @@ class ChatService @Inject constructor(
     @JavascriptInterface
     fun receiveMessages(data: String) {
         val job = scope.launch {
-            val nowMicro = epochMicro() - CHAT_DELAY_OFFSET_SECS.seconds.inMicroseconds
+            val nowMicro = epochMicro() - Duration.seconds(CHAT_DELAY_OFFSET_SECS)
+                .toDouble(DurationUnit.MICROSECONDS)
 
             val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
 
@@ -115,10 +119,10 @@ class ChatService @Inject constructor(
             ytChatMessages.messages
                 .fastForEach {
                     if (isLive) {
-                        delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp).microseconds)
+                        delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp))
                         Timber.d("Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}")
                     } else {
-                        delay(it.delay!!.microseconds)
+                        delay(Duration.microseconds(it.delay!!))
                     }
 
                     if (!isActive) {
@@ -159,10 +163,11 @@ class ChatService @Inject constructor(
     /**
      * Calculates number of microseconds from [now] until [microseconds].
      */
-    private fun getMicrosecondDiff(now: Long, microseconds: Long): Long {
+    @ExperimentalTime
+    private fun getMicrosecondDiff(now: Long, microseconds: Long): Duration {
         val diff = now - microseconds
         Timber.d("Now: $now (${now.toDebugTimestampString()}), time: $microseconds (${microseconds.toDebugTimestampString()}), diff: $diff")
-        return diff
+        return Duration.microseconds(diff)
     }
 
     private fun clearMessages() {
