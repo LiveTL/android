@@ -20,11 +20,11 @@ import io.ktor.client.statement.readText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -34,8 +34,6 @@ import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
-import kotlin.time.microseconds
-import kotlin.time.seconds
 
 @SuppressLint("SetJavaScriptEnabled")
 class ChatService @Inject constructor(
@@ -49,16 +47,12 @@ class ChatService @Inject constructor(
     private var isLive: Boolean = false
     private var currentSecond: Long = 0
 
-    val scope = CoroutineScope(Dispatchers.IO)
+    val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var jobs: List<Job> = mutableListOf()
 
     private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
     val messages: SharedFlow<List<ChatMessage>>
-        get() = _messages.shareIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            replay = 1,
-        )
+        get() = _messages.asSharedFlow()
 
     init {
         with(webview.settings) {

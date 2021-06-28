@@ -193,3 +193,19 @@ private fun SuperChatPreview() {
         emojiCache = EmojiCache(),
     )
 }
+
+@Preview
+@Composable
+private fun NewMemberPreview() {
+    Message(
+        message = ChatMessage.NewMember(
+            author = MessageAuthor(
+                id = "3",
+                name = "Ina Ina Ina",
+            ),
+            timestamp = 1615001105,
+        ),
+        showTimestamp = true,
+        emojiCache = EmojiCache(),
+    )
+}

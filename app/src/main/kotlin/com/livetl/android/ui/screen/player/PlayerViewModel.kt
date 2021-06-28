@@ -43,8 +43,8 @@ class PlayerViewModel @Inject constructor(
     }
 
     suspend fun loadChat(videoId: String, isLive: Boolean) {
-        chatFilterService.connect()
         chatService.connect(videoId, isLive)
+        chatFilterService.connect(chatService)
     }
 
     fun seekTo(videoId: String, second: Long) {
