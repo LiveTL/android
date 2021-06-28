@@ -23,7 +23,7 @@ data class Stream(
     val live_viewers: Int? = null,
     val channel: Channel,
 ) {
-    fun getThumbnail() = "https://i.ytimg.com/vi/$yt_video_key/hq720_live.jpg"
+    fun getThumbnail() = "https://i.ytimg.com/vi/$yt_video_key/maxresdefault.jpg"
 }
 
 @Immutable
