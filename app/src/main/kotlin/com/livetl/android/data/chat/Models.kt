@@ -105,7 +105,7 @@ data class MessageAuthor(
 }
 
 enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
-    ENGLISH("en", setOf("en", "eng", "英訳")),
+    ENGLISH("en", setOf("en", "eng", "英訳", "trans")),
     JAPANESE("ja", setOf("ja", "jp", "日本語")),
     SPANISH("es", setOf("es", "esp")),
     INDONESIAN("id", setOf("id")),
