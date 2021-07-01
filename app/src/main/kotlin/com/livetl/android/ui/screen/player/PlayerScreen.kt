@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
@@ -111,7 +114,15 @@ private fun PortraitLayout(
     filteredMessages: List<ChatMessage>,
     tlScale: Float,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(
+            rememberInsetsPaddingValues(
+                insets = LocalWindowInsets.current.systemBars,
+                applyTop = true,
+                applyBottom = true,
+            )
+        )
+    ) {
         VideoPlayer(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,7 +150,15 @@ private fun LandscapeLayout(
     filteredMessages: List<ChatMessage>,
     tlScale: Float,
 ) {
-    Row {
+    Row(
+        modifier = Modifier.padding(
+            rememberInsetsPaddingValues(
+                insets = LocalWindowInsets.current.systemBars,
+                applyTop = true,
+                applyBottom = true,
+            )
+        )
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()

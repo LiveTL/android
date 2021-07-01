@@ -10,7 +10,9 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.WindowCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.livetl.android.ui.navigation.MainNavHost
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.powerManager
@@ -24,12 +26,17 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("WakelockTimeout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             LiveTLTheme {
-                MainNavHost(
-                    setKeepScreenOn = this::setKeepScreenOn,
-                    setFullscreen = this::setFullscreen,
-                )
+                ProvideWindowInsets {
+                    MainNavHost(
+                        setKeepScreenOn = this::setKeepScreenOn,
+                        setFullscreen = this::setFullscreen,
+                    )
+                }
             }
         }
 
