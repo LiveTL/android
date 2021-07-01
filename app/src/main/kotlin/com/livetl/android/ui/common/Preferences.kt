@@ -42,6 +42,7 @@ fun <Key> MultiChoicePreferenceRow(
     selected: Set<Key>? = null,
     title: String,
     subtitle: String? = null,
+    text: String? = null,
     onSelected: ((Key) -> Unit)? = null,
 ) {
     val state by preference.collectAsState()
@@ -59,6 +60,7 @@ fun <Key> MultiChoicePreferenceRow(
             items = choices.toList(),
             selected = selected ?: state,
             title = { Text(title) },
+            text = text,
             onDismissRequest = { showDialog = false },
             onSelected = onSelected ?: { preference.toggle(it) }
         )
@@ -72,6 +74,7 @@ private fun <T> MultiChoiceDialog(
     onDismissRequest: () -> Unit,
     onSelected: (T) -> Unit,
     title: (@Composable () -> Unit)? = null,
+    text: String? = null,
     buttons: @Composable () -> Unit = {},
 ) {
     AlertDialog(
@@ -80,6 +83,8 @@ private fun <T> MultiChoiceDialog(
         title = title,
         text = {
             LazyColumn {
+                text?.let { item { Text(text) } }
+
                 items(items) { (value, text) ->
                     Row(
                         modifier = Modifier

@@ -126,6 +126,7 @@ private fun AuthorListDialog(
     MultiChoicePreferenceRow(
         title = stringResource(title),
         subtitle = quantityStringResource(R.plurals.num_items, authors.size),
+        text = stringResource(R.string.select_message_to_modify).takeIf { authors.isEmpty() },
         preference = preference,
         choices = getAuthors(),
         selected = getAuthors().keys,

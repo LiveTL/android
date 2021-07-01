@@ -30,6 +30,7 @@
     <string name="setting_show_owner_messages">Owner messages</string>
     <string name="setting_allowed_authors">Always shown authors</string>
     <string name="setting_blocked_authors">Always hidden authors</string>
+    <string name="select_message_to_modify">Select a chat message to add authors to this list</string>
     <plurals name="num_items">
         <item quantity="one">%1$d item</item>
         <item quantity="other">%1$d items</item>
