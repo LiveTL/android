@@ -45,6 +45,7 @@ fun PlayerScreen(
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
 
+    val tlScale by playerViewModel.prefs.tlScale().collectAsState()
     val showFullscreen by playerViewModel.prefs.showFullscreen().collectAsState()
     val showFilteredMessages by playerViewModel.prefs.showTlPanel().collectAsState()
     val filteredMessages by playerViewModel.filteredMessages.collectAsState(initial = emptyList())
@@ -92,10 +93,10 @@ fun PlayerScreen(
 
     when (LocalConfiguration.current.orientation) {
         ORIENTATION_LANDSCAPE -> {
-            LandscapeLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages)
+            LandscapeLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages, tlScale)
         }
         else -> {
-            PortraitLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages)
+            PortraitLayout(videoId, streamInfo, chatState, { onCurrentSecond(it) }, showFilteredMessages, filteredMessages, tlScale)
         }
     }
 }
@@ -108,6 +109,7 @@ private fun PortraitLayout(
     onCurrentSecond: (Long) -> Unit,
     showFilteredMessages: Boolean,
     filteredMessages: List<ChatMessage>,
+    tlScale: Float,
 ) {
     Column {
         VideoPlayer(
@@ -120,7 +122,7 @@ private fun PortraitLayout(
         )
 
         if (showFilteredMessages) {
-            TLPanel(filteredMessages)
+            TLPanel(filteredMessages, tlScale)
         }
 
         PlayerTabs(streamInfo, chatState)
@@ -135,6 +137,7 @@ private fun LandscapeLayout(
     onCurrentSecond: (Long) -> Unit,
     showFilteredMessages: Boolean,
     filteredMessages: List<ChatMessage>,
+    tlScale: Float,
 ) {
     Row {
         Box(
@@ -154,7 +157,7 @@ private fun LandscapeLayout(
 
         Column {
             if (showFilteredMessages) {
-                TLPanel(filteredMessages)
+                TLPanel(filteredMessages, tlScale)
             }
 
             PlayerTabs(streamInfo, chatState)

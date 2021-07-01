@@ -10,6 +10,7 @@ import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.data.chat.TranslatedLanguage
+import com.livetl.android.ui.common.preference.ChoicePreferenceRow
 import com.livetl.android.ui.common.preference.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.SwitchPreferenceRow
@@ -78,6 +79,16 @@ fun SettingsTab(
                 AuthorListDialog(
                     title = R.string.setting_blocked_authors,
                     preference = playerViewModel.prefs.blockedUsers(),
+                )
+            }
+
+            // Font size
+            item {
+                ChoicePreferenceRow(
+                    title = stringResource(R.string.setting_text_size),
+                    preference = playerViewModel.prefs.tlScale(),
+                    choices = listOf(0.75f, 1f, 1.25f, 1.5f, 1.75f, 2f)
+                        .associateWith { stringResource(R.string.percentage, (it * 100).toInt()) },
                 )
             }
         }

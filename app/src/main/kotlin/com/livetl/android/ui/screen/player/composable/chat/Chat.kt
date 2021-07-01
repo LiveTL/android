@@ -43,6 +43,7 @@ fun Chat(
     state: ChatState? = ChatState.LOADED,
     minimalMode: Boolean = false,
     onClickMessage: (ChatMessage) -> Unit = {},
+    fontScale: Float = 1f,
     showJumpToBottomButton: Boolean = false,
     playerViewModel: PlayerViewModel = viewModel(),
 ) {
@@ -106,8 +107,8 @@ fun Chat(
                             .clickable { onClickMessage(message) }
 
                         when (minimalMode) {
-                            true -> MinimalMessage(baseMessageModifier, message, playerViewModel.emojiCache)
-                            false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp, playerViewModel.emojiCache)
+                            true -> MinimalMessage(baseMessageModifier, message, fontScale, playerViewModel.emojiCache)
+                            false -> Message(baseMessageModifier, message, showTimestamp, debugTimestamp, fontScale, playerViewModel.emojiCache)
                         }
                     }
                 }

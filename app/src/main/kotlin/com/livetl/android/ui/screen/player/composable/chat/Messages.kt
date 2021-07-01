@@ -43,6 +43,7 @@ import com.livetl.android.util.toTimestampString
 fun MinimalMessage(
     modifier: Modifier = Modifier,
     message: ChatMessage,
+    fontScale: Float = 1f,
     emojiCache: EmojiCache,
 ) {
     val text = buildAnnotatedString {
@@ -55,7 +56,10 @@ fun MinimalMessage(
     BasicText(
         modifier = modifier.chatPadding(),
         text = text,
-        style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
+        style = MaterialTheme.typography.body1.copy(
+            color = LocalContentColor.current,
+            fontSize = MaterialTheme.typography.body1.fontSize * fontScale,
+        ),
         inlineContent = message.getEmojiInlineContent(emojiCache)
     )
 }
@@ -66,6 +70,7 @@ fun Message(
     message: ChatMessage,
     showTimestamp: Boolean = false,
     debugTimestamp: Boolean = false,
+    fontScale: Float = 1f,
     emojiCache: EmojiCache,
 ) {
     val textColor = when (message) {
@@ -147,7 +152,10 @@ fun Message(
                     .chatPadding()
         },
         text = text,
-        style = MaterialTheme.typography.body1.copy(color = textColor),
+        style = MaterialTheme.typography.body1.copy(
+            color = LocalContentColor.current,
+            fontSize = MaterialTheme.typography.body1.fontSize * fontScale,
+        ),
         inlineContent = message.author.getPhotoInlineContent() +
             message.author.getBadgeInlineContent() +
             message.getEmojiInlineContent(emojiCache)

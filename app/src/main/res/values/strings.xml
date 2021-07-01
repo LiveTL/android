@@ -35,6 +35,8 @@
         <item quantity="one">%1$d item</item>
         <item quantity="other">%1$d items</item>
     </plurals>
+    <string name="setting_text_size">Text size</string>
+    <string name="percentage">%1$d%%</string>
     <string name="setting_group_display">Display</string>
     <string name="setting_show_timestamps">Message timestamps</string>
 

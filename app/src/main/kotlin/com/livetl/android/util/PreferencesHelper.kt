@@ -23,6 +23,7 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
     fun allowedUsers() = flowPrefs.getStringSet("allowed_users", setOf())
     fun blockedUsers() = flowPrefs.getStringSet("blocked_users", setOf())
 
+    fun tlScale() = flowPrefs.getFloat("tl_display_scale", 1f)
     fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
     fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
     fun debugTimestamps() = flowPrefs.getBoolean("debug_timestamps", false)
