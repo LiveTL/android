@@ -15,6 +15,7 @@ import com.livetl.android.ui.common.preference.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.SwitchPreferenceRow
 import com.livetl.android.ui.screen.player.PlayerViewModel
+import com.livetl.android.util.capitalize
 import com.livetl.android.util.collectAsState
 import com.livetl.android.util.quantityStringResource
 import com.tfcporciuncula.flow.Preference
@@ -41,10 +42,10 @@ fun SettingsTab(
                 MultiChoicePreferenceRow(
                     title = stringResource(R.string.setting_tl_languages),
                     preference = playerViewModel.prefs.tlLanguages(),
-                    choices = TranslatedLanguage.values().map {
+                    choices = TranslatedLanguage.values().associate {
                         val locale = Locale(it.id)
                         it.id to locale.getDisplayName(locale).capitalize()
-                    }.toMap()
+                    }
                 )
             }
 
@@ -129,10 +130,10 @@ private fun AuthorListDialog(
 ) {
     val authors by preference.collectAsState()
 
-    fun getAuthors() = authors.map {
+    fun getAuthors() = authors.associate {
         val author = MessageAuthor.fromPrefItem(it)
         author.id to author.name
-    }.toMap()
+    }
 
     MultiChoicePreferenceRow(
         title = stringResource(title),
