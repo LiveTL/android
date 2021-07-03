@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.insets.LocalWindowInsets
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 
@@ -27,7 +28,11 @@ fun StreamSheet(stream: Stream?) {
         return
     }
 
-    Column {
+    val insets = LocalWindowInsets.current
+
+    Column(
+        modifier = Modifier.padding(bottom = insets.navigationBars.bottom.dp),
+    ) {
         Image(
             painter = rememberCoilPainter(stream.getThumbnail()),
             contentDescription = null,
