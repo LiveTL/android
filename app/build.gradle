@@ -125,7 +125,7 @@ dependencies {
     final accompanist_version = '0.13.0'
 
     // Image loading
-    implementation 'io.coil-kt:coil:1.2.1'
+    implementation 'io.coil-kt:coil:1.2.2'
     implementation "com.google.accompanist:accompanist-coil:$accompanist_version"
 
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
