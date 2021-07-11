@@ -49,7 +49,7 @@ fun MainNavHost(
                 HomeScreen(
                     navigateToPlayer = { navigateToPlayer(it) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
-                    homeViewModel = homeViewModel
+                    homeViewModel = homeViewModel,
                 )
             }
 

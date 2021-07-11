@@ -8,18 +8,24 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.ui.common.SymbolAnnotationType
+import com.livetl.android.ui.common.textParser
 
 @Composable
 fun StreamSheet(stream: Stream?) {
@@ -29,36 +35,62 @@ fun StreamSheet(stream: Stream?) {
     }
 
     val insets = LocalWindowInsets.current
+    val uriHandler = LocalUriHandler.current
 
-    Column(
-        modifier = Modifier.padding(bottom = insets.navigationBars.bottom.dp),
-    ) {
-        Image(
-            painter = rememberImagePainter(stream.getThumbnail()),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
-                .aspectRatio(16 / 9f)
-                .background(Color.Black),
-        )
-
-        Column(
-            modifier = Modifier.padding(8.dp),
-        ) {
-            Text(
-                text = stream.title,
-                style = MaterialTheme.typography.h5,
+    LazyColumn {
+        item {
+            Image(
+                painter = rememberImagePainter(stream.getThumbnail()),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+                    .aspectRatio(16 / 9f)
+                    .background(Color.Black),
             )
-            Spacer(modifier = Modifier.requiredHeight(8.dp))
-            Text(
-                text = stream.channel.name,
-                style = MaterialTheme.typography.subtitle1,
-            )
+        }
 
-            Spacer(modifier = Modifier.requiredHeight(8.dp))
-            Divider()
-            Spacer(modifier = Modifier.requiredHeight(8.dp))
+        item {
+            Column(
+                modifier = Modifier.padding(8.dp),
+            ) {
+                Text(
+                    text = stream.title,
+                    style = MaterialTheme.typography.h5,
+                )
+                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Text(
+                    text = stream.channel.name,
+                    style = MaterialTheme.typography.subtitle1,
+                )
 
-            StreamActions(stream.id)
+                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Divider()
+                Spacer(modifier = Modifier.requiredHeight(8.dp))
+
+                StreamActions(stream.id)
+
+                Divider()
+
+                Spacer(modifier = Modifier.requiredHeight(8.dp))
+
+                val styledDescription = textParser(stream.description)
+                ClickableText(
+                    modifier = Modifier.padding(bottom = insets.navigationBars.bottom.dp),
+                    text = styledDescription,
+                    style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
+                    onClick = {
+                        styledDescription
+                            .getStringAnnotations(start = it, end = it)
+                            .firstOrNull()
+                            ?.let { annotation ->
+                                when (annotation.tag) {
+                                    SymbolAnnotationType.LINK.name -> uriHandler.openUri(annotation.item)
+                                    SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
+                                    else -> Unit
+                                }
+                            }
+                    }
+                )
+            }
         }
     }
 }

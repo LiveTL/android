@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- MChad -->
+        <domain includeSubdomains="true">157.230.241.238</domain>
+    </domain-config>
+</network-security-config>
