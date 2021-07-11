@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -28,7 +29,6 @@ import coil.compose.rememberImagePainter
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.ui.screen.player.composable.chat.LocalAuthorNameColor
 import com.livetl.android.util.escapeHtmlEntities
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString
@@ -80,7 +80,7 @@ fun Stream(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp)
                             .weight(1f),
-                        color = LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium),
+                        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -93,7 +93,7 @@ fun Stream(
                             timestampFormatString?.format(relativeDateString) ?: relativeDateString
                         Text(
                             timestampString,
-                            color = LocalAuthorNameColor.current.copy(alpha = ContentAlpha.medium),
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                         )
                     }
                 }

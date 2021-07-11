@@ -59,6 +59,29 @@ fun StreamSheet(stream: Stream?) {
             Spacer(modifier = Modifier.requiredHeight(8.dp))
 
             StreamActions(stream.yt_video_key)
+
+            // TODO: stream description
+//            Divider()
+//
+//            Spacer(modifier = Modifier.requiredHeight(8.dp))
+//
+//            val styledDescription = textParser(streamInfo.shortDescription)
+//            ClickableText(
+//                text = styledDescription,
+//                style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
+//                onClick = {
+//                    styledDescription
+//                        .getStringAnnotations(start = it, end = it)
+//                        .firstOrNull()
+//                        ?.let { annotation ->
+//                            when (annotation.tag) {
+//                                SymbolAnnotationType.LINK.name -> uriHandler.openUri(annotation.item)
+//                                SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
+//                                else -> Unit
+//                            }
+//                        }
+//                }
+//            )
         }
     }
 }

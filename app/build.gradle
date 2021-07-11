@@ -24,7 +24,6 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
     }
 
     buildTypes {
@@ -75,15 +74,6 @@ android {
         disable "MissingTranslation"
         abortOnError false
     }
-
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-            testLogging {
-                events "passed", "skipped", "failed"
-            }
-        }
-    }
 }
 
 dependencies {
@@ -113,7 +103,6 @@ dependencies {
 
     // Video player
     implementation 'com.github.PierfrancescoSoffritti.android-youtube-player:core:10.0.5'
-
     implementation 'com.github.arkon:android-youtubeExtractor:636cae0'
 
     // Networking
@@ -131,8 +120,6 @@ dependencies {
     final accompanist_version = '0.14.0'
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
 
     // Preferences
@@ -141,12 +128,26 @@ dependencies {
 
     // OSS licenses
     implementation "com.mikepenz:aboutlibraries-core:$about_libs_version"
+}
 
-    testImplementation "org.junit.jupiter:junit-jupiter:5.7.2"
-
-    final mockito_version = '3.10.0'
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+// Requires the submodules to already be initialized, i.e.:
+// git submodule update --init --recursive
+task buildExtensionSource {
+    doLast {
+        exec {
+            workingDir "../extension/LiveTL"
+            commandLine "yarn", "install"
+        }
+        exec {
+            workingDir "../extension/LiveTL"
+            commandLine "yarn", "build", "android"
+        }
+    }
+}
+task copyExtensionArtifacts(dependsOn: buildExtensionSource, type: Copy) {
+    from '../extension/LiveTL/build'
+    into './src/main/assets'
+    include '**/*'
 }
 
 kotlinter {

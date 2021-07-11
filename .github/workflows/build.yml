@@ -32,16 +32,30 @@ jobs:
 
       - name: Clone repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
 
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 11
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Copy CI gradle.properties
         run: |
           mkdir -p ~/.gradle
           cp .github/runner-files/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Prepare extension assets
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: copyExtensionArtifacts
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+          configuration-cache-enabled: true
       - name: Build app
         uses: eskatos/gradle-command-action@v1
         with:

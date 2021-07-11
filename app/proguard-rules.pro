@@ -1,8 +1,8 @@
 -dontobfuscate
 
 # Javascript interface
--keepclassmembers class com.livetl.android.data.chat.ChatService {
-   public *;
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
 }
 
 # Serializable models

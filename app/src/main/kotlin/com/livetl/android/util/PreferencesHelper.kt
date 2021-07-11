@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import com.livetl.android.data.chat.TranslatedLanguage
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -15,18 +14,8 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
     private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
     private val flowPrefs = FlowSharedPreferences(prefs)
 
-    fun showTlPanel() = flowPrefs.getBoolean("show_tl_panel", true)
-    fun tlLanguages() = flowPrefs.getStringSet("tl_langs", setOf(TranslatedLanguage.ENGLISH.id))
-    fun showModMessages() = flowPrefs.getBoolean("show_mod_messages", false)
-    fun showVerifiedMessages() = flowPrefs.getBoolean("show_verified_messages", false)
-    fun showOwnerMessages() = flowPrefs.getBoolean("show_owner_messages", false)
-    fun allowedUsers() = flowPrefs.getStringSet("allowed_users", setOf())
-    fun blockedUsers() = flowPrefs.getStringSet("blocked_users", setOf())
-
-    fun tlScale() = flowPrefs.getFloat("tl_display_scale", 1f)
+    // TODO: need to expose this somewhere else now
     fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
-    fun showTimestamps() = flowPrefs.getBoolean("show_timestamps", false)
-    fun debugTimestamps() = flowPrefs.getBoolean("debug_timestamps", false)
 }
 
 fun <T> Preference<Set<T>>.toggle(item: T) {

@@ -6,4 +6,5 @@ data class StreamInfo(
     val author: String,
     val shortDescription: String,
     val isLive: Boolean,
+    val chatContinuation: String?,
 )
