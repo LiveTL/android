@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
@@ -34,7 +34,7 @@ fun StreamSheet(stream: Stream?) {
         modifier = Modifier.padding(bottom = insets.navigationBars.bottom.dp),
     ) {
         Image(
-            painter = rememberCoilPainter(stream.getThumbnail()),
+            painter = rememberImagePainter(stream.getThumbnail()),
             contentDescription = null,
             modifier = Modifier.fillMaxWidth()
                 .aspectRatio(16 / 9f)

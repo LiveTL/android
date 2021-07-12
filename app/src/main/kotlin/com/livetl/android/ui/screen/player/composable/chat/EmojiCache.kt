@@ -12,7 +12,7 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.livetl.android.data.chat.ChatMessageContent
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class EmojiCache @Inject constructor() {
                 children = {
                     Column {
                         Image(
-                            painter = rememberCoilPainter(emote.src),
+                            painter = rememberImagePainter(emote.src),
                             contentDescription = null,
                             modifier = Modifier
                                 .requiredWidth(20.dp)

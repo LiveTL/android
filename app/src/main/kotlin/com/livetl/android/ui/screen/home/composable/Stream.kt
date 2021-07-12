@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
@@ -50,7 +50,7 @@ fun Stream(
             .requiredHeight(48.dp)
     ) {
         Image(
-            painter = rememberCoilPainter(stream.channel.photo),
+            painter = rememberImagePainter(stream.channel.photo),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxHeight()

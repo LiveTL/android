@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
@@ -196,7 +196,7 @@ private fun MessageAuthor.getPhotoInlineContent() = mapOf(
         placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
         children = {
             Image(
-                painter = rememberCoilPainter(photoUrl),
+                painter = rememberImagePainter(photoUrl),
                 contentDescription = null,
                 modifier = Modifier
                     .requiredWidth(16.dp)
@@ -213,7 +213,7 @@ private fun MessageAuthor.getBadgeInlineContent() = when {
             placeholder = Placeholder(1.5.em, 1.em, PlaceholderVerticalAlign.Center),
             children = {
                 Image(
-                    painter = rememberCoilPainter(membershipBadgeUrl),
+                    painter = rememberImagePainter(membershipBadgeUrl),
                     contentDescription = null,
                     modifier = Modifier
                         .requiredWidth(16.dp)
