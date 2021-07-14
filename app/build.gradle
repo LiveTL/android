@@ -99,7 +99,7 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation 'androidx.activity:activity-ktx:1.3.0-rc01'
+    implementation 'androidx.activity:activity-ktx:1.3.0-rc02'
     implementation 'androidx.core:core-ktx:1.7.0-alpha01'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
@@ -128,7 +128,7 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.13.0'
+    final accompanist_version = '0.14.0'
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
