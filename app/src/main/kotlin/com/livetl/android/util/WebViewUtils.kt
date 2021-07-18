@@ -3,7 +3,6 @@ package com.livetl.android.util
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.util.Base64
-import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.compose.ui.unit.Density

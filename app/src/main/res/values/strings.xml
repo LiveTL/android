@@ -9,8 +9,6 @@
 
     <string name="welcome">Welcome!</string>
 
-    <string name="info">Info</string>
-    <string name="chat">Chat</string>
     <string name="settings">Settings</string>
 
     <string name="live">Live</string>
@@ -24,32 +22,12 @@
     <string name="action_copy_link">Copy</string>
     <string name="action_share">Share</string>
 
+    <string name="setting_group_display">Display</string>
     <string name="setting_fullscreen">Fullscreen</string>
-    <string name="setting_group_filter">TL Panel</string>
-    <string name="setting_show_tl_panel">Filter translation chat messages</string>
-    <string name="setting_tl_languages">Languages</string>
-    <string name="setting_show_mod_messages">Mod messages</string>
-    <string name="setting_show_verified_messages">Verified messages</string>
-    <string name="setting_show_owner_messages">Owner messages</string>
-    <string name="setting_allowed_authors">Always shown authors</string>
-    <string name="setting_blocked_authors">Always hidden authors</string>
-    <string name="select_message_to_modify">Select a chat message to add authors to this list</string>
-    <plurals name="num_items">
-        <item quantity="one">%1$d item</item>
-        <item quantity="other">%1$d items</item>
-    </plurals>
     <string name="setting_text_size">Text size</string>
     <string name="percentage">%1$d%%</string>
-    <string name="setting_group_display">Display</string>
-    <string name="setting_show_timestamps">Message timestamps</string>
-
-    <string name="new_member">New member</string>
 
     <string name="error_chat_load">Failed to connect to chat</string>
-
-    <string name="action_allow_author">Always show author</string>
-    <string name="action_block_author">Always hide author</string>
-    <string name="action_copy_text">Copy text</string>
 
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>
@@ -61,6 +39,7 @@
     <string name="holodex_stream_info">Streams feed from HoloDex</string>
     <string name="licenses">Open source licenses</string>
 
+    <string name="action_copy_text">Copy text</string>
     <string name="copied">Copied to clipboard: %s</string>
     <string name="copied_error">Failed to copy</string>
 </resources>
