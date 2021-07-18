@@ -14,6 +14,8 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
     private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
     private val flowPrefs = FlowSharedPreferences(prefs)
 
+    fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
+
     // TODO: need to expose this somewhere else now
     fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
 }

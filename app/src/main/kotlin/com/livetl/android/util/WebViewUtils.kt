@@ -3,8 +3,10 @@ package com.livetl.android.util
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.util.Base64
+import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.compose.ui.unit.Density
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.livetl.android.BuildConfig
@@ -33,11 +35,14 @@ fun WebView.runJS(js: String) {
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-fun WebView.setDefaultSettings() {
+fun WebView.setDefaultSettings(density: Density) {
     // Debug mode (chrome://inspect/#devices)
     if (BuildConfig.DEBUG && 0 != context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) {
         WebView.setWebContentsDebuggingEnabled(true)
     }
+
+//    setInitialScale((density.density * 100).toInt())
+//    overScrollMode = View.OVER_SCROLL_NEVER
 
     with(settings) {
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
@@ -46,7 +51,6 @@ fun WebView.setDefaultSettings() {
 
 //        textZoom = 150
 //        defaultFontSize = 32
-//        setInitialScale(150)
 
         javaScriptEnabled = true
         domStorageEnabled = true

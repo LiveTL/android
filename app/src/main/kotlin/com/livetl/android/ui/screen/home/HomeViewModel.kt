@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModel
 import com.livetl.android.data.feed.Feed
 import com.livetl.android.data.feed.FeedService
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.util.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val feedService: FeedService
+    private val feedService: FeedService,
+    val prefs: PreferencesHelper,
 ) : ViewModel() {
 
     var feed by mutableStateOf<Feed?>(null)
@@ -29,5 +31,9 @@ class HomeViewModel @Inject constructor(
     suspend fun showSheet(stream: Stream) {
         sheetStream = stream
         sheetState.animateTo(ModalBottomSheetValue.Expanded)
+    }
+
+    fun dismissWelcomeScreen() {
+        prefs.showWelcomeScreen().set(false)
     }
 }

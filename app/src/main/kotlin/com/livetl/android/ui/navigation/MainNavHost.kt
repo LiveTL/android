@@ -17,6 +17,7 @@ import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.HomeViewModel
+import com.livetl.android.ui.screen.home.WelcomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 import com.livetl.android.ui.screen.player.PlayerViewModel
 
@@ -47,9 +48,21 @@ fun MainNavHost(
                 val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 HomeScreen(
+                    showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
                     navigateToPlayer = { navigateToPlayer(it) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
                     homeViewModel = homeViewModel,
+                )
+            }
+
+            composable(Route.Welcome.id) {
+                val homeViewModel = hiltViewModel<HomeViewModel>()
+
+                WelcomeScreen(
+                    onDismiss = {
+                        homeViewModel.dismissWelcomeScreen()
+                        navigateBack()
+                    },
                 )
             }
 

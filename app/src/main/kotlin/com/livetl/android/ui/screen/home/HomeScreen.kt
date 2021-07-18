@@ -40,10 +40,16 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun HomeScreen(
+    showWelcomeScreen: () -> Unit,
     navigateToPlayer: (String) -> Unit,
     navigateToAbout: () -> Unit,
     homeViewModel: HomeViewModel,
 ) {
+    if (homeViewModel.prefs.showWelcomeScreen().get()) {
+        showWelcomeScreen()
+        return
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
     val refreshingFeed = rememberSwipeRefreshState(false)
