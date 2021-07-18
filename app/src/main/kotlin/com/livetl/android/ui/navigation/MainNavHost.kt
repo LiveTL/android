@@ -82,6 +82,7 @@ fun MainNavHost(
                 AboutScreen(
                     onBackPressed = { navigateBack() },
                     navigateToLicenses = { navController.navigate(Route.Licenses.id) },
+                    navigateToWelcome = { navController.navigate(Route.Welcome.id) },
                 )
             }
 

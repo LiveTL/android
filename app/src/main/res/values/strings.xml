@@ -38,6 +38,7 @@
     <string name="credits">Credits</string>
     <string name="holodex_stream_info">Streams feed from HoloDex</string>
     <string name="licenses">Open source licenses</string>
+    <string name="show_welcome_screen">Show first launch welcome screen</string>
 
     <string name="action_copy_text">Copy text</string>
     <string name="copied">Copied to clipboard: %s</string>

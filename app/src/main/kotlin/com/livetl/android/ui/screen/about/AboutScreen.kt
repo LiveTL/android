@@ -39,6 +39,7 @@ import com.livetl.android.ui.common.preference.PreferenceRow
 fun AboutScreen(
     onBackPressed: () -> Unit,
     navigateToLicenses: () -> Unit,
+    navigateToWelcome: () -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -119,6 +120,12 @@ fun AboutScreen(
                     onClick = { navigateToLicenses() },
                 )
             }
+            item {
+                PreferenceRow(
+                    title = R.string.show_welcome_screen,
+                    onClick = { navigateToWelcome() },
+                )
+            }
 
             item {
                 Spacer(Modifier.navigationBarsHeight())
@@ -132,6 +139,7 @@ fun AboutScreen(
 private fun AboutScreenPreview() {
     AboutScreen(
         onBackPressed = {},
-        navigateToLicenses = {}
+        navigateToLicenses = {},
+        navigateToWelcome = {},
     )
 }
