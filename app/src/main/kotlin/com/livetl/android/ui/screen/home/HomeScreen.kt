@@ -99,9 +99,6 @@ fun HomeScreen(
                     ),
                 )
             },
-            bottomBar = {
-                Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
-            },
         ) { contentPadding ->
             SwipeRefresh(
                 modifier = Modifier.fillMaxWidth().padding(contentPadding),
@@ -135,6 +132,10 @@ fun HomeScreen(
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
+
+                        item {
+                            Spacer(Modifier.navigationBarsHeight())
+                        }
                     }
                 }
             }

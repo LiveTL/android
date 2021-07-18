@@ -58,15 +58,16 @@ fun LicensesScreen(
                 ),
             )
         },
-        bottomBar = {
-            Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
-        },
     ) { contentPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(contentPadding),
         ) {
             items(libraries) { library ->
                 LicenseItem(library)
+            }
+
+            item {
+                Spacer(Modifier.navigationBarsHeight())
             }
         }
     }

@@ -62,9 +62,6 @@ fun AboutScreen(
                 ),
             )
         },
-        bottomBar = {
-            Spacer(Modifier.navigationBarsHeight().fillMaxWidth())
-        },
     ) { contentPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(contentPadding),
@@ -121,6 +118,10 @@ fun AboutScreen(
                     title = R.string.licenses,
                     onClick = { navigateToLicenses() },
                 )
+            }
+
+            item {
+                Spacer(Modifier.navigationBarsHeight())
             }
         }
     }

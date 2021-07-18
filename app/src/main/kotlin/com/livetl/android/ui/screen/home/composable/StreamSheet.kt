@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.SymbolAnnotationType
@@ -74,7 +75,6 @@ fun StreamSheet(stream: Stream?) {
 
                 val styledDescription = textParser(stream.description)
                 ClickableText(
-                    modifier = Modifier.padding(bottom = insets.navigationBars.bottom.dp),
                     text = styledDescription,
                     style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
                     onClick = {
@@ -90,6 +90,8 @@ fun StreamSheet(stream: Stream?) {
                             }
                     }
                 )
+
+                Spacer(Modifier.navigationBarsHeight())
             }
         }
     }
