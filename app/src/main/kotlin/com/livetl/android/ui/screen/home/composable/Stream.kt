@@ -108,12 +108,15 @@ private fun StreamPreview() {
     Column {
         Stream(
             stream = Stream(
-                yt_video_key = "123",
+                id = "123",
                 title = "Some very, extremely, quite long long long title for testing wow",
-                live_schedule = "2020-01-01T00:00:00.000Z",
-                live_start = "2020-01-01T00:01:12.000Z",
+                description = "",
+                status = "past",
+                start_scheduled = "2020-01-01T00:00:00.000Z",
+                start_actual = "2020-01-01T00:01:12.000Z",
                 channel = Channel(
                     name = "Wow Such YouTube Channel",
+                    org = "Hololive",
                     photo = "",
                 )
             ),
@@ -124,11 +127,14 @@ private fun StreamPreview() {
         )
         Stream(
             stream = Stream(
-                yt_video_key = "123",
+                id = "123",
                 title = "Short title",
-                live_schedule = "2030-01-01T00:01:12.000Z",
+                description = "",
+                status = "upcoming",
+                start_scheduled = "2030-01-01T00:01:12.000Z",
                 channel = Channel(
                     name = "Smol Ch",
+                    org = "Hololive",
                     photo = "",
                 )
             ),

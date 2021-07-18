@@ -58,7 +58,7 @@ fun StreamSheet(stream: Stream?) {
             Divider()
             Spacer(modifier = Modifier.requiredHeight(8.dp))
 
-            StreamActions(stream.yt_video_key)
+            StreamActions(stream.id)
         }
     }
 }

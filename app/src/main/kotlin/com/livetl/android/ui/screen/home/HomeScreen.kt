@@ -53,7 +53,7 @@ fun HomeScreen(
             homeViewModel.showSheet(stream)
         }
     }
-    val navigateToStream = { stream: Stream -> navigateToPlayer(stream.yt_video_key) }
+    val navigateToStream = { stream: Stream -> navigateToPlayer(stream.id) }
 
     fun refreshFeed() {
         coroutineScope.launch {
@@ -115,14 +115,14 @@ fun HomeScreen(
                             streams = homeViewModel.feed!!.live,
                             sortByAscending = false,
                             timestampFormatStringRes = R.string.started_streaming,
-                            timestampSupplier = { it.live_start },
+                            timestampSupplier = { it.start_actual },
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
                         streamItems(
                             headingRes = R.string.upcoming,
                             streams = homeViewModel.feed!!.upcoming,
-                            timestampSupplier = { it.live_schedule },
+                            timestampSupplier = { it.start_scheduled },
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
@@ -131,7 +131,7 @@ fun HomeScreen(
                             streams = homeViewModel.feed!!.ended,
                             sortByAscending = false,
                             timestampFormatStringRes = R.string.streamed,
-                            timestampSupplier = { it.live_end },
+                            timestampSupplier = { it.end_actual },
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )

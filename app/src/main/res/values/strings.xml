@@ -55,7 +55,7 @@
     <string name="about_donate">Donate</string>
 
     <string name="credits">Credits</string>
-    <string name="holotools_stream_info">Streams feed from HoloTools</string>
+    <string name="holodex_stream_info">Streams feed from HoloDex</string>
     <string name="licenses">Open source licenses</string>
 
     <string name="copied">Copied to clipboard: %s</string>

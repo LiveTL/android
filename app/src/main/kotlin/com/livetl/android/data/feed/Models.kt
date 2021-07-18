@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
 @Immutable
-@Serializable
 data class Feed(
     val live: List<Stream>,
     val upcoming: List<Stream>,
@@ -13,22 +12,31 @@ data class Feed(
 
 @Immutable
 @Serializable
+data class HoloDexResponse(
+    val total: Int,
+    val items: List<Stream>,
+)
+
+@Immutable
+@Serializable
 data class Stream(
-    val yt_video_key: String,
+    val id: String,
     val title: String,
-    // e.g. "2021-02-19T13:00:00.000Z"
-    val live_schedule: String? = null,
-    val live_start: String? = null,
-    val live_end: String? = null,
-    val live_viewers: Int? = null,
+    val status: String,
+    // e.g. "2021-07-19T14:00:00.000Z"
+    val start_scheduled: String,
+    val start_actual: String? = null,
+    val end_actual: String? = null,
+    val description: String,
     val channel: Channel,
 ) {
-    fun getThumbnail() = "https://i.ytimg.com/vi/$yt_video_key/maxresdefault.jpg"
+    fun getThumbnail() = "https://i.ytimg.com/vi/$id/maxresdefault.jpg"
 }
 
 @Immutable
 @Serializable
 data class Channel(
     val name: String,
+    val org: String,
     val photo: String,
 )

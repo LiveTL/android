@@ -112,8 +112,8 @@ fun AboutScreen(
             }
             item {
                 PreferenceRow(
-                    title = R.string.holotools_stream_info,
-                    onClick = { uriHandler.openUri("https://hololive.jetri.co/") },
+                    title = R.string.holodex_stream_info,
+                    onClick = { uriHandler.openUri("https://holodex.net/") },
                 )
             }
             item {
