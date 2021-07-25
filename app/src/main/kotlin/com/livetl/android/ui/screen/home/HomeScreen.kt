@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,6 +36,7 @@ import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.composable.Stream
 import com.livetl.android.ui.screen.home.composable.StreamSheet
+import com.livetl.android.util.collectAsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,6 +56,7 @@ fun HomeScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
+    val showThumbnailBackground by homeViewModel.prefs.showFeedThumbnailBackgrounds().collectAsState()
     val refreshingFeed = rememberSwipeRefreshState(false)
 
     val peekStream: (Stream) -> Unit = { stream: Stream ->
@@ -126,6 +129,7 @@ fun HomeScreen(
                             streams = homeViewModel.feed!!.live,
                             timestampFormatStringRes = R.string.started_streaming,
                             timestampSupplier = { it.start_actual },
+                            showThumbnailBackground = showThumbnailBackground,
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
@@ -133,6 +137,7 @@ fun HomeScreen(
                             headingRes = R.string.upcoming,
                             streams = homeViewModel.feed!!.upcoming,
                             timestampSupplier = { it.start_scheduled },
+                            showThumbnailBackground = showThumbnailBackground,
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
@@ -140,6 +145,7 @@ fun HomeScreen(
                             headingRes = R.string.archives,
                             streams = homeViewModel.feed!!.ended,
                             timestampFormatStringRes = R.string.streamed,
+                            showThumbnailBackground = showThumbnailBackground,
                             timestampSupplier = { it.end_actual },
                             onClick = navigateToStream,
                             onLongClick = peekStream,
@@ -159,6 +165,7 @@ private fun LazyListScope.streamItems(
     @StringRes headingRes: Int,
     streams: List<Stream>,
     @StringRes timestampFormatStringRes: Int? = null,
+    showThumbnailBackground: Boolean,
     timestampSupplier: (Stream) -> String?,
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
@@ -178,7 +185,15 @@ private fun LazyListScope.streamItems(
         }
 
         items(streams) { stream ->
-            Stream(Modifier, stream, timestampFormatStringRes, timestampSupplier, onClick, onLongClick)
+            Stream(
+                Modifier,
+                stream,
+                timestampFormatStringRes,
+                timestampSupplier,
+                showThumbnailBackground,
+                onClick,
+                onLongClick,
+            )
         }
     }
 }

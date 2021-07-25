@@ -16,6 +16,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,62 +40,74 @@ fun Stream(
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
+    showThumbnailBackground: Boolean,
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .combinedClickable(onClick = { onClick(stream) }, onLongClick = { onLongClick(stream) })
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .requiredHeight(48.dp)
-    ) {
-        Image(
-            painter = rememberImagePainter(stream.channel.photo),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f)
-                .clip(CircleShape),
-        )
+    Surface {
+        // TODO: verify this works correctly
+        if (showThumbnailBackground) {
+            Image(
+                painter = rememberImagePainter(stream.getThumbnail()),
+                contentDescription = null,
+            )
+        }
 
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween,
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .combinedClickable(onClick = { onClick(stream) }, onLongClick = { onLongClick(stream) })
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .requiredHeight(48.dp)
         ) {
-            val titleOffset = when (stream.title.startsWith('【')) {
-                true -> 0.dp
-                false -> 8.dp
-            }
-            Text(
-                stream.title.escapeHtmlEntities(),
-                modifier = Modifier.padding(start = titleOffset),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            Image(
+                painter = rememberImagePainter(stream.channel.photo),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
             )
 
-            Row {
-                CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.caption) {
-                    Text(
-                        stream.channel.name,
-                        modifier = Modifier
-                            .padding(start = 8.dp, end = 8.dp)
-                            .weight(1f),
-                        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween,
+            ) {
+                val titleOffset = when (stream.title.startsWith('【')) {
+                    true -> 0.dp
+                    false -> 8.dp
+                }
+                Text(
+                    stream.title.escapeHtmlEntities(),
+                    modifier = Modifier.padding(start = titleOffset),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
 
-                    timestampSupplier(stream)?.let {
-                        val relativeDateString = it.toDate().toRelativeString()
-                        val timestampFormatString =
-                            timestampFormatStringRes?.let { res -> stringResource(res) }
-                        val timestampString =
-                            timestampFormatString?.format(relativeDateString) ?: relativeDateString
+                Row {
+                    CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.caption) {
                         Text(
-                            timestampString,
+                            stream.channel.name,
+                            modifier = Modifier
+                                .padding(start = 8.dp, end = 8.dp)
+                                .weight(1f),
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
+
+                        timestampSupplier(stream)?.let {
+                            val relativeDateString = it.toDate().toRelativeString()
+                            val timestampFormatString =
+                                timestampFormatStringRes?.let { res -> stringResource(res) }
+                            val timestampString =
+                                timestampFormatString?.format(relativeDateString)
+                                    ?: relativeDateString
+                            Text(
+                                timestampString,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                            )
+                        }
                     }
                 }
             }
@@ -122,6 +135,7 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
+            showThumbnailBackground = false,
             onClick = {},
             onLongClick = {},
         )
@@ -140,6 +154,7 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
+            showThumbnailBackground = true,
             onClick = {},
             onLongClick = {},
         )
