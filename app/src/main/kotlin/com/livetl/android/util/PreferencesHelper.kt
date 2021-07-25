@@ -16,8 +16,8 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
 
     fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
 
-    // TODO: need to expose this somewhere else now
-    fun showFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
+    fun feedOrganizations() = flowPrefs.getStringSet("feed_orgs", setOf("Hololive"))
+    fun showPlayerFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
 }
 
 fun <T> Preference<Set<T>>.toggle(item: T) {

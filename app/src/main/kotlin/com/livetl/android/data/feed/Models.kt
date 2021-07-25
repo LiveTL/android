@@ -12,7 +12,7 @@ data class Feed(
 
 @Immutable
 @Serializable
-data class HoloDexResponse(
+data class HolodexResponse(
     val total: Int,
     val items: List<Stream>,
 )

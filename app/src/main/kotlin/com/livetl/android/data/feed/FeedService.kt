@@ -14,7 +14,12 @@ import javax.inject.Inject
 
 class FeedService @Inject constructor(private val client: HttpClient, private val json: Json) {
 
-    suspend fun getFeed(): Feed = withContext(Dispatchers.IO) {
+    suspend fun getFeed(organizations: Collection<String>): Feed = withContext(Dispatchers.IO) {
+        val orgs = when {
+            organizations.isNotEmpty() -> organizations
+            else -> listOf("Hololive")
+        }
+
         val result = client.get<HttpResponse> {
             url {
                 protocol = URLProtocol.HTTPS
@@ -25,7 +30,7 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
                     append("lang", "all")
                     append("type", "stream")
                     append("include", "description,live_info")
-                    append("org", "Hololive")
+                    append("org", orgs.joinToString(","))
                     append("sort", "start_scheduled")
                     append("order", "desc")
                     append("limit", "50")
@@ -39,7 +44,7 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
             }
         }
 
-        val response: HoloDexResponse = json.decodeFromString(result.readText())
+        val response: HolodexResponse = json.decodeFromString(result.readText())
 
         Feed(
             live = response.items

@@ -18,6 +18,8 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
 import com.livetl.android.R
+import com.livetl.android.data.feed.ORGANIZATIONS
+import com.livetl.android.ui.common.preference.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.SwitchPreferenceRow
 
@@ -52,13 +54,24 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .padding(contentPadding),
         ) {
-//            item {
-//                PreferenceGroupHeader(title = R.string.setting_group_streams_feed)
-//            }
+            item {
+                PreferenceGroupHeader(title = R.string.setting_group_streams_feed)
+            }
 
-            // setting_feed_org
+            item {
+                MultiChoicePreferenceRow(
+                    title = stringResource(R.string.setting_feed_org),
+                    preference = settingsViewModel.prefs.feedOrganizations(),
+                    choices = ORGANIZATIONS.associateWith { it },
+                )
+            }
 
-            // setting_thumbnail_backgrounds
+            item {
+                SwitchPreferenceRow(
+                    title = R.string.setting_thumbnail_backgrounds,
+                    preference = settingsViewModel.prefs.showFeedThumbnailBackgrounds(),
+                )
+            }
 
             item {
                 PreferenceGroupHeader(title = R.string.setting_group_player)
@@ -66,7 +79,7 @@ fun SettingsScreen(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_fullscreen,
-                    preference = settingsViewModel.prefs.showFullscreen(),
+                    preference = settingsViewModel.prefs.showPlayerFullscreen(),
                 )
             }
 

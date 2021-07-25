@@ -42,7 +42,7 @@ fun PlayerScreen(
     val density = LocalDensity.current
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
-    val showFullscreen by playerViewModel.prefs.showFullscreen().collectAsState()
+    val showFullscreen by playerViewModel.prefs.showPlayerFullscreen().collectAsState()
 
     val webviews = remember {
         val backgroundWebview = WebView(context).apply {
