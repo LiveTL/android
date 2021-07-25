@@ -20,6 +20,8 @@ import com.livetl.android.ui.screen.home.HomeViewModel
 import com.livetl.android.ui.screen.home.WelcomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 import com.livetl.android.ui.screen.player.PlayerViewModel
+import com.livetl.android.ui.screen.settings.SettingsScreen
+import com.livetl.android.ui.screen.settings.SettingsViewModel
 
 @Composable
 fun MainNavHost(
@@ -50,6 +52,7 @@ fun MainNavHost(
                 HomeScreen(
                     showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
                     navigateToPlayer = { navigateToPlayer(it) },
+                    navigateToSettings = { navController.navigate(Route.Settings.id) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
                     homeViewModel = homeViewModel,
                 )
@@ -76,6 +79,15 @@ fun MainNavHost(
                 val videoId = playerViewModel.getVideoId(urlOrId)
 
                 PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
+            }
+
+            composable(Route.Settings.id) {
+                val settingsViewModel = hiltViewModel<SettingsViewModel>()
+
+                SettingsScreen(
+                    onBackPressed = { navigateBack() },
+                    settingsViewModel = settingsViewModel,
+                )
             }
 
             composable(Route.About.id) {

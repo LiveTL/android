@@ -10,6 +10,8 @@
     <string name="welcome">Welcome!</string>
 
     <string name="settings">Settings</string>
+    <string name="setting_group_player">Player</string>
+    <string name="setting_fullscreen">Fullscreen</string>
 
     <string name="live">Live</string>
     <string name="started_streaming">Started %s</string>
@@ -21,13 +23,6 @@
     <string name="action_open_in_youtube">Open in…</string>
     <string name="action_copy_link">Copy</string>
     <string name="action_share">Share</string>
-
-    <string name="setting_group_display">Display</string>
-    <string name="setting_fullscreen">Fullscreen</string>
-    <string name="setting_text_size">Text size</string>
-    <string name="percentage">%1$d%%</string>
-
-    <string name="error_chat_load">Failed to connect to chat</string>
 
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>

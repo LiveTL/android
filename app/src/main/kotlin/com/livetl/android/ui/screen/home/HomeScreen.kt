@@ -16,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +43,7 @@ import kotlinx.coroutines.withContext
 fun HomeScreen(
     showWelcomeScreen: () -> Unit,
     navigateToPlayer: (String) -> Unit,
+    navigateToSettings: () -> Unit,
     navigateToAbout: () -> Unit,
     homeViewModel: HomeViewModel,
 ) {
@@ -90,6 +92,12 @@ fun HomeScreen(
                             Icon(
                                 imageVector = Icons.Outlined.Refresh,
                                 contentDescription = stringResource(R.string.refresh)
+                            )
+                        }
+                        IconButton(onClick = { navigateToSettings() }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(R.string.settings)
                             )
                         }
                         IconButton(onClick = { navigateToAbout() }) {
