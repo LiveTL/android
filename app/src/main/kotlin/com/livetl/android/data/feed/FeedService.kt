@@ -42,9 +42,15 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
         val response: HoloDexResponse = json.decodeFromString(result.readText())
 
         Feed(
-            live = response.items.filter { it.status == "live" },
-            upcoming = response.items.filter { it.status == "upcoming" },
-            ended = response.items.filter { it.status == "past" },
+            live = response.items
+                .filter { it.status == "live" }
+                .sortedByDescending { it.start_actual },
+            upcoming = response.items
+                .filter { it.status == "upcoming" }
+                .sortedBy { it.start_scheduled },
+            ended = response.items
+                .filter { it.status == "past" }
+                .sortedByDescending { it.end_actual },
         )
     }
 }

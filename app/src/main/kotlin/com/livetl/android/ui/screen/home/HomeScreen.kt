@@ -124,7 +124,6 @@ fun HomeScreen(
                         streamItems(
                             headingRes = R.string.live,
                             streams = homeViewModel.feed!!.live,
-                            sortByAscending = false,
                             timestampFormatStringRes = R.string.started_streaming,
                             timestampSupplier = { it.start_actual },
                             onClick = navigateToStream,
@@ -140,7 +139,6 @@ fun HomeScreen(
                         streamItems(
                             headingRes = R.string.archives,
                             streams = homeViewModel.feed!!.ended,
-                            sortByAscending = false,
                             timestampFormatStringRes = R.string.streamed,
                             timestampSupplier = { it.end_actual },
                             onClick = navigateToStream,
@@ -160,7 +158,6 @@ fun HomeScreen(
 private fun LazyListScope.streamItems(
     @StringRes headingRes: Int,
     streams: List<Stream>,
-    sortByAscending: Boolean = true,
     @StringRes timestampFormatStringRes: Int? = null,
     timestampSupplier: (Stream) -> String?,
     onClick: (Stream) -> Unit,
@@ -180,12 +177,7 @@ private fun LazyListScope.streamItems(
             }
         }
 
-        val sortedStreams = when (sortByAscending) {
-            true -> streams.sortedBy(timestampSupplier)
-            false -> streams.sortedByDescending(timestampSupplier)
-        }
-
-        items(sortedStreams) { stream ->
+        items(streams) { stream ->
             Stream(Modifier, stream, timestampFormatStringRes, timestampSupplier, onClick, onLongClick)
         }
     }
