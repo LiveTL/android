@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id 'com.android.application'
@@ -153,12 +153,13 @@ kotlinter {
 }
 preBuild.dependsOn(formatKotlin)
 
-tasks.withType(AbstractKotlinCompile).all {
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions.freeCompilerArgs += [
             "-Xopt-in=kotlin.Experimental",
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi",
             "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
+            "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
     ]
 }
