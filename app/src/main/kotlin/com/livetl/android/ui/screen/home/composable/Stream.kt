@@ -48,7 +48,7 @@ fun Stream(
         // TODO: verify this works correctly
         if (showThumbnailBackground) {
             Image(
-                painter = rememberImagePainter(stream.getThumbnail()),
+                painter = rememberImagePainter(stream.thumbnail),
                 contentDescription = null,
             )
         }

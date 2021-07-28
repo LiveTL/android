@@ -30,7 +30,8 @@ data class Stream(
     val description: String,
     val channel: Channel,
 ) {
-    fun getThumbnail() = "https://i.ytimg.com/vi/$id/maxresdefault.jpg"
+    val thumbnail: String
+        get() = "https://i.ytimg.com/vi/$id/maxresdefault.jpg"
 }
 
 @Immutable

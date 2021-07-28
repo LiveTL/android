@@ -41,7 +41,7 @@ fun StreamSheet(stream: Stream?) {
     LazyColumn {
         item {
             Image(
-                painter = rememberImagePainter(stream.getThumbnail()),
+                painter = rememberImagePainter(stream.thumbnail),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
                     .aspectRatio(16 / 9f)
