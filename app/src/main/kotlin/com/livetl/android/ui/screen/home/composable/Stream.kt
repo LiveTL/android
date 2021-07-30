@@ -4,11 +4,15 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
@@ -16,17 +20,20 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import coil.transform.BlurTransformation
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
@@ -44,19 +51,28 @@ fun Stream(
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
 ) {
-    Surface {
-        // TODO: verify this works correctly
+    val context = LocalContext.current
+
+    Box(modifier = Modifier.height(IntrinsicSize.Min)) {
         if (showThumbnailBackground) {
             Image(
-                painter = rememberImagePainter(stream.thumbnail),
+                modifier = Modifier.fillMaxSize().alpha(0.2f),
+                painter = rememberImagePainter(stream.thumbnail) {
+                    transformations(BlurTransformation(context))
+                    crossfade(true)
+                },
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
             )
         }
 
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .combinedClickable(onClick = { onClick(stream) }, onLongClick = { onLongClick(stream) })
+                .combinedClickable(
+                    onClick = { onClick(stream) },
+                    onLongClick = { onLongClick(stream) }
+                )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .requiredHeight(48.dp)
         ) {
