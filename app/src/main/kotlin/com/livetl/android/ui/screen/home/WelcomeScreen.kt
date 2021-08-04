@@ -13,7 +13,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.insets.LocalWindowInsets
@@ -28,11 +27,10 @@ fun WelcomeScreen(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
-    val density = LocalDensity.current
 
     val webview = remember {
         WebView(context).apply {
-            setDefaultSettings(density)
+            setDefaultSettings()
             loadUrl("file:///android_asset/welcome.html")
         }
     }

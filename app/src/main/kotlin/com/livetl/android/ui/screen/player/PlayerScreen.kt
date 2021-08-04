@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -39,19 +38,18 @@ fun PlayerScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val density = LocalDensity.current
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     val showFullscreen by playerViewModel.prefs.showPlayerFullscreen().collectAsState()
 
     val webviews = remember {
         val backgroundWebview = WebView(context).apply {
-            setDefaultSettings(density)
+            setDefaultSettings()
             loadUrl("file:///android_asset/background.html")
         }
 
         val foregroundWebview = WebView(context).apply {
-            setDefaultSettings(density)
+            setDefaultSettings()
 
             webViewClient = object : WebViewClient() {
                 override fun shouldInterceptRequest(

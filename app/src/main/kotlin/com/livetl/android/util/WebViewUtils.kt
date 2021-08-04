@@ -3,9 +3,9 @@ package com.livetl.android.util
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
 import android.util.Base64
+import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.compose.ui.unit.Density
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.livetl.android.BuildConfig
@@ -34,22 +34,16 @@ fun WebView.runJS(js: String) {
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-fun WebView.setDefaultSettings(density: Density) {
+fun WebView.setDefaultSettings() {
     // Debug mode (chrome://inspect/#devices)
     if (BuildConfig.DEBUG && 0 != context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) {
         WebView.setWebContentsDebuggingEnabled(true)
     }
 
-//    setInitialScale((density.density * 100).toInt())
-//    overScrollMode = View.OVER_SCROLL_NEVER
-
     with(settings) {
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
             WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
         }
-
-//        textZoom = 150
-//        defaultFontSize = 32
 
         javaScriptEnabled = true
         domStorageEnabled = true
@@ -57,6 +51,9 @@ fun WebView.setDefaultSettings(density: Density) {
         setAppCacheEnabled(true)
         useWideViewPort = true
         loadWithOverviewMode = true
+        scrollBarStyle = WebView.SCROLLBARS_INSIDE_INSET
+        isScrollbarFadingEnabled = false
+        overScrollMode = View.OVER_SCROLL_NEVER
         cacheMode = WebSettings.LOAD_DEFAULT
         allowContentAccess = true
         allowFileAccess = true
