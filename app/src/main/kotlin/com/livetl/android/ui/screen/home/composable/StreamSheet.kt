@@ -24,7 +24,7 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.livetl.android.R
-import com.livetl.android.data.feed.Stream
+import com.livetl.android.data.holodex.Stream
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 

@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.BlurTransformation
 import com.livetl.android.R
-import com.livetl.android.data.feed.Channel
-import com.livetl.android.data.feed.Stream
+import com.livetl.android.data.holodex.Channel
+import com.livetl.android.data.holodex.Stream
 import com.livetl.android.util.escapeHtmlEntities
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString

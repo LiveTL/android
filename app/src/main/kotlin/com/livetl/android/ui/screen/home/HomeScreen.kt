@@ -33,7 +33,7 @@ import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.R
-import com.livetl.android.data.feed.Stream
+import com.livetl.android.data.holodex.Stream
 import com.livetl.android.ui.screen.home.composable.Stream
 import com.livetl.android.ui.screen.home.composable.StreamSheet
 import com.livetl.android.util.collectAsState
