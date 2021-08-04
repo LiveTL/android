@@ -121,7 +121,11 @@ fun PlayerScreen(
                         }
                     }
                 } catch (e: Throwable) {
-                    Timber.e(e)
+                    Timber.e(e, "Failed to fetch stream info")
+
+                    // Fallback: attempt to load as a live stream
+                    val url = "file:///android_asset/watch.html?video=$videoId"
+                    webviews.foregroundWebview.loadUrl(url)
                 }
             }
         }
