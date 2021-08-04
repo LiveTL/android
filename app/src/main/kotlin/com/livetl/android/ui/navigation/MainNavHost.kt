@@ -1,6 +1,7 @@
 package com.livetl.android.ui.navigation
 
 import android.content.IntentFilter
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -11,6 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.plusAssign
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.livetl.android.ui.BroadcastReceiver
 import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
@@ -29,6 +33,8 @@ fun MainNavHost(
     setFullscreen: (Boolean) -> Unit,
 ) {
     val navController = rememberNavController()
+    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    navController.navigatorProvider += bottomSheetNavigator
 
     fun navigateToPlayer(urlOrId: String) {
         navController.navigate("${Route.Player.id}?urlOrId=$urlOrId") {
@@ -41,67 +47,71 @@ fun MainNavHost(
         navController.popBackStack()
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+    ModalBottomSheetLayout(
+        bottomSheetNavigator = bottomSheetNavigator,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background),
     ) {
-        NavHost(navController, startDestination = Route.Home.id) {
-            composable(Route.Home.id) {
-                val homeViewModel = hiltViewModel<HomeViewModel>()
+        Surface() {
+            NavHost(navController, startDestination = Route.Home.id) {
+                composable(Route.Home.id) {
+                    val homeViewModel = hiltViewModel<HomeViewModel>()
 
-                HomeScreen(
-                    showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
-                    navigateToPlayer = { navigateToPlayer(it) },
-                    navigateToSettings = { navController.navigate(Route.Settings.id) },
-                    navigateToAbout = { navController.navigate(Route.About.id) },
-                    homeViewModel = homeViewModel,
-                )
-            }
+                    HomeScreen(
+                        showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
+                        navigateToPlayer = { navigateToPlayer(it) },
+                        navigateToSettings = { navController.navigate(Route.Settings.id) },
+                        navigateToAbout = { navController.navigate(Route.About.id) },
+                        homeViewModel = homeViewModel,
+                    )
+                }
 
-            composable(Route.Welcome.id) {
-                val homeViewModel = hiltViewModel<HomeViewModel>()
+                composable(Route.Welcome.id) {
+                    val homeViewModel = hiltViewModel<HomeViewModel>()
 
-                WelcomeScreen(
-                    onDismiss = {
-                        homeViewModel.dismissWelcomeScreen()
-                        navigateBack()
-                    },
-                )
-            }
+                    WelcomeScreen(
+                        onDismiss = {
+                            homeViewModel.dismissWelcomeScreen()
+                            navigateBack()
+                        },
+                    )
+                }
 
-            composable(
-                "${Route.Player.id}?urlOrId={urlOrId}",
-                arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
-            ) { backStackEntry ->
-                val playerViewModel = hiltViewModel<PlayerViewModel>()
+                composable(
+                    "${Route.Player.id}?urlOrId={urlOrId}",
+                    arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
+                ) { backStackEntry ->
+                    val playerViewModel = hiltViewModel<PlayerViewModel>()
 
-                val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                val videoId = playerViewModel.getVideoId(urlOrId)
+                    val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
+                    val videoId = playerViewModel.getVideoId(urlOrId)
 
-                PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
-            }
+                    PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
+                }
 
-            composable(Route.Settings.id) {
-                val settingsViewModel = hiltViewModel<SettingsViewModel>()
+                composable(Route.Settings.id) {
+                    val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
-                SettingsScreen(
-                    onBackPressed = { navigateBack() },
-                    settingsViewModel = settingsViewModel,
-                )
-            }
+                    SettingsScreen(
+                        onBackPressed = { navigateBack() },
+                        settingsViewModel = settingsViewModel,
+                    )
+                }
 
-            composable(Route.About.id) {
-                AboutScreen(
-                    onBackPressed = { navigateBack() },
-                    navigateToLicenses = { navController.navigate(Route.Licenses.id) },
-                    navigateToWelcome = { navController.navigate(Route.Welcome.id) },
-                )
-            }
+                composable(Route.About.id) {
+                    AboutScreen(
+                        onBackPressed = { navigateBack() },
+                        navigateToLicenses = { navController.navigate(Route.Licenses.id) },
+                        navigateToWelcome = { navController.navigate(Route.Welcome.id) },
+                    )
+                }
 
-            composable(Route.Licenses.id) {
-                LicensesScreen(
-                    onBackPressed = { navigateBack() }
-                )
+                composable(Route.Licenses.id) {
+                    LicensesScreen(
+                        onBackPressed = { navigateBack() }
+                    )
+                }
             }
         }
     }
