@@ -18,12 +18,7 @@ class HoloDexService @Inject constructor(
     private val json: Json,
 ) {
 
-    suspend fun getFeed(organizations: Collection<String>): HolodexVideosResponse = withContext(Dispatchers.IO) {
-        val orgs = when {
-            organizations.isNotEmpty() -> organizations
-            else -> listOf("Hololive")
-        }
-
+    suspend fun getFeed(organization: String?): HolodexVideosResponse = withContext(Dispatchers.IO) {
         val result = client.get<HttpResponse> {
             url {
                 baseConfig()
@@ -33,7 +28,7 @@ class HoloDexService @Inject constructor(
                     append("lang", "all")
                     append("type", "stream")
                     append("include", "description,live_info")
-                    append("org", orgs.joinToString(","))
+                    append("org", organization ?: "Hololive")
                     append("sort", "start_scheduled")
                     append("order", "desc")
                     append("limit", "50")

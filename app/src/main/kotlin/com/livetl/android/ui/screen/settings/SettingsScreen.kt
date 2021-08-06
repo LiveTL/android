@@ -19,7 +19,7 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
 import com.livetl.android.R
 import com.livetl.android.data.feed.ORGANIZATIONS
-import com.livetl.android.ui.common.preference.MultiChoicePreferenceRow
+import com.livetl.android.ui.common.preference.ChoicePreferenceRow
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.SwitchPreferenceRow
 
@@ -59,9 +59,9 @@ fun SettingsScreen(
             }
 
             item {
-                MultiChoicePreferenceRow(
+                ChoicePreferenceRow(
                     title = stringResource(R.string.setting_feed_org),
-                    preference = settingsViewModel.prefs.feedOrganizations(),
+                    preference = settingsViewModel.prefs.feedOrganization(),
                     choices = ORGANIZATIONS.associateWith { it },
                 )
             }

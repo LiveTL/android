@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     var sheetStream by mutableStateOf<Stream?>(null)
 
     suspend fun loadFeed() {
-        feed = feedService.getFeed(prefs.feedOrganizations().get())
+        feed = feedService.getFeed(prefs.feedOrganization().get())
     }
 
     suspend fun showSheet(stream: Stream) {

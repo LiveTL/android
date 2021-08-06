@@ -7,8 +7,8 @@ class FeedService @Inject constructor(
     private val holoDexService: HoloDexService,
 ) {
 
-    suspend fun getFeed(organizations: Collection<String>): Feed {
-        val response = holoDexService.getFeed(organizations)
+    suspend fun getFeed(organization: String?): Feed {
+        val response = holoDexService.getFeed(organization)
 
         return Feed(
             live = response.items

@@ -16,7 +16,7 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
 
     fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
 
-    fun feedOrganizations() = flowPrefs.getStringSet("feed_orgs", setOf("Hololive"))
+    fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
     fun showFeedThumbnailBackgrounds() = flowPrefs.getBoolean("feed_thumbnail_bg", false)
     fun showPlayerFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
 }
