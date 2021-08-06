@@ -7,7 +7,7 @@
        src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" />
 </a>
 
-Native Android app for LiveTL using [Jetpack Compose](https://developer.android.com/jetpack/compose) for the UI.
+Android app for LiveTL using [Jetpack Compose](https://developer.android.com/jetpack/compose) for the UI.
 
 
 ## Contributing
@@ -16,4 +16,4 @@ Native Android app for LiveTL using [Jetpack Compose](https://developer.android.
 Translations are done in [Weblate](https://hosted.weblate.org/projects/livetl/android/).
 
 ### Requirements
-- Android Studio Canary
+- Android Studio

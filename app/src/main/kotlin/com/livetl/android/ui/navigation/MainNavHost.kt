@@ -114,10 +114,14 @@ fun MainNavHost(
     }
 
     BroadcastReceiver(
-        intentFilter = IntentFilter().apply { addAction(MainActivity.DEEP_LINK_INTENT) },
+        intentFilter = INTENT_FILTER,
         receiver = {
             val data = it.getStringExtra(MainActivity.DEEP_LINK_INTENT_EXTRA)!!
             navigateToPlayer(data)
         }
     )
+}
+
+private val INTENT_FILTER = IntentFilter().apply {
+    addAction(MainActivity.DEEP_LINK_INTENT)
 }
