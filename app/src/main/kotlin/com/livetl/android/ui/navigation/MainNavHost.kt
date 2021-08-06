@@ -4,7 +4,6 @@ import android.content.IntentFilter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,65 +52,63 @@ fun MainNavHost(
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
     ) {
-        Surface() {
-            NavHost(navController, startDestination = Route.Home.id) {
-                composable(Route.Home.id) {
-                    val homeViewModel = hiltViewModel<HomeViewModel>()
+        NavHost(navController, startDestination = Route.Home.id) {
+            composable(Route.Home.id) {
+                val homeViewModel = hiltViewModel<HomeViewModel>()
 
-                    HomeScreen(
-                        showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
-                        navigateToPlayer = { navigateToPlayer(it) },
-                        navigateToSettings = { navController.navigate(Route.Settings.id) },
-                        navigateToAbout = { navController.navigate(Route.About.id) },
-                        homeViewModel = homeViewModel,
-                    )
-                }
+                HomeScreen(
+                    showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
+                    navigateToPlayer = { navigateToPlayer(it) },
+                    navigateToSettings = { navController.navigate(Route.Settings.id) },
+                    navigateToAbout = { navController.navigate(Route.About.id) },
+                    homeViewModel = homeViewModel,
+                )
+            }
 
-                composable(Route.Welcome.id) {
-                    val homeViewModel = hiltViewModel<HomeViewModel>()
+            composable(Route.Welcome.id) {
+                val homeViewModel = hiltViewModel<HomeViewModel>()
 
-                    WelcomeScreen(
-                        onDismiss = {
-                            homeViewModel.dismissWelcomeScreen()
-                            navigateBack()
-                        },
-                    )
-                }
+                WelcomeScreen(
+                    onDismiss = {
+                        homeViewModel.dismissWelcomeScreen()
+                        navigateBack()
+                    },
+                )
+            }
 
-                composable(
-                    "${Route.Player.id}?urlOrId={urlOrId}",
-                    arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
-                ) { backStackEntry ->
-                    val playerViewModel = hiltViewModel<PlayerViewModel>()
+            composable(
+                "${Route.Player.id}?urlOrId={urlOrId}",
+                arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
+            ) { backStackEntry ->
+                val playerViewModel = hiltViewModel<PlayerViewModel>()
 
-                    val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
-                    val videoId = playerViewModel.getVideoId(urlOrId)
+                val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
+                val videoId = playerViewModel.getVideoId(urlOrId)
 
-                    PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
-                }
+                PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
+            }
 
-                composable(Route.Settings.id) {
-                    val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            composable(Route.Settings.id) {
+                val settingsViewModel = hiltViewModel<SettingsViewModel>()
 
-                    SettingsScreen(
-                        onBackPressed = { navigateBack() },
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
+                SettingsScreen(
+                    onBackPressed = { navigateBack() },
+                    settingsViewModel = settingsViewModel,
+                )
+            }
 
-                composable(Route.About.id) {
-                    AboutScreen(
-                        onBackPressed = { navigateBack() },
-                        navigateToLicenses = { navController.navigate(Route.Licenses.id) },
-                        navigateToWelcome = { navController.navigate(Route.Welcome.id) },
-                    )
-                }
+            composable(Route.About.id) {
+                AboutScreen(
+                    onBackPressed = { navigateBack() },
+                    navigateToLicenses = { navController.navigate(Route.Licenses.id) },
+                    navigateToWelcome = { navController.navigate(Route.Welcome.id) },
+                )
+            }
 
-                composable(Route.Licenses.id) {
-                    LicensesScreen(
-                        onBackPressed = { navigateBack() }
-                    )
-                }
+            composable(Route.Licenses.id) {
+                LicensesScreen(
+                    onBackPressed = { navigateBack() }
+                )
             }
         }
     }
