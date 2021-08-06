@@ -1,39 +1,22 @@
 package com.livetl.android.data.stream
 
-import android.content.Context
 import com.livetl.android.data.holodex.HoloDexService
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
-import me.echeung.youtubeextractor.YouTubeExtractor
 import timber.log.Timber
 import javax.inject.Inject
 
 class StreamService @Inject constructor(
-    @ApplicationContext context: Context,
     private val holoDexService: HoloDexService,
+    private val videoIdParser: VideoIdParser,
     private val client: HttpClient,
 ) {
 
-    private val extractor = YouTubeExtractor(context)
-
-    fun getVideoId(pageUrl: String): String {
-        return when {
-            LIVETL_URI_REGEX.matches(pageUrl) -> {
-                val videoIdWithQuery = LIVETL_URI_REGEX.find(pageUrl)!!.groupValues[1]
-                // We don't do anything with the query parameters right now
-                val (videoId, _) = videoIdWithQuery.split('?', limit = 2)
-                videoId
-            }
-            else -> extractor.getVideoId(pageUrl)
-        }
-    }
-
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
-        val videoId = getVideoId(pageUrl)
+        val videoId = videoIdParser.getVideoId(pageUrl)
         Timber.d("Fetching stream: $videoId")
         val stream = holoDexService.getVideoInfo(videoId)
 
@@ -72,4 +55,3 @@ class NoChatContinuationFoundException(videoId: String) : Exception("Continuatio
 
 const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.54"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
-private val LIVETL_URI_REGEX by lazy { "livetl://translate/(.+)".toRegex() }

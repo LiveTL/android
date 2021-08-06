@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.USER_AGENT
+import com.livetl.android.data.stream.VideoIdParser
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.createScript
 import com.livetl.android.util.readFile
@@ -25,12 +26,13 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     private val streamService: StreamService,
+    private val videoIdParser: VideoIdParser,
     private val client: HttpClient,
     val prefs: PreferencesHelper,
 ) : ViewModel() {
 
     fun getVideoId(urlOrId: String): String {
-        return streamService.getVideoId(urlOrId)
+        return videoIdParser.getVideoId(urlOrId)
     }
 
     suspend fun getStreamInfo(videoId: String): StreamInfo {
