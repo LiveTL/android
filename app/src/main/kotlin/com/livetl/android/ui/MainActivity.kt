@@ -14,12 +14,18 @@ import androidx.core.view.WindowCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.livetl.android.ui.navigation.MainNavHost
+import com.livetl.android.ui.navigation.Route
 import com.livetl.android.ui.theme.LiveTLTheme
+import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.powerManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var prefs: PreferencesHelper
 
     private var wakeLock: PowerManager.WakeLock? = null
 
@@ -29,10 +35,16 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        val startRoute = when (prefs.showWelcomeScreen().get()) {
+            true -> Route.Welcome
+            false -> Route.Home
+        }
+
         setContent {
             LiveTLTheme {
                 ProvideWindowInsets {
                     MainNavHost(
+                        startRoute = startRoute,
                         setKeepScreenOn = this::setKeepScreenOn,
                         setFullscreen = this::setFullscreen,
                     )

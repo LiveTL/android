@@ -20,14 +20,16 @@ import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.HomeViewModel
-import com.livetl.android.ui.screen.home.WelcomeScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
 import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.settings.SettingsScreen
 import com.livetl.android.ui.screen.settings.SettingsViewModel
+import com.livetl.android.ui.screen.welcome.WelcomeScreen
+import com.livetl.android.ui.screen.welcome.WelcomeViewModel
 
 @Composable
 fun MainNavHost(
+    startRoute: Route,
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
 ) {
@@ -52,12 +54,11 @@ fun MainNavHost(
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
     ) {
-        NavHost(navController, startDestination = Route.Home.id) {
+        NavHost(navController, startDestination = startRoute.id) {
             composable(Route.Home.id) {
                 val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 HomeScreen(
-                    showWelcomeScreen = { navController.navigate(Route.Welcome.id) },
                     navigateToPlayer = { navigateToPlayer(it) },
                     navigateToSettings = { navController.navigate(Route.Settings.id) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
@@ -66,13 +67,11 @@ fun MainNavHost(
             }
 
             composable(Route.Welcome.id) {
-                val homeViewModel = hiltViewModel<HomeViewModel>()
+                val welcomeViewModel = hiltViewModel<WelcomeViewModel>()
 
                 WelcomeScreen(
-                    onDismiss = {
-                        homeViewModel.dismissWelcomeScreen()
-                        navigateBack()
-                    },
+                    navigateToHome = { navController.navigate(Route.Home.id) },
+                    viewModel = welcomeViewModel,
                 )
             }
 

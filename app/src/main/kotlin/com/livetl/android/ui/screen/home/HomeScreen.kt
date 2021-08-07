@@ -42,17 +42,11 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun HomeScreen(
-    showWelcomeScreen: () -> Unit,
     navigateToPlayer: (String) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToAbout: () -> Unit,
     homeViewModel: HomeViewModel,
 ) {
-    if (homeViewModel.prefs.showWelcomeScreen().get()) {
-//        showWelcomeScreen()
-//        return
-    }
-
     val coroutineScope = rememberCoroutineScope()
 
     val showThumbnailBackground by homeViewModel.prefs.showFeedThumbnailBackgrounds().collectAsState()

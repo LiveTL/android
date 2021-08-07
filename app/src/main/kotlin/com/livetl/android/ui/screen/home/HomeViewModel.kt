@@ -32,8 +32,4 @@ class HomeViewModel @Inject constructor(
         sheetStream = stream
         sheetState.animateTo(ModalBottomSheetValue.Expanded)
     }
-
-    fun dismissWelcomeScreen() {
-        prefs.showWelcomeScreen().set(false)
-    }
 }

@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.home
+package com.livetl.android.ui.screen.welcome
 
 import android.webkit.WebView
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +24,8 @@ import com.livetl.android.util.setDefaultSettings
 
 @Composable
 fun WelcomeScreen(
-    onDismiss: () -> Unit,
+    navigateToHome: () -> Unit,
+    viewModel: WelcomeViewModel,
 ) {
     val context = LocalContext.current
 
@@ -48,7 +49,12 @@ fun WelcomeScreen(
                     Text(text = stringResource(R.string.welcome))
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onDismiss() }) {
+                    IconButton(
+                        onClick = {
+                            viewModel.dismissWelcomeScreen()
+                            navigateToHome()
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(R.string.cd_close)
