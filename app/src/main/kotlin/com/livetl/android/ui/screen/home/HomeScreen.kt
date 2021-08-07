@@ -49,8 +49,8 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
 ) {
     if (homeViewModel.prefs.showWelcomeScreen().get()) {
-        showWelcomeScreen()
-        return
+//        showWelcomeScreen()
+//        return
     }
 
     val coroutineScope = rememberCoroutineScope()
