@@ -15,7 +15,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -91,12 +90,6 @@ fun HomeScreen(
                         Text(text = stringResource(R.string.app_name))
                     },
                     actions = {
-                        IconButton(onClick = { refreshFeed() }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Refresh,
-                                contentDescription = stringResource(R.string.refresh)
-                            )
-                        }
                         IconButton(onClick = { navigateToSettings() }) {
                             Icon(
                                 imageVector = Icons.Outlined.Settings,
