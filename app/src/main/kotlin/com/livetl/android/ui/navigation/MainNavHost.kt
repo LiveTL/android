@@ -1,12 +1,13 @@
 package com.livetl.android.ui.navigation
 
-import android.content.IntentFilter
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
@@ -14,8 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import com.livetl.android.ui.BroadcastReceiver
-import com.livetl.android.ui.MainActivity
 import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
@@ -27,22 +26,23 @@ import com.livetl.android.ui.screen.settings.SettingsViewModel
 import com.livetl.android.ui.screen.welcome.WelcomeScreen
 import com.livetl.android.ui.screen.welcome.WelcomeViewModel
 
+fun NavHostController.navigateToPlayer(urlOrId: String) {
+    navigate("${Route.Player.id}?urlOrId=$urlOrId") {
+        launchSingleTop = true
+        popUpTo(Route.Home.id) {}
+    }
+}
+
+@SuppressLint("ComposableNaming")
 @Composable
 fun MainNavHost(
     startRoute: Route,
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
-) {
+): NavHostController {
     val navController = rememberNavController()
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     navController.navigatorProvider += bottomSheetNavigator
-
-    fun navigateToPlayer(urlOrId: String) {
-        navController.navigate("${Route.Player.id}?urlOrId=$urlOrId") {
-            launchSingleTop = true
-            popUpTo(Route.Home.id) {}
-        }
-    }
 
     fun navigateBack() {
         navController.popBackStack()
@@ -59,7 +59,7 @@ fun MainNavHost(
                 val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 HomeScreen(
-                    navigateToPlayer = { navigateToPlayer(it) },
+                    navigateToPlayer = { navController.navigateToPlayer(it) },
                     navigateToSettings = { navController.navigate(Route.Settings.id) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
                     viewModel = homeViewModel,
@@ -112,15 +112,5 @@ fun MainNavHost(
         }
     }
 
-    BroadcastReceiver(
-        intentFilter = INTENT_FILTER,
-        receiver = {
-            val data = it.getStringExtra(MainActivity.DEEP_LINK_INTENT_EXTRA)!!
-            navigateToPlayer(data)
-        }
-    )
-}
-
-private val INTENT_FILTER = IntentFilter().apply {
-    addAction(MainActivity.DEEP_LINK_INTENT)
+    return navController
 }

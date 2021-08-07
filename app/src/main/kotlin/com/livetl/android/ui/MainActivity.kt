@@ -11,10 +11,11 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.NavHostController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.livetl.android.ui.navigation.MainNavHost
 import com.livetl.android.ui.navigation.Route
+import com.livetl.android.ui.navigation.navigateToPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.powerManager
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var prefs: PreferencesHelper
 
+    private lateinit var navController: NavHostController
     private var wakeLock: PowerManager.WakeLock? = null
 
     @SuppressLint("WakelockTimeout")
@@ -43,7 +45,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LiveTLTheme {
                 ProvideWindowInsets {
-                    MainNavHost(
+                    navController = MainNavHost(
                         startRoute = startRoute,
                         setKeepScreenOn = this::setKeepScreenOn,
                         setFullscreen = this::setFullscreen,
@@ -103,20 +105,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // We broadcast intents that the Compose nav host then handles
     private fun handleVideoIntent(data: String?) {
-        data?.let {
-            val intent = Intent().apply {
-                action = DEEP_LINK_INTENT
-                putExtra(DEEP_LINK_INTENT_EXTRA, data)
-            }
-
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-        }
-    }
-
-    companion object {
-        const val DEEP_LINK_INTENT = "LiveTL::DeepLink"
-        const val DEEP_LINK_INTENT_EXTRA = "data"
+        data?.let { navController.navigateToPlayer(it) }
     }
 }
