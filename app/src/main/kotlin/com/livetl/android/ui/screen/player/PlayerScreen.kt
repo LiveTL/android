@@ -34,13 +34,13 @@ fun PlayerScreen(
     videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
-    playerViewModel: PlayerViewModel,
+    viewModel: PlayerViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
-    val showFullscreen by playerViewModel.prefs.showPlayerFullscreen().collectAsState()
+    val showFullscreen by viewModel.prefs.showPlayerFullscreen().collectAsState()
 
     val webviews = remember {
         val backgroundWebview = WebView(context).apply {
@@ -58,7 +58,7 @@ fun PlayerScreen(
                 ): WebResourceResponse? {
                     val url = request.url.toString()
 
-                    return runBlocking { playerViewModel.getInjectedResponse(context, url) }
+                    return runBlocking { viewModel.getInjectedResponse(context, url) }
                         ?: super.shouldInterceptRequest(view, request)
                 }
             }
@@ -109,7 +109,7 @@ fun PlayerScreen(
         if (videoId.isNotEmpty()) {
             coroutineScope.launch {
                 try {
-                    val newStream = playerViewModel.getStreamInfo(videoId)
+                    val newStream = viewModel.getStreamInfo(videoId)
                     withContext(Dispatchers.Main) {
                         streamInfo = newStream
 

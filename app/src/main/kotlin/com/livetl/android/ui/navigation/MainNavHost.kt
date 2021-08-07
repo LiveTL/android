@@ -62,7 +62,7 @@ fun MainNavHost(
                     navigateToPlayer = { navigateToPlayer(it) },
                     navigateToSettings = { navController.navigate(Route.Settings.id) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
-                    homeViewModel = homeViewModel,
+                    viewModel = homeViewModel,
                 )
             }
 
@@ -92,7 +92,7 @@ fun MainNavHost(
 
                 SettingsScreen(
                     onBackPressed = { navigateBack() },
-                    settingsViewModel = settingsViewModel,
+                    viewModel = settingsViewModel,
                 )
             }
 

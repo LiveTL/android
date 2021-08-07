@@ -45,16 +45,16 @@ fun HomeScreen(
     navigateToPlayer: (String) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToAbout: () -> Unit,
-    homeViewModel: HomeViewModel,
+    viewModel: HomeViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val showThumbnailBackground by homeViewModel.prefs.showFeedThumbnailBackgrounds().collectAsState()
+    val showThumbnailBackground by viewModel.prefs.showFeedThumbnailBackgrounds().collectAsState()
     val refreshingFeed = rememberSwipeRefreshState(false)
 
     val peekStream: (Stream) -> Unit = { stream: Stream ->
         coroutineScope.launch {
-            homeViewModel.showSheet(stream)
+            viewModel.showSheet(stream)
         }
     }
     val navigateToStream = { stream: Stream -> navigateToPlayer(stream.id) }
@@ -62,7 +62,7 @@ fun HomeScreen(
     fun refreshFeed() {
         coroutineScope.launch {
             refreshingFeed.isRefreshing = true
-            homeViewModel.loadFeed()
+            viewModel.loadFeed()
             withContext(Dispatchers.Main) {
                 refreshingFeed.isRefreshing = false
             }
@@ -74,8 +74,8 @@ fun HomeScreen(
     }
 
     ModalBottomSheetLayout(
-        sheetState = homeViewModel.sheetState,
-        sheetContent = { StreamSheet(homeViewModel.sheetStream) },
+        sheetState = viewModel.sheetState,
+        sheetContent = { StreamSheet(viewModel.sheetStream) },
     ) {
         Scaffold(
             topBar = {
@@ -109,11 +109,11 @@ fun HomeScreen(
                 state = refreshingFeed,
                 onRefresh = { refreshFeed() },
             ) {
-                if (homeViewModel.feed != null) {
+                if (viewModel.feed != null) {
                     LazyColumn {
                         streamItems(
                             headingRes = R.string.live,
-                            streams = homeViewModel.feed!!.live,
+                            streams = viewModel.feed!!.live,
                             timestampFormatStringRes = R.string.started_streaming,
                             timestampSupplier = { it.start_actual },
                             showThumbnailBackground = showThumbnailBackground,
@@ -122,7 +122,7 @@ fun HomeScreen(
                         )
                         streamItems(
                             headingRes = R.string.upcoming,
-                            streams = homeViewModel.feed!!.upcoming,
+                            streams = viewModel.feed!!.upcoming,
                             timestampSupplier = { it.start_scheduled },
                             showThumbnailBackground = showThumbnailBackground,
                             onClick = navigateToStream,
@@ -130,7 +130,7 @@ fun HomeScreen(
                         )
                         streamItems(
                             headingRes = R.string.archives,
-                            streams = homeViewModel.feed!!.ended,
+                            streams = viewModel.feed!!.ended,
                             timestampFormatStringRes = R.string.streamed,
                             showThumbnailBackground = showThumbnailBackground,
                             timestampSupplier = { it.end_actual },

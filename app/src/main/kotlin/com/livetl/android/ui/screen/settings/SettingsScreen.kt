@@ -26,7 +26,7 @@ import com.livetl.android.ui.common.preference.SwitchPreferenceRow
 @Composable
 fun SettingsScreen(
     onBackPressed: () -> Unit,
-    settingsViewModel: SettingsViewModel,
+    viewModel: SettingsViewModel,
 ) {
     Scaffold(
         topBar = {
@@ -61,7 +61,7 @@ fun SettingsScreen(
             item {
                 ChoicePreferenceRow(
                     title = stringResource(R.string.setting_feed_org),
-                    preference = settingsViewModel.prefs.feedOrganization(),
+                    preference = viewModel.prefs.feedOrganization(),
                     choices = ORGANIZATIONS.associateWith { it },
                 )
             }
@@ -69,7 +69,7 @@ fun SettingsScreen(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_thumbnail_backgrounds,
-                    preference = settingsViewModel.prefs.showFeedThumbnailBackgrounds(),
+                    preference = viewModel.prefs.showFeedThumbnailBackgrounds(),
                 )
             }
 
@@ -79,7 +79,7 @@ fun SettingsScreen(
             item {
                 SwitchPreferenceRow(
                     title = R.string.setting_fullscreen,
-                    preference = settingsViewModel.prefs.showPlayerFullscreen(),
+                    preference = viewModel.prefs.showPlayerFullscreen(),
                 )
             }
 
