@@ -2,7 +2,6 @@ package com.livetl.android.util
 
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
-import android.util.Base64
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -10,27 +9,12 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.livetl.android.BuildConfig
 
-fun WebView.injectScript(js: String) {
-    val encodedJs = Base64.encodeToString(js.toByteArray(), Base64.NO_WRAP)
-    loadUrl(
-        """
-        javascript:(function() {
-            var parent = document.getElementsByTagName('head').item(0);
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.innerHTML = window.atob('$encodedJs');
-            parent.appendChild(script);
-        })()
-        """.trimToSingleLine()
-    )
-}
-
-fun createScript(js: String): String {
+fun createScriptTag(js: String): String {
     return """<script type="text/javascript">$js</script>""".trimIndent()
 }
 
 fun WebView.runJS(js: String) {
-    loadUrl("javascript:(function() { $js })()".trimToSingleLine())
+    evaluateJavascript("(function() { $js })()", null)
 }
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -58,8 +42,4 @@ fun WebView.setDefaultSettings() {
         allowContentAccess = true
         allowFileAccess = true
     }
-}
-
-private fun String.trimToSingleLine(): String {
-    return trimIndent().replace("\n", "")
 }

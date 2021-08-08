@@ -9,7 +9,7 @@ import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.USER_AGENT
 import com.livetl.android.data.stream.VideoIdParser
 import com.livetl.android.util.PreferencesHelper
-import com.livetl.android.util.createScript
+import com.livetl.android.util.createScriptTag
 import com.livetl.android.util.readFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
@@ -86,7 +86,7 @@ class PlayerViewModel @Inject constructor(
 
         val scripts = scriptsToInject
             .map { context.readFile(it) }
-            .joinToString("\n") { createScript(it) }
+            .joinToString("\n") { createScriptTag(it) }
 
         WebResourceResponse(
             mimeType,
