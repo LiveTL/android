@@ -77,7 +77,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'LiveTL/android'
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/playstore/release
+          releaseDirectory: app/build/outputs/bundle/playstoreRelease
           signingKeyBase64: ${{ secrets.KEY_B64 }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.PASSWORD }}
