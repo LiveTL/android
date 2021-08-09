@@ -63,12 +63,7 @@ class PlayerViewModel @Inject constructor(
                     "chat-interceptor.bundle.js",
                     "injector.bundle.js",
                     "chat.bundle.js",
-                )
-            }
-            // "https://www.youtube.com/embed/**"
-            url.startsWith("https://www.youtube.com/embed/") -> {
-                listOf(
-                    "fullscreen.bundle.js",
+                    "translatormode.bundle.js",
                 )
             }
             else -> emptyList()
