@@ -30,6 +30,7 @@ android {
             applicationIdSuffix '.dev'
         }
         release {
+            debuggable true 
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
