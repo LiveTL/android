@@ -89,13 +89,9 @@ fun Stream(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                val titleOffset = when (stream.title.startsWith('【')) {
-                    true -> 0.dp
-                    false -> 8.dp
-                }
                 Text(
                     stream.title.escapeHtmlEntities(),
-                    modifier = Modifier.padding(start = titleOffset),
+                    modifier = Modifier.padding(start = 8.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
