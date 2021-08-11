@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">設定</string>
+    <string name="about"></string>
+    <string name="about_discord" translatable="false"></string>
+    <string name="setting_feed_org"></string>
+    <string name="archives"></string>
+    <string name="streamed"></string>
+    <string name="cd_back"></string>
+    <string name="started_streaming"></string>
+    <string name="setting_group_streams_feed"></string>
+    <string name="refresh"></string>
+    <string name="upcoming"></string>
+    <string name="about_github" translatable="false"></string>
+    <string name="setting_thumbnail_backgrounds"></string>
+    <string name="setting_group_player"></string>
+    <string name="about_donate"></string>
+    <string name="show_welcome_screen"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="holodex_stream_info"></string>
+    <string name="live"></string>
+    <string name="copied_error"></string>
+    <string name="copied"></string>
+    <string name="licenses"></string>
+    <string name="about_website"></string>
+    <string name="about_version"></string>
+    <string name="setting_fullscreen"></string>
+    <string name="action_share"></string>
+    <string name="action_copy_link"></string>
+    <string name="action_open_in_youtube"></string>
+    <string name="welcome"></string>
+    <string name="cd_close"></string>
+    <string name="action_copy_text"></string>
+    <string name="select_a_stream"></string>
+    <string name="credits"></string>
 </resources>
