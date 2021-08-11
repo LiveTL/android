@@ -26,4 +26,18 @@ class NativeJavascriptInterface(
             foregroundWebview.runJS("window.postMessage($data, '*');")
         }
     }
+
+    @Suppress("UNUSED")
+    @JavascriptInterface
+    fun toggleFullscreen(isFullscreen: Boolean) {
+        Timber.d("Toggling fullscreen: $isFullscreen")
+        // TODO
+    }
+
+    @Suppress("UNUSED")
+    @JavascriptInterface
+    fun downloadText(text: String) {
+        Timber.d("Downloading text: $text")
+        // TODO
+    }
 }
