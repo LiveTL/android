@@ -82,7 +82,7 @@ jobs:
           set -x
           echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
-          if [[ ${{ github.event.ref }} ==*"-beta"* ]]
+          if [[ "${{ github.event.ref }}" ==*"-beta"* ]]
           then
             echo "GOOGLE_PLAY_TRACK=beta" >> $GITHUB_ENV
           else

@@ -7,6 +7,8 @@
        src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" />
 </a>
 
+Open beta: https://play.google.com/apps/testing/com.livetl.android
+
 Android app for LiveTL using [Jetpack Compose](https://developer.android.com/jetpack/compose) for the UI.
 
 
@@ -16,4 +18,5 @@ Android app for LiveTL using [Jetpack Compose](https://developer.android.com/jet
 Translations are done in [Weblate](https://hosted.weblate.org/projects/livetl/android/).
 
 ### Requirements
-- Android Studio
+- [Android Studio](https://developer.android.com/studio)
+- [Yarn](https://yarnpkg.com/)
