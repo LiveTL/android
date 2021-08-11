@@ -5,8 +5,6 @@ import android.content.pm.ApplicationInfo
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.webkit.WebSettingsCompat
-import androidx.webkit.WebViewFeature
 import com.livetl.android.BuildConfig
 
 fun createScriptTag(js: String): String {
@@ -25,9 +23,10 @@ fun WebView.setDefaultSettings() {
     }
 
     with(settings) {
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
-        }
+//        forcing dark results in occasionally unreadable text and buttons
+//        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+//            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
+//        }
 
         javaScriptEnabled = true
         domStorageEnabled = true
@@ -41,5 +40,8 @@ fun WebView.setDefaultSettings() {
         cacheMode = WebSettings.LOAD_DEFAULT
         allowContentAccess = true
         allowFileAccess = true
+//        desktop UAS to make the YT player default to the desktop version
+        userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/94.0.4585.0 Safari/537.36 Edg/94.0.972.2"
     }
 }
