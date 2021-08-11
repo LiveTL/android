@@ -111,4 +111,4 @@ jobs:
           releaseFile: ${{ env.SIGNED_RELEASE_FILE }}
           mappingFile: app/build/outputs/mapping/playstoreRelease/mapping.txt
           track: ${{ env.GOOGLE_PLAY_TRACK }}
-          whatsNewDirectory: distribution
+          whatsNewDirectory: distribution/whatsnew
