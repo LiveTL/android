@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings">設定</string>
+    <string name="welcome">ようこそ!</string>
+    <string name="cd_back">戻る</string>
 </resources>
