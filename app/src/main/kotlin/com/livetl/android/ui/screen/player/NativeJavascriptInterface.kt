@@ -29,15 +29,15 @@ class NativeJavascriptInterface(
 
     @Suppress("UNUSED")
     @JavascriptInterface
-    fun toggleFullscreen(isFullscreen: Boolean) {
-        Timber.d("Toggling fullscreen: $isFullscreen")
+    fun toggleFullscreen() {
+        Timber.d("Toggling fullscreen")
         // TODO
     }
 
     @Suppress("UNUSED")
     @JavascriptInterface
-    fun downloadText(text: String) {
-        Timber.d("Downloading text: $text")
+    fun downloadText(text: String, fileName: String) {
+        Timber.d("Downloading text to $fileName: $text")
         // TODO
     }
 }
