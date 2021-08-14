@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.livetl.android.R
 import com.livetl.android.data.holodex.Stream
@@ -35,7 +34,6 @@ fun StreamSheet(stream: Stream?) {
         return
     }
 
-    val insets = LocalWindowInsets.current
     val uriHandler = LocalUriHandler.current
 
     LazyColumn {
@@ -63,15 +61,11 @@ fun StreamSheet(stream: Stream?) {
                     style = MaterialTheme.typography.subtitle1,
                 )
 
-                Spacer(modifier = Modifier.requiredHeight(8.dp))
-                Divider()
-                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
 
                 StreamActions(stream.id)
 
-                Divider()
-
-                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
 
                 val styledDescription = textParser(stream.description)
                 ClickableText(
