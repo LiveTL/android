@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Public
-import androidx.compose.material.icons.outlined.Savings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,11 +95,6 @@ fun AboutScreen(
                         labelRes = R.string.about_github,
                         icon = Icons.Outlined.Code,
                         url = "https://github.com/LiveTL/android",
-                    )
-                    LinkIcon(
-                        labelRes = R.string.about_donate,
-                        icon = Icons.Outlined.Savings,
-                        url = "https://opencollective.com/livetl",
                     )
                 }
             }
