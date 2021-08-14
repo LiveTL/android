@@ -35,7 +35,8 @@ fun WebView.setDefaultSettings() {
         cacheMode = WebSettings.LOAD_DEFAULT
         allowContentAccess = true
         allowFileAccess = true
-//        desktop UAS to make the YT player default to the desktop version
+
+        // Desktop UAS to make the YT player default to the desktop version
         userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
             "(KHTML, like Gecko) Chrome/94.0.4585.0 Safari/537.36 Edg/94.0.972.2"
     }

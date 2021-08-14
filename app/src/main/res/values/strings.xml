@@ -11,8 +11,6 @@
     <string name="setting_group_streams_feed">Streams feed</string>
     <string name="setting_feed_org">Organization</string>
     <string name="setting_thumbnail_backgrounds">Thumbnail backgrounds</string>
-    <string name="setting_group_player">Player</string>
-    <string name="setting_fullscreen">Fullscreen</string>
 
     <string name="live">Live</string>
     <string name="started_streaming">Started %s</string>

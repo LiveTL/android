@@ -15,10 +15,10 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
     private val flowPrefs = FlowSharedPreferences(prefs)
 
     fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
+    fun wasPlayerFullscreen() = flowPrefs.getBoolean("player_fullscreen", false)
 
     fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
     fun showFeedThumbnailBackgrounds() = flowPrefs.getBoolean("feed_thumbnail_bg", false)
-    fun showPlayerFullscreen() = flowPrefs.getBoolean("show_fullscreen", false)
 }
 
 fun <T> Preference<Set<T>>.toggle(item: T) {

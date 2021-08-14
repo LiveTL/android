@@ -74,16 +74,6 @@ fun SettingsScreen(
             }
 
             item {
-                PreferenceGroupHeader(title = R.string.setting_group_player)
-            }
-            item {
-                SwitchPreferenceRow(
-                    title = R.string.setting_fullscreen,
-                    preference = viewModel.prefs.showPlayerFullscreen(),
-                )
-            }
-
-            item {
                 Spacer(Modifier.navigationBarsHeight())
             }
         }
