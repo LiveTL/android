@@ -7,8 +7,6 @@
     <string name="refresh">Refresh</string>
     <string name="about">About</string>
 
-    <string name="welcome">Welcome!</string>
-
     <string name="settings">Settings</string>
     <string name="setting_group_streams_feed">Streams feed</string>
     <string name="setting_feed_org">Organization</string>
@@ -36,6 +34,19 @@
     <string name="holodex_stream_info">Streams feed from Holodex</string>
     <string name="licenses">Open source licenses</string>
     <string name="show_welcome_screen">Show first launch welcome screen</string>
+
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_thank_you">Thank you for installing LiveTL!</string>
+    <string name="welcome_get_started">To get started, open a YouTube link, share a YouTube link to this app, or select a stream from the home feed.</string>
+    <string name="welcome_faq">Frequently asked questions</string>
+    <string name="welcome_faq_q_how_it_works">How does LiveTL work?</string>
+    <string name="welcome_faq_a_how_it_works">LiveTL is, at its core, a chat filter for YouTube streams. It helps foreign viewers better catch translations that other viewers are providing in the live chat. LiveTL does not automatically translate streams – instead, it picks up translations found in the chat.</string>
+    <string name="welcome_faq_q_trust">Can I trust LiveTL translations?</string>
+    <string name="welcome_faq_a_trust">LiveTL\'s translations are entirely crowdsourced, so there is no guarantee that they are accurate. ALWAYS take caution when sharing translations found in LiveTL.</string>
+    <string name="welcome_faq_q_no_translations">I don’t see any translations in the translations panel.</string>
+    <string name="welcome_faq_a_no_translations">If there are no translators in chat, LiveTL is unable to provide translations. Any messages properly tagged with a language (ex. [en], ESP:, etc.) will appear when they are available.</string>
+    <string name="welcome_faq_q_custom_filter">A translator is using their own style of language tags.</string>
+    <string name="welcome_faq_a_custom_filter">You can manually select additional users to filter in the settings.</string>
 
     <string name="action_copy_text">Copy text</string>
     <string name="copied">Copied to clipboard: %s</string>
