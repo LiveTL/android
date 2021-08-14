@@ -23,11 +23,6 @@ fun WebView.setDefaultSettings() {
     }
 
     with(settings) {
-//        forcing dark results in occasionally unreadable text and buttons
-//        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-//            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
-//        }
-
         javaScriptEnabled = true
         domStorageEnabled = true
         databaseEnabled = true
