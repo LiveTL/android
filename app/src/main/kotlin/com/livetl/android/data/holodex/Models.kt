@@ -34,6 +34,6 @@ data class Stream(
 @Serializable
 data class Channel(
     val name: String,
-    val org: String,
     val photo: String,
+    val org: String? = null,
 )
