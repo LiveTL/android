@@ -97,7 +97,7 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha06'
+    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha07'
 
     // Networking
     final ktor_version = '1.6.0'
@@ -110,7 +110,7 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.16.0'
+    final accompanist_version = '0.17.0'
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
