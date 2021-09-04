@@ -54,6 +54,7 @@ class PlayerViewModel @Inject constructor(
             )
         }
 
+        // TODO: parse manifest.json to do this?
         // Mimics script injection defined in extension's manifest.json
         val scriptsToInject = when {
             // "https://www.youtube.com/live_chat*",
