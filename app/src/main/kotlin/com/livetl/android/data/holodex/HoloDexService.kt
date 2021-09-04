@@ -2,6 +2,7 @@ package com.livetl.android.data.holodex
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
 import io.ktor.client.utils.buildHeaders
@@ -23,19 +24,17 @@ class HoloDexService @Inject constructor(
             url {
                 baseConfig()
                 path("api", "v2", "videos")
-                with(parameters) {
-                    append("status", "live,upcoming,past")
-                    append("lang", "all")
-                    append("type", "stream")
-                    append("include", "description,live_info")
-                    append("org", organization ?: "Hololive")
-                    append("sort", "start_scheduled")
-                    append("order", "desc")
-                    append("limit", "50")
-                    append("offset", "0")
-                    append("paginated", "<empty>")
-                    append("max_upcoming_hours", "48")
-                }
+                parameter("status", "live,upcoming,past")
+                parameter("lang", "all")
+                parameter("type", "stream")
+                parameter("include", "description,live_info")
+                parameter("org", organization ?: "Hololive")
+                parameter("sort", "start_scheduled")
+                parameter("order", "desc")
+                parameter("limit", "50")
+                parameter("offset", "0")
+                parameter("paginated", "<empty>")
+                parameter("max_upcoming_hours", "48")
             }
         }
 

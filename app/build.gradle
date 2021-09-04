@@ -154,6 +154,7 @@ tasks.withType(KotlinCompile).configureEach {
             "-Xopt-in=kotlin.Experimental",
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi",
             "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi",
             "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
             "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
