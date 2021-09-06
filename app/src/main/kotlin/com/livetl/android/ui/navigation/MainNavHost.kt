@@ -38,7 +38,7 @@ fun NavHostController.navigateToPlayer(urlOrId: String) {
 fun MainNavHost(
     startRoute: Route,
     setKeepScreenOn: (Boolean) -> Unit,
-    setFullscreen: (Boolean?) -> Unit,
+    setFullscreen: (Boolean) -> Unit,
 ): NavHostController {
     val navController = rememberNavController()
     val bottomSheetNavigator = rememberBottomSheetNavigator()

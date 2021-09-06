@@ -9,7 +9,7 @@ import timber.log.Timber
 class NativeJavascriptInterface(
     private val backgroundWebview: WebView,
     private val foregroundWebview: WebView,
-    private val toggleAppFullscreen: (Boolean?) -> Unit,
+    private val toggleAppFullscreen: () -> Unit,
 ) {
 
     @JavascriptInterface
@@ -32,7 +32,7 @@ class NativeJavascriptInterface(
     @JavascriptInterface
     fun toggleFullscreen() {
         Timber.d("Toggling fullscreen")
-        toggleAppFullscreen(null)
+        toggleAppFullscreen()
     }
 
     @Suppress("UNUSED")

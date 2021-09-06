@@ -93,11 +93,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun setFullscreen(enabled: Boolean?) {
-        val isCurrentlyDisabled = window.decorView.systemUiVisibility == View.SYSTEM_UI_FLAG_VISIBLE
-        val setToFullscreen = enabled ?: !isCurrentlyDisabled
-
-        if (setToFullscreen) {
+    private fun setFullscreen(enabled: Boolean) {
+        if (enabled) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -106,8 +103,6 @@ class MainActivity : ComponentActivity() {
         } else {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
-
-        prefs.wasPlayerFullscreen().set(setToFullscreen)
     }
 
     private fun handleVideoIntent(data: String?) {

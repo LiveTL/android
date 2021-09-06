@@ -21,6 +21,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.common.LoadingIndicator
+import com.livetl.android.util.collectAsState
 import com.livetl.android.util.setDefaultSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,13 +33,22 @@ import timber.log.Timber
 fun PlayerScreen(
     videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
-    toggleFullscreen: (Boolean?) -> Unit,
+    toggleFullscreen: (Boolean) -> Unit,
     viewModel: PlayerViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val isFullscreen by viewModel.prefs.wasPlayerFullscreen().collectAsState()
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
+
+    DisposableEffect(isFullscreen) {
+        toggleFullscreen(isFullscreen)
+
+        onDispose {
+            toggleFullscreen(false)
+        }
+    }
 
     val webviews = remember {
         val backgroundWebview = WebView(context).apply {
@@ -65,7 +75,7 @@ fun PlayerScreen(
         val jsInterface = NativeJavascriptInterface(
             backgroundWebview,
             foregroundWebview,
-            toggleFullscreen,
+            viewModel::toggleFullscreen,
         )
         backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
         foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
@@ -92,11 +102,9 @@ fun PlayerScreen(
 
     DisposableEffect(Unit) {
         setKeepScreenOn(true)
-        toggleFullscreen(viewModel.prefs.wasPlayerFullscreen().get())
 
         onDispose {
             setKeepScreenOn(false)
-            toggleFullscreen(false)
 
             webviews.backgroundWebview.destroy()
             webviews.foregroundWebview.destroy()
