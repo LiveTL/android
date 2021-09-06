@@ -103,14 +103,14 @@ dependencies {
     final ktor_version = '1.6.0'
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0-RC'
 
     // Image loading
     final coil_version = '1.3.2'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.17.0'
+    final accompanist_version = '0.18.0'
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
