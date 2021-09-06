@@ -11,6 +11,7 @@ import com.livetl.android.data.stream.VideoIdParser
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.createScriptTag
 import com.livetl.android.util.readFile
+import com.livetl.android.util.toggle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -88,6 +89,10 @@ class PlayerViewModel @Inject constructor(
             StandardCharsets.UTF_8.toString(),
             ByteArrayInputStream((response.readText() + scripts).toByteArray(StandardCharsets.UTF_8)),
         )
+    }
+
+    fun toggleFullscreen() {
+        prefs.wasPlayerFullscreen().toggle()
     }
 }
 
