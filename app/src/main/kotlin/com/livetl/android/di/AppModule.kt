@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -16,6 +17,10 @@ object AppModule {
     @Provides
     @Singleton
     fun httpClient() = HttpClient(Android)
+
+    @Provides
+    @Singleton
+    fun okhttpClient() = OkHttpClient.Builder().build()
 
     @Provides
     @Singleton
