@@ -10,19 +10,16 @@ import com.livetl.android.data.stream.USER_AGENT
 import com.livetl.android.data.stream.VideoIdParser
 import com.livetl.android.util.DownloadUtil
 import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.await
 import com.livetl.android.util.createScriptTag
+import com.livetl.android.util.get
 import com.livetl.android.util.readFile
 import com.livetl.android.util.toggle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import java.io.ByteArrayInputStream
-import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +27,7 @@ class PlayerViewModel @Inject constructor(
     private val streamService: StreamService,
     private val videoIdParser: VideoIdParser,
     private val downloadUtil: DownloadUtil,
-    private val client: HttpClient,
+    private val okhttpClient: OkHttpClient,
     val prefs: PreferencesHelper,
 ) : ViewModel() {
 
@@ -43,7 +40,7 @@ class PlayerViewModel @Inject constructor(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun getInjectedResponse(context: Context, url: String): WebResourceResponse? = withContext(Dispatchers.IO) {
+    suspend fun getInterceptedResponse(context: Context, url: String): WebResourceResponse? = withContext(Dispatchers.IO) {
         val fileExtension = MimeTypeMap.getFileExtensionFromUrl(url)
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
 
@@ -52,7 +49,7 @@ class PlayerViewModel @Inject constructor(
             val assetPath = url.substringAfter(LOCAL_ASSET_BASEURL)
             return@withContext WebResourceResponse(
                 mimeType,
-                StandardCharsets.UTF_8.toString(),
+                Charsets.UTF_8.toString(),
                 context.assets.open(assetPath),
             )
         }
@@ -77,11 +74,12 @@ class PlayerViewModel @Inject constructor(
             return@withContext null
         }
 
-        val response = client.get<HttpResponse>(url) {
-            headers {
-                set("User-Agent", USER_AGENT)
+        val response = okhttpClient.await(
+            get {
+                url(url)
+                addHeader("User-Agent", USER_AGENT)
             }
-        }
+        )
 
         val scripts = scriptsToInject
             .map { context.readFile(it) }
@@ -89,8 +87,8 @@ class PlayerViewModel @Inject constructor(
 
         WebResourceResponse(
             mimeType,
-            StandardCharsets.UTF_8.toString(),
-            ByteArrayInputStream((response.readText() + scripts).toByteArray(StandardCharsets.UTF_8)),
+            Charsets.UTF_8.toString(),
+            ByteArrayInputStream((response.body!!.string() + scripts).toByteArray(Charsets.UTF_8)),
         )
     }
 

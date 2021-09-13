@@ -1,18 +1,16 @@
 package com.livetl.android.data.stream
 
 import com.livetl.android.data.holodex.HoloDexService
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
+import com.livetl.android.util.await
+import com.livetl.android.util.get
+import okhttp3.OkHttpClient
 import timber.log.Timber
 import javax.inject.Inject
 
 class StreamService @Inject constructor(
     private val holoDexService: HoloDexService,
     private val videoIdParser: VideoIdParser,
-    private val client: HttpClient,
+    private val okhttpClient: OkHttpClient,
 ) {
 
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
@@ -36,12 +34,14 @@ class StreamService @Inject constructor(
     }
 
     private suspend fun getChatContinuation(videoId: String): String? {
-        val result = client.get<HttpResponse>("https://www.youtube.com/watch?v=$videoId") {
-            headers {
-                set("User-Agent", USER_AGENT)
-            }
-        }
-        val matches = CHAT_CONTINUATION_PATTERN.matcher(result.readText())
+        val response = okhttpClient
+            .await(
+                get {
+                    url("https://www.youtube.com/watch?v=$videoId")
+                    header("User-Agent", USER_AGENT)
+                }
+            )
+        val matches = CHAT_CONTINUATION_PATTERN.matcher(response.body?.string().orEmpty())
         if (matches.find()) {
             return matches.group(1)
         } else {

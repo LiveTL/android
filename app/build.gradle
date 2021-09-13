@@ -100,9 +100,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-compose:2.4.0-alpha08'
 
     // Networking
-    final ktor_version = '1.6.0'
-    implementation "io.ktor:ktor-client-core:$ktor_version"
-    implementation "io.ktor:ktor-client-android:$ktor_version"
     final okhttpVersion = "4.9.1"
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0"

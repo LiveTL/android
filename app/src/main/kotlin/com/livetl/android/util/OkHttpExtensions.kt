@@ -12,8 +12,6 @@ suspend fun OkHttpClient.await(request: Request) = newCall(request).await()
 fun get(block: Request.Builder.() -> Unit) = Request.Builder().apply(block).build()
 
 inline fun <reified T> Response.parseAs(json: Json): T {
-    this.use {
-        val responseBody = it.body?.string().orEmpty()
-        return json.decodeFromString(responseBody)
-    }
+    val responseBody = body?.string().orEmpty()
+    return json.decodeFromString(responseBody)
 }

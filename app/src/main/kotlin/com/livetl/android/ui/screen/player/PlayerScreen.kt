@@ -66,7 +66,7 @@ fun PlayerScreen(
                 ): WebResourceResponse? {
                     val url = request.url.toString()
 
-                    return runBlocking { viewModel.getInjectedResponse(context, url) }
+                    return runBlocking { viewModel.getInterceptedResponse(context, url) }
                         ?: super.shouldInterceptRequest(view, request)
                 }
             }
