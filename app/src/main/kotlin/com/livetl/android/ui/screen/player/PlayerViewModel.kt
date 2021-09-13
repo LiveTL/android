@@ -70,7 +70,9 @@ class PlayerViewModel @Inject constructor(
             else -> emptyList()
         }
 
-        if (scriptsToInject.isEmpty()) {
+        val shouldStripHeaders = url.startsWith("https://www.youtube.com/")
+
+        if (scriptsToInject.isEmpty() && !shouldStripHeaders) {
             return@withContext null
         }
 
@@ -81,6 +83,14 @@ class PlayerViewModel @Inject constructor(
             }
         )
 
+        val strippedResponse = when (shouldStripHeaders) {
+            true -> response.newBuilder()
+                .removeHeader("content-security-policy")
+                .removeHeader("x-frame-options")
+                .build()
+            false -> response
+        }
+
         val scripts = scriptsToInject
             .map { context.readFile(it) }
             .joinToString("\n") { createScriptTag(it) }
@@ -88,7 +98,7 @@ class PlayerViewModel @Inject constructor(
         WebResourceResponse(
             mimeType,
             Charsets.UTF_8.toString(),
-            ByteArrayInputStream((response.body!!.string() + scripts).toByteArray(Charsets.UTF_8)),
+            ByteArrayInputStream((strippedResponse.body!!.string() + scripts).toByteArray(Charsets.UTF_8)),
         )
     }
 
