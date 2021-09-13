@@ -9,7 +9,8 @@ import timber.log.Timber
 class NativeJavascriptInterface(
     private val backgroundWebview: WebView,
     private val foregroundWebview: WebView,
-    private val toggleAppFullscreen: () -> Unit,
+    private val toggleFullscreenCallback: () -> Unit,
+    private val downloadTextCallback: (String, String) -> Unit,
 ) {
 
     @JavascriptInterface
@@ -32,13 +33,13 @@ class NativeJavascriptInterface(
     @JavascriptInterface
     fun toggleFullscreen() {
         Timber.d("Toggling fullscreen")
-        toggleAppFullscreen()
+        toggleFullscreenCallback()
     }
 
     @Suppress("UNUSED")
     @JavascriptInterface
     fun downloadText(text: String, fileName: String) {
         Timber.d("Downloading text to $fileName: $text")
-        // TODO
+        downloadTextCallback(text, fileName)
     }
 }

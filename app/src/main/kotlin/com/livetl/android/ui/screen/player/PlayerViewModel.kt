@@ -8,6 +8,7 @@ import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.USER_AGENT
 import com.livetl.android.data.stream.VideoIdParser
+import com.livetl.android.util.DownloadUtil
 import com.livetl.android.util.PreferencesHelper
 import com.livetl.android.util.createScriptTag
 import com.livetl.android.util.readFile
@@ -28,6 +29,7 @@ import javax.inject.Inject
 class PlayerViewModel @Inject constructor(
     private val streamService: StreamService,
     private val videoIdParser: VideoIdParser,
+    private val downloadUtil: DownloadUtil,
     private val client: HttpClient,
     val prefs: PreferencesHelper,
 ) : ViewModel() {
@@ -94,6 +96,10 @@ class PlayerViewModel @Inject constructor(
 
     fun toggleFullscreen() {
         prefs.wasPlayerFullscreen().toggle()
+    }
+
+    fun downloadText(text: String, fileName: String) {
+        downloadUtil.saveTextToStorage(text, fileName)
     }
 }
 
