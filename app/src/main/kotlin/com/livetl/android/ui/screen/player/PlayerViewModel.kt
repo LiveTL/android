@@ -54,19 +54,21 @@ class PlayerViewModel @Inject constructor(
             )
         }
 
-        // TODO: parse manifest.json to do this?
+        // TODO: parse manifest.json to do this
         // Mimics script injection defined in extension's manifest.json
         val scriptsToInject = when {
             // "https://www.youtube.com/live_chat*",
             // "https://www.youtube.com/live_chat_replay*"
-            url.startsWith("https://www.youtube.com/live_chat") -> {
-                listOf(
-                    "chat-interceptor.bundle.js",
-                    "injector.bundle.js",
-                    "chat.bundle.js",
-                    "translatormode.bundle.js",
-                )
-            }
+            url.startsWith("https://www.youtube.com/live_chat") -> listOf(
+                "chat-interceptor.bundle.js",
+                "injector.bundle.js",
+                "chat.bundle.js",
+                "translatormode.bundle.js",
+            )
+            // "https://www.youtube.com/error*?*"
+            url.startsWith("https://www.youtube.com/error") -> listOf(
+                "video_embedder.bundle.js",
+            )
             else -> emptyList()
         }
 
