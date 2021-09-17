@@ -1,11 +1,7 @@
-New in the latest build:
-- Fixed duplicated chat messages
-- Fix crash when viewing streams list
+New in v6.2.0:
 
-New in v6.2.0 in general:
-- Back to a hybrid app approach (i.e. player is the same as the web extension)
-- Feed now sources data from HoloDex, with the ability to choose different organizations
-- Feed thumbnail background option
+- Updated hybrid app with a newer version of the LiveTL extension!
+- New streams feed to find something to watch. Data courtesy of HoloDex!
 
 ---
 
