@@ -17,8 +17,8 @@ android {
         applicationId "com.livetl.android"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 267
-        versionName "6.2.0-beta07"
+        versionCode 268
+        versionName "6.2.0"
     }
 
     sourceSets {
