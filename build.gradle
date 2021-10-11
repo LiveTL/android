@@ -1,8 +1,8 @@
 buildscript {
     ext {
-        kotlin_version = '1.5.30'
-        compose_version = '1.1.0-alpha03'
-        about_libs_version = '8.9.1'
+        kotlin_version = '1.5.31'
+        compose_version = '1.1.0-alpha05'
+        about_libs_version = '8.9.3'
         hilt_version = '2.38.1'
     }
     repositories {
