@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorPalette = darkColors(
     primary = Color(0xFF0094F7),
     primaryVariant = Color(0xFF004D81),
-    secondary = Color(0xFF4CAF50),
+    secondary = Color(0xFF0094F7),
 )
 
 @Composable
@@ -16,7 +16,6 @@ fun LiveTLTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colors = DarkColorPalette,
         typography = typography,
-        shapes = shapes,
         content = content
     )
 }
