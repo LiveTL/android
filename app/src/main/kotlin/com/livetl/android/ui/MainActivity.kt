@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var prefs: PreferencesHelper
 
-    private lateinit var navController: NavHostController
+    private var navController: NavHostController? = null
     private var wakeLock: PowerManager.WakeLock? = null
 
     @SuppressLint("WakelockTimeout")
@@ -106,6 +106,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleVideoIntent(data: String?) {
-        data?.let { navController.navigateToPlayer(it) }
+        data?.let { navController?.navigateToPlayer(it) }
     }
 }
