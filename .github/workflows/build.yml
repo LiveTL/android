@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - stable
     tags:
       - v*
   pull_request:
@@ -34,7 +35,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Copy CI gradle.properties
         run: |
@@ -42,12 +43,9 @@ jobs:
           cp .github/runner-files/ci-gradle.properties ~/.gradle/gradle.properties
 
       - name: Build app
-        uses: gradle/gradle-command-action@v1
+        uses: gradle/gradle-command-action@v2
         with:
           arguments: copyExtensionArtifacts bundlePlaystoreRelease
-          distributions-cache-enabled: true
-          dependencies-cache-enabled: true
-          configuration-cache-enabled: true
 
       # Sign app bundle and create release for tags
 
