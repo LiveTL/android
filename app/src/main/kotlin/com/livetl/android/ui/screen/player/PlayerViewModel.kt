@@ -63,8 +63,8 @@ class PlayerViewModel @Inject constructor(
             url.startsWith("https://www.youtube.com/live_chat") -> {
                 listOf(
                     "chat-interceptor.bundle.js",
-                    "injector.bundle.js",
                     "chat.bundle.js",
+                    "injector.bundle.js",
                     "translatormode.bundle.js",
                 )
             }
