@@ -14,6 +14,7 @@ import com.livetl.android.util.readFile
 import com.livetl.android.util.toggle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
+import io.ktor.client.features.expectSuccess
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
@@ -67,6 +68,11 @@ class PlayerViewModel @Inject constructor(
                     "translatormode.bundle.js",
                 )
             }
+            url.startsWith("https://www.youtube.com/error") -> {
+                listOf(
+                    "video_embedder.bundle.js"
+                )
+            }
             else -> emptyList()
         }
 
@@ -75,6 +81,10 @@ class PlayerViewModel @Inject constructor(
         }
 
         val response = client.get<HttpResponse>(url) {
+            // Don't throw an exception on the error 404 page that's
+            // used for the player
+            expectSuccess = false
+
             headers {
                 set("User-Agent", USER_AGENT)
             }
