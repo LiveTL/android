@@ -49,7 +49,6 @@ fun HomeScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val showThumbnailBackground by viewModel.prefs.showFeedThumbnailBackgrounds().collectAsState()
     val refreshingFeed = rememberSwipeRefreshState(false)
 
     val peekStream: (Stream) -> Unit = { stream: Stream ->
@@ -116,7 +115,6 @@ fun HomeScreen(
                             streams = viewModel.feed!!.live,
                             timestampFormatStringRes = R.string.started_streaming,
                             timestampSupplier = { it.start_actual },
-                            showThumbnailBackground = showThumbnailBackground,
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
@@ -124,7 +122,6 @@ fun HomeScreen(
                             headingRes = R.string.upcoming,
                             streams = viewModel.feed!!.upcoming,
                             timestampSupplier = { it.start_scheduled },
-                            showThumbnailBackground = showThumbnailBackground,
                             onClick = navigateToStream,
                             onLongClick = peekStream,
                         )
@@ -132,7 +129,6 @@ fun HomeScreen(
                             headingRes = R.string.archives,
                             streams = viewModel.feed!!.ended,
                             timestampFormatStringRes = R.string.streamed,
-                            showThumbnailBackground = showThumbnailBackground,
                             timestampSupplier = { it.end_actual },
                             onClick = navigateToStream,
                             onLongClick = peekStream,
@@ -152,7 +148,6 @@ private fun LazyListScope.streamItems(
     @StringRes headingRes: Int,
     streams: List<Stream>,
     @StringRes timestampFormatStringRes: Int? = null,
-    showThumbnailBackground: Boolean,
     timestampSupplier: (Stream) -> String?,
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
@@ -177,7 +172,6 @@ private fun LazyListScope.streamItems(
                 stream,
                 timestampFormatStringRes,
                 timestampSupplier,
-                showThumbnailBackground,
                 onClick,
                 onLongClick,
             )

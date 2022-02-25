@@ -67,13 +67,6 @@ fun SettingsScreen(
             }
 
             item {
-                SwitchPreferenceRow(
-                    title = R.string.setting_thumbnail_backgrounds,
-                    preference = viewModel.prefs.showFeedThumbnailBackgrounds(),
-                )
-            }
-
-            item {
                 Spacer(Modifier.navigationBarsHeight())
             }
         }

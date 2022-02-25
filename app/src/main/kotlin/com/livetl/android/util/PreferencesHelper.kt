@@ -18,7 +18,6 @@ open class PreferencesHelper @Inject constructor(@ApplicationContext context: Co
     fun wasPlayerFullscreen() = flowPrefs.getBoolean("player_fullscreen", false)
 
     fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
-    fun showFeedThumbnailBackgrounds() = flowPrefs.getBoolean("feed_thumbnail_bg", false)
 }
 
 fun <T> Preference<Set<T>>.toggle(item: T) {

@@ -47,24 +47,21 @@ fun Stream(
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
-    showThumbnailBackground: Boolean,
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
 ) {
     val context = LocalContext.current
 
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
-        if (showThumbnailBackground) {
-            Image(
-                modifier = Modifier.fillMaxSize().alpha(0.2f),
-                painter = rememberImagePainter(stream.thumbnail) {
-                    transformations(BlurTransformation(context))
-                    crossfade(true)
-                },
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-            )
-        }
+        Image(
+            modifier = Modifier.fillMaxSize().alpha(0.2f),
+            painter = rememberImagePainter(stream.thumbnail) {
+                transformations(BlurTransformation(context))
+                crossfade(true)
+            },
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+        )
 
         Row(
             modifier = modifier
@@ -147,7 +144,6 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
-            showThumbnailBackground = false,
             onClick = {},
             onLongClick = {},
         )
@@ -166,7 +162,6 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
-            showThumbnailBackground = true,
             onClick = {},
             onLongClick = {},
         )
