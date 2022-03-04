@@ -64,7 +64,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
-    
+
     lint {
         abortOnError false
         disable 'MissingTranslation'
@@ -110,6 +110,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -154,5 +156,6 @@ tasks.withType(KotlinCompile).configureEach {
             "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
             "-Xopt-in=coil.annotation.ExperimentalCoilApi",
             "-Xopt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
+            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
     ]
 }

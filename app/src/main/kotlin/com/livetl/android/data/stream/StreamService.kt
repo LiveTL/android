@@ -1,6 +1,6 @@
 package com.livetl.android.data.stream
 
-import com.livetl.android.data.holodex.HoloDexService
+import com.livetl.android.data.feed.FeedService
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -10,7 +10,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class StreamService @Inject constructor(
-    private val holoDexService: HoloDexService,
+    private val feedService: FeedService,
     private val videoIdParser: VideoIdParser,
     private val client: HttpClient,
 ) {
@@ -18,7 +18,7 @@ class StreamService @Inject constructor(
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
         val videoId = videoIdParser.getVideoId(pageUrl)
         Timber.d("Fetching stream: $videoId")
-        val stream = holoDexService.getVideoInfo(videoId)
+        val stream = feedService.getVideoInfo(videoId)
 
         val chatContinuation: String? = when (stream.isLive) {
             true -> null

@@ -1,44 +1,34 @@
 package com.livetl.android.ui.screen.home
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.Surface
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
-import com.livetl.android.data.holodex.Stream
-import com.livetl.android.ui.screen.home.composable.Stream
+import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.composable.StreamSheet
-import com.livetl.android.util.collectAsState
-import kotlinx.coroutines.Dispatchers
+import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun HomeScreen(
@@ -48,8 +38,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-    val refreshingFeed = rememberSwipeRefreshState(false)
+    val pagerState = rememberPagerState()
 
     val peekStream: (Stream) -> Unit = { stream: Stream ->
         coroutineScope.launch {
@@ -58,123 +47,72 @@ fun HomeScreen(
     }
     val navigateToStream = { stream: Stream -> navigateToPlayer(stream.id) }
 
-    fun refreshFeed() {
-        coroutineScope.launch {
-            refreshingFeed.isRefreshing = true
-            viewModel.loadFeed()
-            withContext(Dispatchers.Main) {
-                refreshingFeed.isRefreshing = false
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        refreshFeed()
-    }
-
     ModalBottomSheetLayout(
         sheetState = viewModel.sheetState,
         sheetContent = { StreamSheet(viewModel.sheetStream) },
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.app_name))
-                    },
-                    actions = {
-                        IconButton(onClick = { navigateToSettings() }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = stringResource(R.string.settings)
-                            )
-                        }
-                        IconButton(onClick = { navigateToAbout() }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Info,
-                                contentDescription = stringResource(R.string.about)
-                            )
-                        }
-                    },
-                    contentPadding = rememberInsetsPaddingValues(
-                        LocalWindowInsets.current.statusBars,
-                        applyBottom = false,
-                    ),
-                )
-            },
-        ) { contentPadding ->
-            SwipeRefresh(
-                modifier = Modifier.fillMaxWidth().padding(contentPadding),
-                state = refreshingFeed,
-                onRefresh = { refreshFeed() },
-            ) {
-                if (viewModel.feed != null) {
-                    LazyColumn {
-                        streamItems(
-                            headingRes = R.string.live,
-                            streams = viewModel.feed!!.live,
-                            timestampFormatStringRes = R.string.started_streaming,
-                            timestampSupplier = { it.start_actual },
-                            onClick = navigateToStream,
-                            onLongClick = peekStream,
-                        )
-                        streamItems(
-                            headingRes = R.string.upcoming,
-                            streams = viewModel.feed!!.upcoming,
-                            timestampSupplier = { it.start_scheduled },
-                            onClick = navigateToStream,
-                            onLongClick = peekStream,
-                        )
-                        streamItems(
-                            headingRes = R.string.archives,
-                            streams = viewModel.feed!!.ended,
-                            timestampFormatStringRes = R.string.streamed,
-                            timestampSupplier = { it.end_actual },
-                            onClick = navigateToStream,
-                            onLongClick = peekStream,
-                        )
+                Column {
+                    TopAppBar(
+                        title = {
+                            Text(text = stringResource(R.string.app_name))
+                        },
+                        actions = {
+                            IconButton(onClick = { navigateToSettings() }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Settings,
+                                    contentDescription = stringResource(R.string.settings)
+                                )
+                            }
+                            IconButton(onClick = { navigateToAbout() }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Info,
+                                    contentDescription = stringResource(R.string.about)
+                                )
+                            }
+                        },
+                        contentPadding = rememberInsetsPaddingValues(
+                            LocalWindowInsets.current.statusBars,
+                            applyBottom = false,
+                        ),
+                    )
 
-                        item {
-                            Spacer(Modifier.navigationBarsHeight())
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                            )
+                        }
+                    ) {
+                        // Add tabs for all of our pages
+                        viewModel.tabs.forEachIndexed { index, tab ->
+                            Tab(
+                                text = { Text(stringResource(tab.first.headingRes)) },
+                                selected = pagerState.currentPage == index,
+                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) }},
+                            )
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-private fun LazyListScope.streamItems(
-    @StringRes headingRes: Int,
-    streams: List<Stream>,
-    @StringRes timestampFormatStringRes: Int? = null,
-    timestampSupplier: (Stream) -> String?,
-    onClick: (Stream) -> Unit,
-    onLongClick: (Stream) -> Unit,
-) {
-    if (streams.isNotEmpty()) {
-        stickyHeader {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colors.surface.copy(alpha = 0.9f),
-            ) {
-                Text(
-                    text = stringResource(headingRes),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    fontSize = 18.sp,
+            },
+        ) { contentPadding ->
+            HorizontalPager(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding),
+                count = viewModel.tabs.size,
+                state = pagerState,
+            ) { page ->
+                val (status, tabViewModel) = viewModel.tabs[page]
+                StreamsTab(
+                    navigateToStream = navigateToStream,
+                    peekStream = peekStream,
+                    status = status,
+                    viewModel = tabViewModel,
                 )
             }
-        }
-
-        items(streams) { stream ->
-            Stream(
-                Modifier,
-                stream,
-                timestampFormatStringRes,
-                timestampSupplier,
-                onClick,
-                onLongClick,
-            )
         }
     }
 }
