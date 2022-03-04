@@ -19,7 +19,7 @@ data class Stream(
     val title: String,
     val status: String,
     // e.g. "2021-07-19T14:00:00.000Z"
-    val start_scheduled: String,
+    val start_scheduled: String? = null,
     val start_actual: String? = null,
     val end_actual: String? = null,
     val description: String,
