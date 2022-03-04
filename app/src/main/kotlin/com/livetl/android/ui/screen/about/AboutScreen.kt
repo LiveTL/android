@@ -31,8 +31,8 @@ import com.google.accompanist.insets.ui.TopAppBar
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.ui.common.LinkIcon
-import com.livetl.android.ui.common.preference.PreferenceGroupHeader
-import com.livetl.android.ui.common.preference.PreferenceRow
+import com.livetl.android.ui.common.PreferenceGroupHeader
+import com.livetl.android.ui.common.PreferenceRow
 
 @Composable
 fun AboutScreen(

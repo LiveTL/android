@@ -1,4 +1,4 @@
-package com.livetl.android.ui.common.preference
+package com.livetl.android.ui.common
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable

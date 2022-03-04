@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(
     val tabs = StreamStatus.values().map {
         it to StreamsTabViewModel(
             feedService = feedService,
-            organization = prefs.feedOrganization().get(),
+            prefs = prefs,
             status = it,
         )
     }

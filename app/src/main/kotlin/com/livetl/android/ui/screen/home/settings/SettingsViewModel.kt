@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.settings
+package com.livetl.android.ui.screen.home.settings
 
 import androidx.lifecycle.ViewModel
 import com.livetl.android.util.PreferencesHelper

@@ -47,7 +47,9 @@ fun StreamsTab(
         state = refreshingFeed,
         onRefresh = { refreshFeed() },
     ) {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
             items(viewModel.streams) { stream ->
                 Stream(
                     modifier = Modifier,
