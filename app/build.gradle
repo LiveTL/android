@@ -11,12 +11,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.livetl.android"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 272
         versionName "6.4.0-beta03"
     }
