@@ -54,7 +54,7 @@ fun Stream(
 
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
         Image(
-            modifier = Modifier.fillMaxSize().alpha(0.2f),
+            modifier = Modifier.matchParentSize().alpha(0.2f),
             painter = rememberImagePainter(stream.thumbnail) {
                 transformations(BlurTransformation(context))
                 crossfade(true)
