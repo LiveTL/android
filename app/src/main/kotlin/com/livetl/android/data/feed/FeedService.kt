@@ -9,6 +9,7 @@ import io.ktor.client.utils.buildHeaders
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -45,7 +46,7 @@ class FeedService @Inject constructor(
         response.items
     }
 
-    suspend fun getVideoInfo(videoId: String): Stream = withContext(Dispatchers.IO) {
+    suspend fun getVideoInfo(videoId: String): Stream = withContext(SupervisorJob() + Dispatchers.IO) {
         val result = client.get<HttpResponse> {
             url {
                 baseConfig()

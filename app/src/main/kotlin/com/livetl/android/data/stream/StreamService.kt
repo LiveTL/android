@@ -2,6 +2,7 @@ package com.livetl.android.data.stream
 
 import com.livetl.android.data.feed.FeedService
 import io.ktor.client.HttpClient
+import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
@@ -17,22 +18,36 @@ class StreamService @Inject constructor(
 
     suspend fun getStreamInfo(pageUrl: String): StreamInfo {
         val videoId = videoIdParser.getVideoId(pageUrl)
-        Timber.d("Fetching stream: $videoId")
-        val stream = feedService.getVideoInfo(videoId)
 
-        val chatContinuation: String? = when (stream.isLive) {
-            true -> null
-            false -> getChatContinuation(stream.id)
+        return try {
+            Timber.d("Fetching stream: $videoId")
+            val stream = feedService.getVideoInfo(videoId)
+
+            val chatContinuation: String? = when (stream.isLive) {
+                true -> null
+                false -> getChatContinuation(stream.id)
+            }
+
+            StreamInfo(
+                videoId = stream.id,
+                title = stream.title,
+                author = stream.channel.name,
+                shortDescription = stream.description,
+                isLive = stream.isLive,
+                chatContinuation = chatContinuation,
+            )
+        } catch (e: ClientRequestException) {
+            Timber.e(e, "Error getting video info for $videoId from HoloDex")
+
+            StreamInfo(
+                videoId = videoId,
+                title = "",
+                author = "",
+                shortDescription = "",
+                isLive = false,
+                chatContinuation = getChatContinuation(videoId),
+            )
         }
-
-        return StreamInfo(
-            videoId = stream.id,
-            title = stream.title,
-            author = stream.channel.name,
-            shortDescription = stream.description,
-            isLive = stream.isLive,
-            chatContinuation = chatContinuation,
-        )
     }
 
     private suspend fun getChatContinuation(videoId: String): String? {
@@ -42,16 +57,14 @@ class StreamService @Inject constructor(
             }
         }
         val matches = CHAT_CONTINUATION_PATTERN.matcher(result.readText())
-        if (matches.find()) {
-            return matches.group(1)
+        return if (matches.find()) {
+            matches.group(1)
         } else {
-            // TODO: need to handle this in the UI
-            throw NoChatContinuationFoundException(videoId)
+            Timber.w("Chat continuation found for $videoId")
+            null
         }
     }
 }
-
-class NoChatContinuationFoundException(videoId: String) : Exception("Continuation not found for $videoId")
 
 const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.54"
 private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }

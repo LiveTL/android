@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("WakelockTimeout")
     private fun setKeepScreenOn(enabled: Boolean) {
         if (enabled) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -94,14 +95,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setFullscreen(enabled: Boolean) {
-        if (enabled) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+        window.decorView.systemUiVisibility = if (enabled) {
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            View.SYSTEM_UI_FLAG_VISIBLE
         }
     }
 
