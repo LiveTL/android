@@ -118,7 +118,7 @@ dependencies {
     implementation 'com.github.tfcporciuncula.flow-preferences:flow-preferences:1.4.0'
 
     // OSS licenses
-    implementation "com.mikepenz:aboutlibraries-core:$about_libs_version"
+    implementation "com.mikepenz:aboutlibraries-compose:$about_libs_version"
 }
 
 // Requires the submodules to already be initialized, i.e.:

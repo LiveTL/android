@@ -2,7 +2,7 @@ buildscript {
     ext {
         kotlin_version = '1.6.21'
         compose_version = '1.2.0-beta03'
-        about_libs_version = '8.9.4'
+        about_libs_version = '10.3.0'
         hilt_version = '2.42'
     }
     repositories {
