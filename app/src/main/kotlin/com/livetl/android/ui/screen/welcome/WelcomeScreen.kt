@@ -80,7 +80,10 @@ fun WelcomeScreen(
                     )
                 }
 
-                items(FAQ) {
+                items(
+                    items = FAQ,
+                    key = { it.first },
+                ) {
                     Text(
                         modifier = Modifier.padding(vertical = 8.dp),
                         text = stringResource(it.first),

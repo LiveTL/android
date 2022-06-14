@@ -50,7 +50,10 @@ fun StreamsTab(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            items(viewModel.streams) { stream ->
+            items(
+                items = viewModel.streams,
+                key = { it.id },
+            ) { stream ->
                 Stream(
                     modifier = Modifier,
                     stream = stream,

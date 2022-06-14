@@ -62,7 +62,10 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .padding(contentPadding),
         ) {
-            items(ORGANIZATIONS) { organization ->
+            items(
+                items = ORGANIZATIONS,
+                key = { it },
+            ) { organization ->
                 val selectOrganization = { viewModel.prefs.feedOrganization().set(organization) }
 
                 Row(
