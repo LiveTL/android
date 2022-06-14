@@ -20,6 +20,6 @@ fun Date.toRelativeString(): String {
     return DateUtils.getRelativeTimeSpanString(
         time,
         Instant.now().toEpochMilli(),
-        DateUtils.MINUTE_IN_MILLIS
+        DateUtils.MINUTE_IN_MILLIS,
     ).toString()
 }

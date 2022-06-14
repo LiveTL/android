@@ -40,7 +40,7 @@ fun LinkIcon(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null
+            contentDescription = null,
         )
         Text(stringResource(labelRes))
     }

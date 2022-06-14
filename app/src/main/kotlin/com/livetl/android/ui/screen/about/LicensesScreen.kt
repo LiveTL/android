@@ -48,7 +48,7 @@ fun LicensesScreen(
                     IconButton(onClick = { onBackPressed() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_back)
+                            contentDescription = stringResource(R.string.cd_back),
                         )
                     }
                 },
@@ -86,7 +86,7 @@ private fun LicenseItem(library: Library) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         Text("${library.libraryName} ${library.libraryVersion}")
         CompositionLocalProvider(

@@ -19,10 +19,10 @@ import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.HomeViewModel
-import com.livetl.android.ui.screen.player.PlayerScreen
-import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.home.settings.SettingsScreen
 import com.livetl.android.ui.screen.home.settings.SettingsViewModel
+import com.livetl.android.ui.screen.player.PlayerScreen
+import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.welcome.WelcomeScreen
 import com.livetl.android.ui.screen.welcome.WelcomeViewModel
 
@@ -77,7 +77,7 @@ fun MainNavHost(
 
             composable(
                 "${Route.Player.id}?urlOrId={urlOrId}",
-                arguments = listOf(navArgument("urlOrId") { defaultValue = "" })
+                arguments = listOf(navArgument("urlOrId") { defaultValue = "" }),
             ) { backStackEntry ->
                 val playerViewModel = hiltViewModel<PlayerViewModel>()
 
@@ -106,7 +106,7 @@ fun MainNavHost(
 
             composable(Route.Licenses.id) {
                 LicensesScreen(
-                    onBackPressed = { navigateBack() }
+                    onBackPressed = { navigateBack() },
                 )
             }
         }

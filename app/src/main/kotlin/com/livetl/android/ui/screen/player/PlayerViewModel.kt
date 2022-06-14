@@ -70,7 +70,7 @@ class PlayerViewModel @Inject constructor(
             }
             url.startsWith("https://www.youtube.com/error") -> {
                 listOf(
-                    "video_embedder.bundle.js"
+                    "video_embedder.bundle.js",
                 )
             }
             else -> emptyList()

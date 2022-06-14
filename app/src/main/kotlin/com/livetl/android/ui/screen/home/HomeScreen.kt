@@ -62,13 +62,13 @@ fun HomeScreen(
                             IconButton(onClick = { navigateToSettings() }) {
                                 Icon(
                                     imageVector = Icons.Outlined.Settings,
-                                    contentDescription = stringResource(R.string.settings)
+                                    contentDescription = stringResource(R.string.settings),
                                 )
                             }
                             IconButton(onClick = { navigateToAbout() }) {
                                 Icon(
                                     imageVector = Icons.Outlined.Info,
-                                    contentDescription = stringResource(R.string.about)
+                                    contentDescription = stringResource(R.string.about),
                                 )
                             }
                         },
@@ -82,16 +82,16 @@ fun HomeScreen(
                         selectedTabIndex = pagerState.currentPage,
                         indicator = { tabPositions ->
                             TabRowDefaults.Indicator(
-                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
                             )
-                        }
+                        },
                     ) {
                         // Add tabs for all of our pages
                         viewModel.tabs.forEachIndexed { index, tab ->
                             Tab(
                                 text = { Text(stringResource(tab.first.headingRes)) },
                                 selected = pagerState.currentPage == index,
-                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) }},
+                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
                             )
                         }
                     }

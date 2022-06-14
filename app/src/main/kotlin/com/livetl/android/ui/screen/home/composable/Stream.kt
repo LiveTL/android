@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -68,10 +67,10 @@ fun Stream(
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = { onClick(stream) },
-                    onLongClick = { onLongClick(stream) }
+                    onLongClick = { onLongClick(stream) },
                 )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .requiredHeight(48.dp)
+                .requiredHeight(48.dp),
         ) {
             Image(
                 painter = rememberImagePainter(stream.channel.photo),
@@ -140,7 +139,7 @@ private fun StreamPreview() {
                     name = "Wow Such YouTube Channel",
                     org = "Hololive",
                     photo = "",
-                )
+                ),
             ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
@@ -158,7 +157,7 @@ private fun StreamPreview() {
                     name = "Smol Ch",
                     org = "Hololive",
                     photo = "",
-                )
+                ),
             ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },

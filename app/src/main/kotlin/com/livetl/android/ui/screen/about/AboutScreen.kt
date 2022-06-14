@@ -52,7 +52,7 @@ fun AboutScreen(
                     IconButton(onClick = { onBackPressed() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_back)
+                            contentDescription = stringResource(R.string.cd_back),
                         )
                     }
                 },

@@ -82,7 +82,7 @@ fun StreamSheet(stream: Stream?) {
                                     else -> Unit
                                 }
                             }
-                    }
+                    },
                 )
 
                 Spacer(Modifier.navigationBarsHeight())

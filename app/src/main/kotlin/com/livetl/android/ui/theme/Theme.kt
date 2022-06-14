@@ -16,6 +16,6 @@ fun LiveTLTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colors = DarkColorPalette,
         typography = typography,
-        content = content
+        content = content,
     )
 }

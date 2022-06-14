@@ -95,8 +95,8 @@ fun PlayerScreen(
                         insets = LocalWindowInsets.current.systemBars,
                         applyTop = true,
                         applyBottom = true,
-                    )
-                )
+                    ),
+                ),
         )
     }
 

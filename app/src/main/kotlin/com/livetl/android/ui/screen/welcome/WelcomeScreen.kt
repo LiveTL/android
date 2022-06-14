@@ -38,11 +38,11 @@ fun WelcomeScreen(
                         onClick = {
                             viewModel.dismissWelcomeScreen()
                             navigateToHome()
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.cd_close)
+                            contentDescription = stringResource(R.string.cd_close),
                         )
                     }
                 },

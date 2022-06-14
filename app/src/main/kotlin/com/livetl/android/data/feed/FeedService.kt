@@ -22,7 +22,7 @@ class FeedService @Inject constructor(
 
     suspend fun getFeed(
         organization: String? = "Hololive",
-        status: StreamStatus
+        status: StreamStatus,
     ): List<Stream> = withContext(Dispatchers.IO) {
         val result = client.get<HttpResponse> {
             url {

@@ -90,29 +90,29 @@ private fun getSymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = colors.primary
-                )
+                    color = colors.primary,
+                ),
             ),
             StringAnnotation(
                 item = matchResult.value,
                 start = matchResult.range.first,
                 end = matchResult.range.last,
-                tag = SymbolAnnotationType.LINK.name
-            )
+                tag = SymbolAnnotationType.LINK.name,
+            ),
         )
         SymbolAnnotationType.HASHTAG.name in parsedContentTypes && matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = colors.primary
-                )
+                    color = colors.primary,
+                ),
             ),
             StringAnnotation(
                 item = matchResult.value.substring(1),
                 start = matchResult.range.first,
                 end = matchResult.range.last,
-                tag = SymbolAnnotationType.HASHTAG.name
-            )
+                tag = SymbolAnnotationType.HASHTAG.name,
+            ),
         )
         else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
     }
