@@ -1,6 +1,5 @@
 package com.livetl.android.ui.screen.home.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import com.google.accompanist.insets.navigationBarsHeight
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
@@ -38,8 +37,8 @@ fun StreamSheet(stream: Stream?) {
 
     LazyColumn {
         item {
-            Image(
-                painter = rememberImagePainter(stream.thumbnail),
+            AsyncImage(
+                model = stream.thumbnail,
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
                     .aspectRatio(16 / 9f)

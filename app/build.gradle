@@ -101,7 +101,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3'
 
     // Image loading
-    final coil_version = '1.4.0'
+    final coil_version = '2.1.0'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
@@ -148,14 +148,13 @@ preBuild.dependsOn(formatKotlin)
 
 tasks.withType(KotlinCompile).configureEach {
     kotlinOptions.freeCompilerArgs += [
-            "-Xopt-in=kotlin.Experimental",
-            "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-            "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
-            "-Xopt-in=coil.annotation.ExperimentalCoilApi",
-            "-Xopt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
-            "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+        "-opt-in=kotlin.Experimental",
+        "-opt-in=kotlin.RequiresOptIn",
+        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+        "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+        "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
+        "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
     ]
 }

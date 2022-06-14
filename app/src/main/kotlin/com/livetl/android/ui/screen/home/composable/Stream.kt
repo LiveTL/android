@@ -1,7 +1,6 @@
 package com.livetl.android.ui.screen.home.composable
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -31,8 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
-import coil.transform.BlurTransformation
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
@@ -49,16 +49,18 @@ fun Stream(
     onClick: (Stream) -> Unit,
     onLongClick: (Stream) -> Unit,
 ) {
-    val context = LocalContext.current
-
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
-        Image(
-            modifier = Modifier.matchParentSize().alpha(0.2f),
-            painter = rememberImagePainter(stream.thumbnail) {
-                transformations(BlurTransformation(context))
-                crossfade(true)
-            },
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(stream.thumbnail)
+                .transformations()
+                .crossfade(true)
+                .build(),
             contentDescription = null,
+            modifier = Modifier
+                .matchParentSize()
+                .alpha(0.2f)
+                .blur(5.dp),
             contentScale = ContentScale.Crop,
         )
 
@@ -72,8 +74,8 @@ fun Stream(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .requiredHeight(48.dp),
         ) {
-            Image(
-                painter = rememberImagePainter(stream.channel.photo),
+            AsyncImage(
+                model = stream.channel.photo,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()
