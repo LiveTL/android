@@ -2,13 +2,13 @@ package com.livetl.android.ui.screen.home.tab
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.data.feed.Stream
@@ -65,7 +65,7 @@ fun StreamsTab(
             }
 
             item {
-                Spacer(Modifier.navigationBarsHeight())
+                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }
