@@ -15,6 +15,7 @@
     <string name="upcoming">Upcoming</string>
     <string name="archives">Archives</string>
     <string name="streamed">Streamed %s</string>
+    <string name="empty_streams">Nothing to see here</string>
 
     <string name="select_a_stream">Select a stream to view details</string>
     <string name="action_open_in_youtube">Open in…</string>
