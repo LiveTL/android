@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.PowerManager
 import android.widget.Toast
 import com.livetl.android.R
@@ -22,7 +23,12 @@ fun Context.copyToClipboard(text: String) {
             getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(/* label = */ text, text)
         clipboard.setPrimaryClip(clip)
-        toast(getString(R.string.copied, text))
+
+        // Android 13 and higher shows a visual confirmation of copied contents
+        // https://developer.android.com/about/versions/13/features/copy-paste
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            toast(getString(R.string.copied, text))
+        }
     } catch (e: Throwable) {
         toast(getString(R.string.copied_error))
         Timber.e(e)
