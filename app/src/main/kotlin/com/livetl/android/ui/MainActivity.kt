@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
-import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.livetl.android.ui.navigation.MainNavHost
@@ -95,14 +96,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setFullscreen(enabled: Boolean) {
-        window.decorView.systemUiVisibility = if (enabled) {
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        val controller = WindowInsetsControllerCompat(window!!, window.decorView.rootView)
+        if (enabled) {
+            controller.apply {
+                hide(WindowInsetsCompat.Type.systemBars())
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
         } else {
-            View.SYSTEM_UI_FLAG_VISIBLE
+            controller
+                .show(WindowInsetsCompat.Type.systemBars())
         }
     }
 
