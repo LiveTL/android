@@ -5,6 +5,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -95,9 +96,18 @@ fun PlayerScreen(
     if (streamInfo == null) {
         LoadingIndicator()
     } else {
+        val modifier = if (isFullscreen) {
+            Modifier
+                .fillMaxSize()
+        } else {
+            Modifier
+                .fillMaxSize()
+                .safeContentPadding()
+        }
+
         AndroidView(
+            modifier = modifier,
             factory = { webviews.foregroundWebview },
-            modifier = Modifier.fillMaxSize(),
         )
     }
 
