@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.Surface
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
@@ -62,46 +64,49 @@ fun HomeScreen(
     ) {
         Scaffold(
             topBar = {
-                Column {
-                    TopAppBar(
-                        title = {
-                            Text(text = stringResource(R.string.app_name))
-                        },
-                        actions = {
-                            IconButton(onClick = { navigateToSettings() }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Settings,
-                                    contentDescription = stringResource(R.string.settings),
-                                )
-                            }
-                            IconButton(onClick = { navigateToAbout() }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Info,
-                                    contentDescription = stringResource(R.string.about),
-                                )
-                            }
-                        },
-                        contentPadding = rememberInsetsPaddingValues(
-                            LocalWindowInsets.current.statusBars,
-                            applyBottom = false,
-                        ),
-                    )
+                Surface(elevation = AppBarDefaults.TopAppBarElevation) {
+                    Column {
+                        TopAppBar(
+                            title = {
+                                Text(text = stringResource(R.string.app_name))
+                            },
+                            actions = {
+                                IconButton(onClick = { navigateToSettings() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Settings,
+                                        contentDescription = stringResource(R.string.settings),
+                                    )
+                                }
+                                IconButton(onClick = { navigateToAbout() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = stringResource(R.string.about),
+                                    )
+                                }
+                            },
+                            contentPadding = rememberInsetsPaddingValues(
+                                LocalWindowInsets.current.statusBars,
+                                applyBottom = false,
+                            ),
+                            elevation = 0.dp,
+                        )
 
-                    TabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                        indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                            )
-                        },
-                    ) {
-                        // Add tabs for all of our pages
-                        viewModel.tabs.forEachIndexed { index, tab ->
-                            Tab(
-                                text = { Text(stringResource(tab.first.headingRes)) },
-                                selected = pagerState.currentPage == index,
-                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
-                            )
+                        TabRow(
+                            selectedTabIndex = pagerState.currentPage,
+                            indicator = { tabPositions ->
+                                TabRowDefaults.Indicator(
+                                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                                )
+                            },
+                        ) {
+                            // Add tabs for all of our pages
+                            viewModel.tabs.forEachIndexed { index, tab ->
+                                Tab(
+                                    text = { Text(stringResource(tab.first.headingRes)) },
+                                    selected = pagerState.currentPage == index,
+                                    onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
+                                )
+                            }
                         }
                     }
                 }
