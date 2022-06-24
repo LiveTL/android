@@ -2,13 +2,18 @@ package com.livetl.android.ui.screen.welcome
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -16,10 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.insets.ui.TopAppBar
 import com.livetl.android.R
 
 @Composable
@@ -29,28 +30,30 @@ fun WelcomeScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.welcome))
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            viewModel.dismissWelcomeScreen()
-                            navigateToHome()
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.cd_close),
-                        )
-                    }
-                },
-                contentPadding = rememberInsetsPaddingValues(
-                    LocalWindowInsets.current.statusBars,
-                    applyBottom = false,
-                ),
-            )
+            Surface(
+                elevation = AppBarDefaults.TopAppBarElevation,
+            ) {
+                TopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
+                    title = {
+                        Text(text = stringResource(R.string.welcome))
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                viewModel.dismissWelcomeScreen()
+                                navigateToHome()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.cd_close),
+                            )
+                        }
+                    },
+                    elevation = 0.dp,
+                )
+            }
         },
     ) { contentPadding ->
         Box(Modifier.padding(contentPadding)) {

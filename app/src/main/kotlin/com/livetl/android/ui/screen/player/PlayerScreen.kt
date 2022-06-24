@@ -5,7 +5,6 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -17,8 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.util.collectAsState
@@ -100,15 +97,7 @@ fun PlayerScreen(
     } else {
         AndroidView(
             factory = { webviews.foregroundWebview },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    rememberInsetsPaddingValues(
-                        insets = LocalWindowInsets.current.systemBars,
-                        applyTop = true,
-                        applyBottom = true,
-                    ),
-                ),
+            modifier = Modifier.fillMaxSize(),
         )
     }
 
