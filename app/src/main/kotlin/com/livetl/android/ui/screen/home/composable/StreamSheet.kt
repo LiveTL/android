@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
@@ -36,13 +36,14 @@ fun StreamSheet(stream: Stream?) {
 
     val uriHandler = LocalUriHandler.current
 
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier.safeContentPadding(),
+    ) {
         item {
             AsyncImage(
                 model = stream.thumbnail,
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
-                    .systemBarsPadding()
                     .aspectRatio(16 / 9f)
                     .background(Color.Black),
             )
