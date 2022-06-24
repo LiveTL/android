@@ -59,7 +59,7 @@ fun Stream(
             contentDescription = null,
             modifier = Modifier
                 .matchParentSize()
-                .alpha(0.2f)
+                .alpha(0.1f)
                 .blur(5.dp),
             contentScale = ContentScale.Crop,
         )
