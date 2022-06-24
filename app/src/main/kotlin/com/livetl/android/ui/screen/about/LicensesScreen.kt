@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.about
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -43,7 +44,8 @@ fun LicensesScreen(
     ) { contentPadding ->
         LibrariesContainer(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .navigationBarsPadding(),
             contentPadding = contentPadding,
         )
     }
