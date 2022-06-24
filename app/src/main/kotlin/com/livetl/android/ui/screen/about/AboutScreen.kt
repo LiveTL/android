@@ -10,17 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,10 +45,8 @@ fun AboutScreen(
 
     Scaffold(
         topBar = {
-            Surface(
-                elevation = AppBarDefaults.TopAppBarElevation,
-            ) {
-                TopAppBar(
+            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+                SmallTopAppBar(
                     modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.about))
@@ -61,7 +59,6 @@ fun AboutScreen(
                             )
                         }
                     },
-                    elevation = 0.dp,
                 )
             }
         },

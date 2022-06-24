@@ -1,13 +1,13 @@
 package com.livetl.android.ui.theme
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
+private val DarkColorPalette = darkColorScheme(
     primary = Color(0xFF1773BC),
-    primaryVariant = Color(0xFF004D81),
+    primaryContainer = Color(0xFF004D81),
     secondary = Color(0xFF1773BC),
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -16,7 +16,7 @@ private val DarkColorPalette = darkColors(
 @Composable
 fun LiveTLTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = DarkColorPalette,
+        colorScheme = DarkColorPalette,
         typography = typography,
         content = content,
     )

@@ -15,10 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -95,7 +95,7 @@ fun Stream(
                 )
 
                 Row {
-                    CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.caption) {
+                    CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelSmall) {
                         Text(
                             stream.channel.name,
                             modifier = Modifier

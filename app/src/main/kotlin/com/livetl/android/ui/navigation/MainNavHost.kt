@@ -3,7 +3,7 @@ package com.livetl.android.ui.navigation
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,7 +52,7 @@ fun MainNavHost(
         bottomSheetNavigator = bottomSheetNavigator,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colorScheme.background),
     ) {
         NavHost(navController, startDestination = startRoute.id) {
             composable(Route.Home.id) {

@@ -11,15 +11,15 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,10 +39,8 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            Surface(
-                elevation = AppBarDefaults.TopAppBarElevation,
-            ) {
-                TopAppBar(
+            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+                SmallTopAppBar(
                     modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.setting_feed_org))
@@ -55,7 +53,6 @@ fun SettingsScreen(
                             )
                         }
                     },
-                    elevation = 0.dp,
                 )
             }
         },

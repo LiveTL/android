@@ -2,40 +2,38 @@ package com.livetl.android.ui.screen.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToQueue
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.ui.common.pagerTabIndicatorOffset
 import com.livetl.android.ui.screen.home.composable.StreamSheet
 import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
@@ -63,9 +61,9 @@ fun HomeScreen(
     ) {
         Scaffold(
             topBar = {
-                Surface(elevation = AppBarDefaults.TopAppBarElevation) {
+                Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
                     Column {
-                        TopAppBar(
+                        SmallTopAppBar(
                             modifier = Modifier.statusBarsPadding(),
                             title = {
                                 Text(text = stringResource(R.string.app_name))
@@ -84,7 +82,6 @@ fun HomeScreen(
                                     )
                                 }
                             },
-                            elevation = 0.dp,
                         )
 
                         TabRow(
@@ -142,18 +139,11 @@ fun HomeScreen(
                             )
                         }
                     },
-                    buttons = {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp),
-                            horizontalAlignment = Alignment.End,
+                    confirmButton = {
+                        TextButton(
+                            onClick = { navigateToPlayer(viewModel.openVideoUrl) },
                         ) {
-                            TextButton(
-                                onClick = { navigateToPlayer(viewModel.openVideoUrl) },
-                            ) {
-                                Text(stringResource(R.string.action_open))
-                            }
+                            Text(stringResource(R.string.action_open))
                         }
                     },
                 )

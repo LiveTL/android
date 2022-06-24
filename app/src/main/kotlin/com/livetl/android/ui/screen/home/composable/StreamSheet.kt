@@ -11,10 +11,11 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,58 +37,63 @@ fun StreamSheet(stream: Stream?) {
 
     val uriHandler = LocalUriHandler.current
 
-    LazyColumn(
-        modifier = Modifier.safeDrawingPadding(),
-    ) {
-        item {
-            AsyncImage(
-                model = stream.thumbnail,
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
-                    .aspectRatio(16 / 9f)
-                    .background(Color.Black),
-            )
-        }
-
-        item {
-            Column(
-                modifier = Modifier.padding(8.dp),
-            ) {
-                Text(
-                    text = stream.title,
-                    style = MaterialTheme.typography.h5,
+    Surface {
+        LazyColumn(
+            modifier = Modifier.safeDrawingPadding(),
+        ) {
+            item {
+                AsyncImage(
+                    model = stream.thumbnail,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16 / 9f)
+                        .background(Color.Black),
                 )
-                Spacer(modifier = Modifier.requiredHeight(8.dp))
-                Text(
-                    text = stream.channel.name,
-                    style = MaterialTheme.typography.subtitle1,
-                )
+            }
 
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+            item {
+                Column(
+                    modifier = Modifier.padding(8.dp),
+                ) {
+                    Text(
+                        text = stream.title,
+                        style = MaterialTheme.typography.headlineMedium,
+                    )
+                    Spacer(modifier = Modifier.requiredHeight(8.dp))
+                    Text(
+                        text = stream.channel.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
 
-                StreamActions(stream.id)
+                    Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+                    StreamActions(stream.id)
 
-                val styledDescription = textParser(stream.description)
-                ClickableText(
-                    text = styledDescription,
-                    style = MaterialTheme.typography.body1.copy(color = LocalContentColor.current),
-                    onClick = {
-                        styledDescription
-                            .getStringAnnotations(start = it, end = it)
-                            .firstOrNull()
-                            ?.let { annotation ->
-                                when (annotation.tag) {
-                                    SymbolAnnotationType.LINK.name -> uriHandler.openUri(annotation.item)
-                                    SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
-                                    else -> Unit
+                    Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    val styledDescription = textParser(stream.description)
+                    ClickableText(
+                        text = styledDescription,
+                        style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
+                        onClick = {
+                            styledDescription
+                                .getStringAnnotations(start = it, end = it)
+                                .firstOrNull()
+                                ?.let { annotation ->
+                                    when (annotation.tag) {
+                                        SymbolAnnotationType.LINK.name -> uriHandler.openUri(
+                                            annotation.item,
+                                        )
+                                        SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
+                                        else -> Unit
+                                    }
                                 }
-                            }
-                    },
-                )
+                        },
+                    )
 
-                Spacer(Modifier.navigationBarsPadding())
+                    Spacer(Modifier.navigationBarsPadding())
+                }
             }
         }
     }

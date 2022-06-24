@@ -12,12 +12,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,8 +30,8 @@ fun PreferenceGroupHeader(
 ) {
     Text(
         text = stringResource(title),
-        color = MaterialTheme.colors.secondary,
-        fontSize = MaterialTheme.typography.subtitle1.fontSize,
+        color = MaterialTheme.colorScheme.secondary,
+        fontSize = MaterialTheme.typography.titleMedium.fontSize,
         fontWeight = FontWeight.Medium,
         modifier = modifier
             .fillMaxWidth()
@@ -66,11 +64,11 @@ fun PreferenceRow(
                 text = title,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.subtitle1,
+                style = MaterialTheme.typography.bodyLarge,
             )
             if (subtitle != null) {
                 CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.subtitle1,
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium,
                     LocalContentAlpha provides ContentAlpha.medium,
                 ) {
                     Text(

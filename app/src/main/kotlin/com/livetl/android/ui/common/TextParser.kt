@@ -1,8 +1,8 @@
 package com.livetl.android.ui.common
 
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -52,7 +52,7 @@ fun textParser(
             } else {
                 val (annotatedString, stringAnnotation) = getSymbolAnnotation(
                     matchResult = token,
-                    colors = MaterialTheme.colors,
+                    colors = MaterialTheme.colorScheme,
                     parsedContentTypes = parsedContentTypes,
                 )
                 append(annotatedString)
@@ -82,7 +82,7 @@ fun textParser(
  */
 private fun getSymbolAnnotation(
     matchResult: MatchResult,
-    colors: Colors,
+    colors: ColorScheme,
     parsedContentTypes: Collection<String>,
 ): SymbolAnnotation {
     return when {
