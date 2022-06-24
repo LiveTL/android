@@ -28,8 +28,19 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    var showOpenVideoDialog by mutableStateOf(false)
+    var openVideoUrl by mutableStateOf("")
+
     val sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
     var sheetStream by mutableStateOf<Stream?>(null)
+
+    fun showOpenVideoDialog() {
+        showOpenVideoDialog = true
+    }
+
+    fun hideOpenVideoDialog() {
+        showOpenVideoDialog = false
+    }
 
     suspend fun showSheet(stream: Stream) {
         sheetStream = stream

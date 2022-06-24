@@ -22,6 +22,11 @@
     <string name="action_copy_link">Copy</string>
     <string name="action_share">Share</string>
 
+    <string name="action_open_video">Open video</string>
+    <string name="open_video_hint">You can also directly share a video to %s from the YouTube app!</string>
+    <string name="youtube_url_hint">Enter a YouTube URL or ID</string>
+    <string name="action_open">Open</string>
+
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>
     <string name="about_discord" translatable="false">Discord</string>
