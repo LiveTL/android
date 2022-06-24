@@ -85,7 +85,7 @@ fun StreamsTab(
                 Spacer(
                     Modifier
                         .navigationBarsPadding()
-                        .padding(bottom = 88.dp), // Additional padding for FAB
+                        .padding(bottom = 80.dp), // Additional padding for FAB
                 )
             }
         }

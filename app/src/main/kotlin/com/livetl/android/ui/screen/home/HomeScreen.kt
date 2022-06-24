@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetLayout
@@ -108,15 +108,17 @@ fun HomeScreen(
                 }
             },
             floatingActionButton = {
-                FloatingActionButton(
+                ExtendedFloatingActionButton(
                     modifier = Modifier.navigationBarsPadding(),
                     onClick = { viewModel.showOpenVideoDialog() },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AddToQueue,
-                        contentDescription = stringResource(R.string.action_open_video),
-                    )
-                }
+                    text = { Text(stringResource(R.string.action_open_video)) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.AddToQueue,
+                            contentDescription = stringResource(R.string.action_open_video),
+                        )
+                    },
+                )
             },
         ) { contentPadding ->
             if (viewModel.showOpenVideoDialog) {
