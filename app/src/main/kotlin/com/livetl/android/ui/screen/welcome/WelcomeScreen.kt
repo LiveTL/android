@@ -1,21 +1,23 @@
 package com.livetl.android.ui.screen.welcome
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,10 +32,8 @@ fun WelcomeScreen(
 ) {
     Scaffold(
         topBar = {
-            Surface(
-                elevation = AppBarDefaults.TopAppBarElevation,
-            ) {
-                TopAppBar(
+            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+                SmallTopAppBar(
                     modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.welcome))
@@ -51,7 +51,6 @@ fun WelcomeScreen(
                             )
                         }
                     },
-                    elevation = 0.dp,
                 )
             }
         },
@@ -61,7 +60,7 @@ fun WelcomeScreen(
                 item {
                     Text(
                         text = stringResource(R.string.welcome_thank_you),
-                        style = MaterialTheme.typography.h5,
+                        style = MaterialTheme.typography.headlineMedium,
                     )
                 }
 
@@ -79,7 +78,7 @@ fun WelcomeScreen(
                 item {
                     Text(
                         text = stringResource(R.string.welcome_faq),
-                        style = MaterialTheme.typography.h5,
+                        style = MaterialTheme.typography.headlineMedium,
                     )
                 }
 
@@ -95,6 +94,10 @@ fun WelcomeScreen(
                     Text(
                         text = stringResource(it.second),
                     )
+                }
+
+                item {
+                    Spacer(Modifier.navigationBarsPadding())
                 }
             }
         }
