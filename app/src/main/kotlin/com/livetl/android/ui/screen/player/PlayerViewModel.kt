@@ -122,6 +122,10 @@ class PlayerViewModel @Inject constructor(
     fun toggleFullscreen() {
         prefs.wasPlayerFullscreen().toggle()
     }
+
+    fun saveText(text: String, fileName: String) {
+        // TODO
+    }
 }
 
 private const val LOCAL_ASSET_BASEURL = "https://__local_android_asset_baseurl__/"

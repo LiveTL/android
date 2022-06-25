@@ -86,6 +86,7 @@ fun PlayerScreen(
             backgroundWebview,
             foregroundWebview,
             viewModel::toggleFullscreen,
+            viewModel::saveText,
         )
         backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
         foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)

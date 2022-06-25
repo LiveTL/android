@@ -10,6 +10,7 @@ class NativeJavascriptInterface(
     private val backgroundWebview: WebView,
     private val foregroundWebview: WebView,
     private val toggleAppFullscreen: () -> Unit,
+    private val saveText: (String, String) -> Unit,
 ) {
 
     @JavascriptInterface
@@ -39,6 +40,6 @@ class NativeJavascriptInterface(
     @JavascriptInterface
     fun downloadText(text: String, fileName: String) {
         Timber.d("Downloading text to $fileName: $text")
-        // TODO
+        saveText(text, fileName)
     }
 }
