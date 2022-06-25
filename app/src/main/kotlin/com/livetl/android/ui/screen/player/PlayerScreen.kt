@@ -144,7 +144,7 @@ fun PlayerScreen(
                     Timber.e(e, "Failed to fetch stream info")
 
                     // Fallback: attempt to load as a live stream
-                    val url = "file:///android_asset/watch.html?video=$videoId"
+                    val url = "file:///android_asset/watch.html?ytVideo=$videoId"
                     webviews.foregroundWebview.loadUrl(url)
                 }
             }
