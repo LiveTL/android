@@ -76,8 +76,8 @@ fun StreamsTab(
                     stream = stream,
                     timestampFormatStringRes = status.timestampFormatStringRes,
                     timestampSupplier = status.timestampSupplier,
-                    onClick = navigateToStream,
-                    onLongClick = peekStream,
+                    openPlayer = navigateToStream,
+                    openStreamInfo = peekStream,
                 )
             }
 

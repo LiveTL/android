@@ -18,6 +18,7 @@
     <string name="empty_streams">Nothing to see here</string>
 
     <string name="select_a_stream">Select a stream to view details</string>
+    <string name="video_info">See video details</string>
     <string name="action_open_in_youtube">Open in…</string>
     <string name="action_copy_link">Copy</string>
     <string name="action_share">Share</string>
