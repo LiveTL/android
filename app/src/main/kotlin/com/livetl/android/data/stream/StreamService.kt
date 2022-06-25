@@ -1,6 +1,5 @@
 package com.livetl.android.data.stream
 
-import com.livetl.android.data.feed.FeedService
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.get
@@ -11,7 +10,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class StreamService @Inject constructor(
-    private val feedService: FeedService,
+    private val streamRepository: StreamRepository,
     private val videoIdParser: VideoIdParser,
     private val client: HttpClient,
 ) {
@@ -21,7 +20,7 @@ class StreamService @Inject constructor(
 
         return try {
             Timber.d("Fetching stream: $videoId")
-            val stream = feedService.getVideoInfo(videoId)
+            val stream = streamRepository.getStream(videoId)
 
             val chatContinuation: String? = when (stream.isLive) {
                 true -> null

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToQueue
 import androidx.compose.material.icons.outlined.Info
@@ -34,12 +33,12 @@ import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.pagerTabIndicatorOffset
-import com.livetl.android.ui.screen.home.composable.StreamSheet
 import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    navigateToStreamInfo: (String) -> Unit,
     navigateToPlayer: (String) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToAbout: () -> Unit,
@@ -48,122 +47,113 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
 
-    val peekStream: (Stream) -> Unit = { stream: Stream ->
-        coroutineScope.launch {
-            viewModel.showSheet(stream)
-        }
-    }
-    val navigateToStream = { stream: Stream -> navigateToPlayer(stream.id) }
+    val openStreamInfo = { stream: Stream -> navigateToStreamInfo(stream.id) }
+    val openStream = { stream: Stream -> navigateToPlayer(stream.id) }
 
-    ModalBottomSheetLayout(
-        sheetState = viewModel.sheetState,
-        sheetContent = { StreamSheet(viewModel.sheetStream) },
-    ) {
-        Scaffold(
-            topBar = {
-                Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
-                    Column {
-                        SmallTopAppBar(
-                            modifier = Modifier.statusBarsPadding(),
-                            title = {
-                                Text(text = stringResource(R.string.app_name))
-                            },
-                            actions = {
-                                IconButton(onClick = { navigateToSettings() }) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Settings,
-                                        contentDescription = stringResource(R.string.settings),
-                                    )
-                                }
-                                IconButton(onClick = { navigateToAbout() }) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Info,
-                                        contentDescription = stringResource(R.string.about),
-                                    )
-                                }
-                            },
-                        )
-
-                        TabRow(
-                            selectedTabIndex = pagerState.currentPage,
-                            indicator = { tabPositions ->
-                                TabRowDefaults.Indicator(
-                                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                                )
-                            },
-                        ) {
-                            // Add tabs for all of our pages
-                            viewModel.tabs.forEachIndexed { index, tab ->
-                                Tab(
-                                    text = { Text(stringResource(tab.first.headingRes)) },
-                                    selected = pagerState.currentPage == index,
-                                    onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
+    Scaffold(
+        topBar = {
+            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+                Column {
+                    SmallTopAppBar(
+                        modifier = Modifier.statusBarsPadding(),
+                        title = {
+                            Text(text = stringResource(R.string.app_name))
+                        },
+                        actions = {
+                            IconButton(onClick = { navigateToSettings() }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Settings,
+                                    contentDescription = stringResource(R.string.settings),
                                 )
                             }
+                            IconButton(onClick = { navigateToAbout() }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Info,
+                                    contentDescription = stringResource(R.string.about),
+                                )
+                            }
+                        },
+                    )
+
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                            )
+                        },
+                    ) {
+                        // Add tabs for all of our pages
+                        viewModel.tabs.forEachIndexed { index, tab ->
+                            Tab(
+                                text = { Text(stringResource(tab.first.headingRes)) },
+                                selected = pagerState.currentPage == index,
+                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
+                            )
                         }
                     }
                 }
-            },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.navigationBarsPadding(),
-                    onClick = { viewModel.showOpenVideoDialog() },
-                    text = { Text(stringResource(R.string.action_open_video)) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.AddToQueue,
-                            contentDescription = stringResource(R.string.action_open_video),
+            }
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.navigationBarsPadding(),
+                onClick = { viewModel.showOpenVideoDialog() },
+                text = { Text(stringResource(R.string.action_open_video)) },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.AddToQueue,
+                        contentDescription = stringResource(R.string.action_open_video),
+                    )
+                },
+            )
+        },
+    ) { contentPadding ->
+        if (viewModel.showOpenVideoDialog) {
+            AlertDialog(
+                onDismissRequest = { viewModel.hideOpenVideoDialog() },
+                title = {
+                    Text(stringResource(R.string.action_open_video))
+                },
+                text = {
+                    Column {
+                        Text(
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            text = stringResource(R.string.open_video_hint, stringResource(R.string.app_name)),
                         )
-                    },
-                )
-            },
-        ) { contentPadding ->
-            if (viewModel.showOpenVideoDialog) {
-                AlertDialog(
-                    onDismissRequest = { viewModel.hideOpenVideoDialog() },
-                    title = {
-                        Text(stringResource(R.string.action_open_video))
-                    },
-                    text = {
-                        Column {
-                            Text(
-                                modifier = Modifier.padding(bottom = 16.dp),
-                                text = stringResource(R.string.open_video_hint, stringResource(R.string.app_name)),
-                            )
 
-                            TextField(
-                                value = viewModel.openVideoUrl,
-                                onValueChange = { viewModel.openVideoUrl = it },
-                                placeholder = { Text(stringResource(R.string.youtube_url_hint)) },
-                                singleLine = true,
-                            )
-                        }
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = { navigateToPlayer(viewModel.openVideoUrl) },
-                        ) {
-                            Text(stringResource(R.string.action_open))
-                        }
-                    },
-                )
-            }
+                        TextField(
+                            value = viewModel.openVideoUrl,
+                            onValueChange = { viewModel.openVideoUrl = it },
+                            placeholder = { Text(stringResource(R.string.youtube_url_hint)) },
+                            singleLine = true,
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = { navigateToPlayer(viewModel.openVideoUrl) },
+                    ) {
+                        Text(stringResource(R.string.action_open))
+                    }
+                },
+            )
+        }
 
-            HorizontalPager(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding),
-                count = viewModel.tabs.size,
-                state = pagerState,
-            ) { page ->
-                val (status, tabViewModel) = viewModel.tabs[page]
-                StreamsTab(
-                    navigateToStream = navigateToStream,
-                    peekStream = peekStream,
-                    status = status,
-                    viewModel = tabViewModel,
-                )
-            }
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
+            count = viewModel.tabs.size,
+            state = pagerState,
+        ) { page ->
+            val (status, tabViewModel) = viewModel.tabs[page]
+            StreamsTab(
+                navigateToStream = openStream,
+                peekStream = openStreamInfo,
+                status = status,
+                viewModel = tabViewModel,
+            )
         }
     }
 }

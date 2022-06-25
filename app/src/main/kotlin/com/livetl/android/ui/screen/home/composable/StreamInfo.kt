@@ -17,6 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -25,11 +31,34 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
+import kotlinx.coroutines.launch
 
 @Composable
-fun StreamSheet(stream: Stream?) {
+fun StreamInfo(
+    urlOrId: String,
+    viewModel: StreamInfoViewModel,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var loading by remember { mutableStateOf(true) }
+    var stream by remember { mutableStateOf<Stream?>(null) }
+
+    LaunchedEffect(urlOrId) {
+        if (urlOrId.isNotEmpty()) {
+            coroutineScope.launch {
+                stream = viewModel.getStream(urlOrId)
+                loading = false
+            }
+        }
+    }
+
+    if (loading) {
+        LoadingIndicator()
+        return
+    }
+
     if (stream == null) {
         Text(stringResource(R.string.select_a_stream))
         return
@@ -43,7 +72,7 @@ fun StreamSheet(stream: Stream?) {
         ) {
             item {
                 AsyncImage(
-                    model = stream.thumbnail,
+                    model = stream!!.thumbnail,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -57,22 +86,22 @@ fun StreamSheet(stream: Stream?) {
                     modifier = Modifier.padding(8.dp),
                 ) {
                     Text(
-                        text = stream.title,
+                        text = stream!!.title,
                         style = MaterialTheme.typography.headlineMedium,
                     )
                     Spacer(modifier = Modifier.requiredHeight(8.dp))
                     Text(
-                        text = stream.channel.name,
+                        text = stream!!.channel.name,
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
                     Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    StreamActions(stream.id)
+                    StreamActions(stream!!.id)
 
                     Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    val styledDescription = textParser(stream.description)
+                    val styledDescription = textParser(stream!!.description)
                     ClickableText(
                         text = styledDescription,
                         style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),

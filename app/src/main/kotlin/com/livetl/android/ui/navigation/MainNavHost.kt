@@ -14,11 +14,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.bottomSheet
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.HomeViewModel
+import com.livetl.android.ui.screen.home.composable.StreamInfo
+import com.livetl.android.ui.screen.home.composable.StreamInfoViewModel
 import com.livetl.android.ui.screen.home.settings.SettingsScreen
 import com.livetl.android.ui.screen.home.settings.SettingsViewModel
 import com.livetl.android.ui.screen.player.PlayerScreen
@@ -59,10 +62,25 @@ fun MainNavHost(
                 val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 HomeScreen(
+                    navigateToStreamInfo = { navController.navigate("${Route.StreamInfo.id}?urlOrId=$it") },
                     navigateToPlayer = { navController.navigateToPlayer(it) },
                     navigateToSettings = { navController.navigate(Route.Settings.id) },
                     navigateToAbout = { navController.navigate(Route.About.id) },
                     viewModel = homeViewModel,
+                )
+            }
+
+            bottomSheet(
+                "${Route.StreamInfo.id}?urlOrId={urlOrId}",
+                arguments = listOf(navArgument("urlOrId") { defaultValue = "" }),
+            ) { backStackEntry ->
+                val streamInfoViewModel = hiltViewModel<StreamInfoViewModel>()
+
+                val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
+
+                StreamInfo(
+                    urlOrId = urlOrId,
+                    viewModel = streamInfoViewModel,
                 )
             }
 
