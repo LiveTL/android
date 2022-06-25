@@ -10,7 +10,7 @@ import com.tfcporciuncula.flow.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-open class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {
+class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
     private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
     private val flowPrefs = FlowSharedPreferences(prefs)
 

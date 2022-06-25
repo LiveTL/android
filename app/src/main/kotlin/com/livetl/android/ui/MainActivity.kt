@@ -17,7 +17,7 @@ import com.livetl.android.ui.navigation.MainNavHost
 import com.livetl.android.ui.navigation.Route
 import com.livetl.android.ui.navigation.navigateToPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
-import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.AppPreferences
 import com.livetl.android.util.powerManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var prefs: PreferencesHelper
+    lateinit var prefs: AppPreferences
 
     private var navController: NavHostController? = null
     private var wakeLock: PowerManager.WakeLock? = null

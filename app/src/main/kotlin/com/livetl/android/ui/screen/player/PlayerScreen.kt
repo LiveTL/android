@@ -83,6 +83,7 @@ fun PlayerScreen(
         }
 
         val jsInterface = NativeJavascriptInterface(
+            viewModel.webViewLocalStoragePolyfill,
             backgroundWebview,
             foregroundWebview,
             viewModel::toggleFullscreen,
@@ -91,7 +92,7 @@ fun PlayerScreen(
         backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
         foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
 
-        WebViews(backgroundWebview, foregroundWebview)
+        WebViews(jsInterface, backgroundWebview, foregroundWebview)
     }
 
     if (streamInfo == null) {
@@ -120,6 +121,7 @@ fun PlayerScreen(
 
             webviews.backgroundWebview.destroy()
             webviews.foregroundWebview.destroy()
+            webviews.jsInterface.destroy()
         }
     }
 
@@ -153,6 +155,7 @@ fun PlayerScreen(
 private const val JS_INTERFACE_NAME = "nativeJavascriptInterface"
 
 private data class WebViews(
+    val jsInterface: NativeJavascriptInterface,
     val backgroundWebview: WebView,
     val foregroundWebview: WebView,
 )

@@ -8,7 +8,8 @@ import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.USER_AGENT
 import com.livetl.android.data.stream.VideoIdParser
-import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.AppPreferences
+import com.livetl.android.util.WebViewStoragePolyfill
 import com.livetl.android.util.createScriptTag
 import com.livetl.android.util.readFile
 import com.livetl.android.util.toggle
@@ -30,7 +31,8 @@ class PlayerViewModel @Inject constructor(
     private val streamService: StreamService,
     private val videoIdParser: VideoIdParser,
     private val client: HttpClient,
-    val prefs: PreferencesHelper,
+    val webViewLocalStoragePolyfill: WebViewStoragePolyfill,
+    val prefs: AppPreferences,
 ) : ViewModel() {
 
     fun getVideoId(urlOrId: String): String {

@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.data.feed.StreamStatus
 import com.livetl.android.data.stream.StreamRepository
-import com.livetl.android.util.PreferencesHelper
+import com.livetl.android.util.AppPreferences
 
 class StreamsTabViewModel(
     private val streamRepository: StreamRepository,
-    private val prefs: PreferencesHelper,
+    private val prefs: AppPreferences,
     private val status: StreamStatus,
 ) : ViewModel() {
 
