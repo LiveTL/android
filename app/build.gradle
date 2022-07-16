@@ -7,16 +7,16 @@ plugins {
     id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
     id 'dagger.hilt.android.plugin'
-    id 'org.jmailen.kotlinter' version '3.10.0'
+    id 'org.jmailen.kotlinter' version '3.11.1'
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.livetl.android"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 280
         versionName "8.0.0-beta03"
     }
@@ -62,7 +62,7 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion "1.2.0"
     }
 
     lint {
@@ -73,7 +73,7 @@ android {
 
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -83,17 +83,17 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.5.0'
     implementation 'androidx.core:core-ktx:1.8.0'
 
     // Jetpack Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.material3:material3:1.0.0-alpha13"
+    implementation "androidx.compose.material3:material3:1.0.0-alpha14"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation 'androidx.navigation:navigation-compose:2.5.0-rc02'
+    implementation 'androidx.navigation:navigation-compose:2.5.0'
 
     // Networking
     final ktor_version = '1.6.0'
@@ -106,7 +106,7 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.24.12-rc'
+    final accompanist_version = '0.24.13-rc'
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"

@@ -26,7 +26,6 @@ fun WebView.setDefaultSettings() {
         javaScriptEnabled = true
         domStorageEnabled = true
         databaseEnabled = true
-        setAppCacheEnabled(true)
         useWideViewPort = true
         loadWithOverviewMode = true
         scrollBarStyle = WebView.SCROLLBARS_INSIDE_INSET
@@ -38,6 +37,6 @@ fun WebView.setDefaultSettings() {
 
         // Desktop UAS to make the YT player default to the desktop version
         userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-            "(KHTML, like Gecko) Chrome/94.0.4585.0 Safari/537.36 Edg/94.0.972.2"
+            "(KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
     }
 }
