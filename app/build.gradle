@@ -17,8 +17,8 @@ android {
         applicationId "com.livetl.android"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 280
-        versionName "8.0.0-beta03"
+        versionCode 281
+        versionName "8.0.0-beta04"
     }
 
     buildTypes {
