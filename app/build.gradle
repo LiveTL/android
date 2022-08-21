@@ -62,7 +62,7 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.3.0-rc02"
+        kotlinCompilerExtensionVersion "1.3.0"
     }
 
     lint {
@@ -90,7 +90,7 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.material3:material3:1.0.0-alpha15"
+    implementation "androidx.compose.material3:material3:1.0.0-alpha16"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
     implementation 'androidx.navigation:navigation-compose:2.5.1'
@@ -99,14 +99,14 @@ dependencies {
     final ktor_version = '1.6.0'
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
 
     // Image loading
-    final coil_version = '2.1.0'
+    final coil_version = '2.2.0'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.25.0'
+    final accompanist_version = '0.25.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
