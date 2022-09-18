@@ -11,6 +11,8 @@ plugins {
 }
 
 android {
+    namespace 'com.livetl.android'
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -62,7 +64,7 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.3.0"
+        kotlinCompilerExtensionVersion "1.3.1"
     }
 
     lint {
@@ -84,16 +86,16 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     implementation 'androidx.activity:activity-compose:1.5.1'
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
 
     // Jetpack Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.material3:material3:1.0.0-alpha16"
+    implementation "androidx.compose.material3:material3:1.0.0-beta01"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-    implementation 'androidx.navigation:navigation-compose:2.5.1'
+    implementation 'androidx.navigation:navigation-compose:2.5.2'
 
     // Networking
     final ktor_version = '1.6.0'
@@ -102,7 +104,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
 
     // Image loading
-    final coil_version = '2.2.0'
+    final coil_version = '2.2.1'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
