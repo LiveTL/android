@@ -52,18 +52,6 @@ fun PlayerScreen(
         val backgroundWebview = WebView(context).apply {
             setDefaultSettings()
             loadUrl("file:///android_asset/background.html")
-
-            webViewClient = object : WebViewClient() {
-                override fun shouldInterceptRequest(
-                    view: WebView,
-                    request: WebResourceRequest,
-                ): WebResourceResponse? {
-                    val url = request.url.toString()
-
-                    return runBlocking { viewModel.getInjectedResponse(context, url) }
-                        ?: super.shouldInterceptRequest(view, request)
-                }
-            }
         }
 
         val foregroundWebview = WebView(context).apply {
@@ -133,7 +121,7 @@ fun PlayerScreen(
                     withContext(Dispatchers.Main) {
                         streamInfo = newStream
 
-                        val url = "file:///android_asset/watch.html?ytVideo=$videoId"
+                        val url = "file:///android_asset/watch.html?video=$videoId"
                         if (newStream.isLive) {
                             webviews.foregroundWebview.loadUrl(url)
                         } else {
@@ -144,7 +132,7 @@ fun PlayerScreen(
                     Timber.e(e, "Failed to fetch stream info")
 
                     // Fallback: attempt to load as a live stream
-                    val url = "file:///android_asset/watch.html?ytVideo=$videoId"
+                    val url = "file:///android_asset/watch.html?video=$videoId"
                     webviews.foregroundWebview.loadUrl(url)
                 }
             }
