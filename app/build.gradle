@@ -132,7 +132,7 @@ task buildExtensionSource {
         }
         exec {
             workingDir "../extension/LiveTL"
-            commandLine "yarn", "build", "android"
+            commandLine "yarn", "build:android"
         }
     }
 }
