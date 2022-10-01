@@ -19,7 +19,6 @@ import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -32,7 +31,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.ui.common.pagerTabIndicatorOffset
+import com.livetl.android.ui.common.TabIndicator
 import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
 
@@ -77,13 +76,8 @@ fun HomeScreen(
 
                     TabRow(
                         selectedTabIndex = pagerState.currentPage,
-                        indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                            )
-                        },
+                        indicator = { TabIndicator(it[pagerState.currentPage]) },
                     ) {
-                        // Add tabs for all of our pages
                         viewModel.tabs.forEachIndexed { index, tab ->
                             Tab(
                                 text = { Text(stringResource(tab.first.headingRes)) },
