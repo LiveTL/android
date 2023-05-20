@@ -1,6 +1,4 @@
-- A new way to manually open a video
-- Now using Material Design 3 for the UI
-- A bunch of updates under the hood, including targeting Android 13
+- Fix crashing on launch
 
 ---
 
