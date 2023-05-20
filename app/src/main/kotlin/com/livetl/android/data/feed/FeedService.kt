@@ -2,10 +2,10 @@ package com.livetl.android.data.feed
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
-import io.ktor.client.utils.buildHeaders
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +40,10 @@ class FeedService @Inject constructor(
                 parameter("paginated", "<empty>")
                 parameter("max_upcoming_hours", "48")
             }
+            headers {
+                set("X-APIKEY", "278935bd-d91d-4037-a2b8-95b781428af7")
+                set("Accept", "application/json")
+            }
         }
 
         val response = json.decodeFromString<HolodexVideosResponse>(result.readText())
@@ -52,6 +56,10 @@ class FeedService @Inject constructor(
                 baseConfig()
                 path("api", "v2", "videos", videoId)
             }
+            headers {
+                set("X-APIKEY", "278935bd-d91d-4037-a2b8-95b781428af7")
+                set("Accept", "application/json")
+            }
         }
 
         json.decodeFromString(result.readText())
@@ -60,8 +68,5 @@ class FeedService @Inject constructor(
     private fun URLBuilder.baseConfig() {
         protocol = URLProtocol.HTTPS
         host = "holodex.net"
-        buildHeaders {
-            append("X-APIKEY", "a314698f-90b8-452e-9192-2a87ddd471ff")
-        }
     }
 }
