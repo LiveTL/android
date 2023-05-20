@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.data.feed.StreamStatus
@@ -33,14 +34,13 @@ fun StreamsTab(
     viewModel: StreamsTabViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val refreshingFeed = rememberSwipeRefreshState(false)
 
     fun refreshFeed() {
         coroutineScope.launch {
-            refreshingFeed.isRefreshing = true
+            viewModel.isRefreshing = true
             viewModel.loadStreams()
             withContext(Dispatchers.Main) {
-                refreshingFeed.isRefreshing = false
+                viewModel.isRefreshing = false
             }
         }
     }
@@ -49,19 +49,30 @@ fun StreamsTab(
         refreshFeed()
     }
 
-    SwipeRefresh(
-        modifier = Modifier.fillMaxSize(),
-        state = refreshingFeed,
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
         onRefresh = { refreshFeed() },
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState),
     ) {
-        if (!refreshingFeed.isRefreshing && viewModel.streams.isEmpty()) {
+        PullRefreshIndicator(
+            refreshing = viewModel.isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
+
+        if (!viewModel.isRefreshing && viewModel.streams.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(stringResource(R.string.empty_streams))
             }
-            return@SwipeRefresh
+            return
         }
 
         LazyColumn(

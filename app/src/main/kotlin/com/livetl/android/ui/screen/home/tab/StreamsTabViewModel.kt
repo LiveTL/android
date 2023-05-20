@@ -15,6 +15,7 @@ class StreamsTabViewModel(
     private val status: StreamStatus,
 ) : ViewModel() {
 
+    var isRefreshing by mutableStateOf(false)
     var streams by mutableStateOf<List<Stream>>(emptyList())
 
     suspend fun loadStreams() {

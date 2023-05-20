@@ -110,7 +110,6 @@ dependencies {
     implementation "io.coil-kt:coil-compose:$coil_version"
 
     final accompanist_version = '0.30.1'
-    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
 
     // Preferences
