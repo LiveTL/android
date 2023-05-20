@@ -140,6 +140,9 @@ task copyExtensionArtifacts(dependsOn: buildExtensionSource, type: Copy) {
     into './src/main/assets'
     include '**/*'
 }
+project.afterEvaluate {
+    tasks.findByName('mergePlaystoreReleaseAssets')?.dependsOn(copyExtensionArtifacts)
+}
 
 kotlinter {
     experimentalRules = true

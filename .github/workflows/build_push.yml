@@ -41,7 +41,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build app
-        run: ./gradlew copyExtensionArtifacts bundlePlaystoreRelease
+        run: ./gradlew bundlePlaystoreRelease
 
       # Sign app bundle and create release for tags
 
