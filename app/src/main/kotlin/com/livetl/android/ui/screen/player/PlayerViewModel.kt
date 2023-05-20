@@ -57,14 +57,6 @@ class PlayerViewModel @Inject constructor(
                 context.assets.open(assetPath),
             )
         }
-        if (url.startsWith(FILE_ASSET)) {
-            val assetPath = url.substringAfter(FILE_ASSET)
-            return@withContext WebResourceResponse(
-                mimeType,
-                StandardCharsets.UTF_8.toString(),
-                context.assets.open(assetPath),
-            )
-        }
 
         // Mimics script injection defined in extension's manifest.json
         val scriptsToInject = when {
@@ -72,25 +64,15 @@ class PlayerViewModel @Inject constructor(
             // "https://www.youtube.com/live_chat_replay*"
             url.startsWith("https://www.youtube.com/live_chat") -> {
                 listOf(
-                    "polyfill.bundle.js",
                     "chat-interceptor.bundle.js",
                     "chat.bundle.js",
                     "injector.bundle.js",
                     "translatormode.bundle.js",
                 )
             }
-            // "https://www.youtube.com/error*?*"
             url.startsWith("https://www.youtube.com/error") -> {
                 listOf(
-                    "polyfill.bundle.js",
-                    "workaround-injector.bundle.js",
-                )
-            }
-            // "https://www.twitch.tv/*"
-            url.startsWith("https://www.twitch.tv/") -> {
-                listOf(
-                    "polyfill.bundle.js",
-                    "twitch-injector.bundle.js",
+                    "video_embedder.bundle.js",
                 )
             }
             else -> emptyList()
@@ -131,4 +113,3 @@ class PlayerViewModel @Inject constructor(
 }
 
 private const val LOCAL_ASSET_BASEURL = "https://__local_android_asset_baseurl__/"
-private const val FILE_ASSET = "file:///"
