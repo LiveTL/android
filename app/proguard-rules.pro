@@ -1,6 +1,6 @@
 -dontobfuscate
 
--keep,allowoptimization class com.livetl.**
+-keep class com.livetl.** { *; }
 
 # Javascript interface
 -keepclassmembers class * {
@@ -16,11 +16,11 @@
 -keepclasseswithmembers class kotlinx.serialization.json.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
--keep,includedescriptorclasses class com.livetl.android.**$$serializer { *; }
--keepclassmembers class com.livetl.android.data.** {
+-keep,includedescriptorclasses class com.livetl.**$$serializer { *; }
+-keepclassmembers class com.livetl.data.** {
     *** Companion;
 }
--keepclasseswithmembers class com.livetl.android.** {
+-keepclasseswithmembers class com.livetl.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 
@@ -29,6 +29,8 @@
     public <methods>;
     private <methods>;
 }
+# https://issuetracker.google.com/issues/188703877
+-keep,allowobfuscation,allowoptimization class io.ktor.util.reflect.** { *; }
 
 # These are generated automatically by the Android Gradle plugin.
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
