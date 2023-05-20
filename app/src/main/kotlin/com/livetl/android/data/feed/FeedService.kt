@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 class FeedService @Inject constructor(
@@ -23,7 +24,7 @@ class FeedService @Inject constructor(
     suspend fun getFeed(
         organization: String? = "Hololive",
         status: StreamStatus,
-    ): List<Stream> = withContext(Dispatchers.IO) {
+    ): List<Stream> = withContext(SupervisorJob() + Dispatchers.IO) {
         val result = client.get<HttpResponse> {
             url {
                 baseUrl()
@@ -43,8 +44,13 @@ class FeedService @Inject constructor(
             baseHeaders()
         }
 
-        val response: HolodexVideosResponse = json.decodeFromString(result.readText())
-        response.items
+        try {
+            val response: HolodexVideosResponse = json.decodeFromString(result.readText())
+            response.items
+        } catch (e: Exception) {
+            Timber.e(e)
+            emptyList()
+        }
     }
 
     suspend fun getVideoInfo(videoId: String): Stream = withContext(SupervisorJob() + Dispatchers.IO) {
