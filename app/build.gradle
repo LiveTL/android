@@ -57,11 +57,11 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     composeOptions {
         kotlinCompilerExtensionVersion "1.4.7"
@@ -112,8 +112,6 @@ dependencies {
     final accompanist_version = '0.30.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -158,6 +156,5 @@ tasks.withType(KotlinCompile).configureEach {
         "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
         "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
-        "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
     ]
 }

@@ -18,9 +18,9 @@ import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +46,7 @@ fun AboutScreen(
     Scaffold(
         topBar = {
             Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
-                SmallTopAppBar(
+                TopAppBar(
                     modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.about))

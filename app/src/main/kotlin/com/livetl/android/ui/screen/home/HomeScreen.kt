@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToQueue
@@ -15,20 +17,18 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.TabIndicator
@@ -44,7 +44,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { viewModel.tabs.size }
 
     val openStreamInfo = { stream: Stream -> navigateToStreamInfo(stream.id) }
     val openStream = { stream: Stream -> navigateToPlayer(stream.id) }
@@ -53,7 +53,7 @@ fun HomeScreen(
         topBar = {
             Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
                 Column {
-                    SmallTopAppBar(
+                    TopAppBar(
                         modifier = Modifier.statusBarsPadding(),
                         title = {
                             Text(text = stringResource(R.string.app_name))
@@ -138,7 +138,6 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            count = viewModel.tabs.size,
             state = pagerState,
         ) { page ->
             val (status, tabViewModel) = viewModel.tabs[page]
