@@ -19,8 +19,8 @@ android {
         applicationId "com.livetl.android"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 286
-        versionName "8.0.3"
+        versionCode 287
+        versionName "8.0.4-beta01"
     }
 
     buildTypes {
@@ -28,8 +28,8 @@ android {
             applicationIdSuffix '.dev'
         }
         release {
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
