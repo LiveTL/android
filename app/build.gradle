@@ -19,8 +19,8 @@ android {
         applicationId "com.livetl.android"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 287
-        versionName "8.0.4-beta01"
+        versionCode 288
+        versionName "8.0.4"
     }
 
     buildTypes {
@@ -28,6 +28,7 @@ android {
             applicationIdSuffix '.dev'
         }
         release {
+            // TODO: for some reason this breaks HoloDex API response parsing
             shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -85,7 +86,7 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     implementation 'androidx.core:core-ktx:1.10.1'
 
     // Jetpack Compose
