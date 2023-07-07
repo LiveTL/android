@@ -126,6 +126,7 @@ fun HomeScreen(
                 },
                 confirmButton = {
                     TextButton(
+                        enabled = viewModel.openVideoUrl.isNotEmpty(),
                         onClick = { navigateToPlayer(viewModel.openVideoUrl) },
                     ) {
                         Text(stringResource(R.string.action_open))
