@@ -20,6 +20,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.util.collectAsState
+import com.livetl.android.util.isTvMode
 import com.livetl.android.util.setDefaultSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -97,7 +98,16 @@ fun PlayerScreen(
 
         AndroidView(
             modifier = modifier,
-            factory = { webviews.foregroundWebview },
+            factory = {
+                if (context.isTvMode()) {
+                    CursorLayout(it).apply {
+                        addView(webviews.foregroundWebview)
+                        requestFocus()
+                    }
+                } else {
+                    webviews.foregroundWebview
+                }
+            },
         )
     }
 

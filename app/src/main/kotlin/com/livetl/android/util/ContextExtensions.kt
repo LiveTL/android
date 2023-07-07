@@ -1,12 +1,15 @@
 package com.livetl.android.util
 
+import android.app.UiModeManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.PowerManager
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import com.livetl.android.R
 import timber.log.Timber
 import java.io.BufferedReader
@@ -56,4 +59,8 @@ fun Context.readFile(filePath: String): String {
         }
         total.toString()
     }
+}
+
+fun Context.isTvMode(): Boolean {
+    return getSystemService<UiModeManager>()?.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION
 }
