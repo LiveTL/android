@@ -20,6 +20,7 @@ import io.ktor.client.request.headers
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -102,6 +103,7 @@ class PlayerViewModel @Inject constructor(
 
     fun saveText(text: String, fileName: String) {
         // TODO
+        Timber.d("Save text to $fileName: $text")
     }
 }
 

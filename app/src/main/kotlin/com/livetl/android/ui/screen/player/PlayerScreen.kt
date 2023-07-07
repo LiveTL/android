@@ -125,7 +125,7 @@ fun PlayerScreen(
                         if (newStream.isLive) {
                             webviews.foregroundWebview.loadUrl(url)
                         } else {
-                            webviews.foregroundWebview.loadUrl(url + "&continuation=${newStream.chatContinuation}&isReplay=true")
+                            webviews.foregroundWebview.loadUrl("$url&continuation=${newStream.chatContinuation}&isReplay=true")
                         }
                     }
                 } catch (e: Throwable) {
