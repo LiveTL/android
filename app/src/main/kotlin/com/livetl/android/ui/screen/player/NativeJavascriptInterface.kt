@@ -63,7 +63,7 @@ class NativeJavascriptInterface(
         webViewStoragePolyfill.set(key, value)
     }
 
-    override fun onSharedPreferenceChanged(_prefs: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(_prefs: SharedPreferences?, key: String?) {
         Timber.d("Emitting storage key change: $key")
         runOnMainThread {
             backgroundWebview.runJS(
