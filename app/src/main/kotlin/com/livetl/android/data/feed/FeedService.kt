@@ -5,10 +5,10 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
+import io.ktor.http.path
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
@@ -25,7 +25,7 @@ class FeedService @Inject constructor(
         organization: String? = "Hololive",
         status: StreamStatus,
     ): List<Stream> = withContext(SupervisorJob() + Dispatchers.IO) {
-        val result = client.get<HttpResponse> {
+        val result = client.get {
             url {
                 baseUrl()
                 path("api", "v2", "videos")
@@ -45,7 +45,7 @@ class FeedService @Inject constructor(
         }
 
         try {
-            val response: HolodexVideosResponse = json.decodeFromString(result.readText())
+            val response: HolodexVideosResponse = json.decodeFromString(result.bodyAsText())
             response.items
         } catch (e: Exception) {
             Timber.e(e)
@@ -54,7 +54,7 @@ class FeedService @Inject constructor(
     }
 
     suspend fun getVideoInfo(videoId: String): Stream = withContext(SupervisorJob() + Dispatchers.IO) {
-        val result = client.get<HttpResponse> {
+        val result = client.get {
             url {
                 baseUrl()
                 path("api", "v2", "videos", videoId)
@@ -62,7 +62,7 @@ class FeedService @Inject constructor(
             baseHeaders()
         }
 
-        json.decodeFromString(result.readText())
+        json.decodeFromString(result.bodyAsText())
     }
 
     private fun URLBuilder.baseUrl() {

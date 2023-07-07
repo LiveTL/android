@@ -1,11 +1,10 @@
 package com.livetl.android.data.stream
 
 import io.ktor.client.HttpClient
-import io.ktor.client.features.ClientRequestException
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
+import io.ktor.client.statement.bodyAsText
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,12 +49,12 @@ class StreamService @Inject constructor(
     }
 
     private suspend fun getChatContinuation(videoId: String): String? {
-        val result = client.get<HttpResponse>("https://www.youtube.com/watch?v=$videoId") {
+        val result = client.get("https://www.youtube.com/watch?v=$videoId") {
             headers {
                 set("User-Agent", USER_AGENT)
             }
         }
-        val matches = CHAT_CONTINUATION_PATTERN.matcher(result.readText())
+        val matches = CHAT_CONTINUATION_PATTERN.matcher(result.bodyAsText())
         return if (matches.find()) {
             matches.group(1)
         } else {

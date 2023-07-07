@@ -15,11 +15,9 @@ import com.livetl.android.util.readFile
 import com.livetl.android.util.toggle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.features.expectSuccess
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -43,7 +41,6 @@ class PlayerViewModel @Inject constructor(
         return streamService.getStreamInfo(videoId)
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getInjectedResponse(context: Context, url: String): WebResourceResponse? = withContext(Dispatchers.IO) {
         val fileExtension = MimeTypeMap.getFileExtensionFromUrl(url)
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
@@ -82,11 +79,7 @@ class PlayerViewModel @Inject constructor(
             return@withContext null
         }
 
-        val response = client.get<HttpResponse>(url) {
-            // Don't throw an exception on the error 404 page that's
-            // used for the player
-            expectSuccess = false
-
+        val response = client.get(url) {
             headers {
                 set("User-Agent", USER_AGENT)
             }
@@ -99,7 +92,7 @@ class PlayerViewModel @Inject constructor(
         WebResourceResponse(
             mimeType,
             StandardCharsets.UTF_8.toString(),
-            ByteArrayInputStream((response.readText() + scripts).toByteArray(StandardCharsets.UTF_8)),
+            ByteArrayInputStream((response.bodyAsText() + scripts).toByteArray(StandardCharsets.UTF_8)),
         )
     }
 
