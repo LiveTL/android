@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.livetl.android"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 288
         versionName "8.0.4"
     }
@@ -65,7 +65,7 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.8"
+        kotlinCompilerExtensionVersion "1.5.0"
     }
 
     lint {
@@ -90,7 +90,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.10.1'
 
     // Jetpack Compose
-    implementation platform("dev.chrisbanes.compose:compose-bom:2023.06.00-alpha01")
+    implementation platform("dev.chrisbanes.compose:compose-bom:2023.07.00-alpha01")
     implementation "androidx.compose.ui:ui"
     implementation "androidx.compose.material:material"
     implementation "androidx.compose.material:material-icons-extended"
@@ -111,7 +111,7 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.31.4-beta'
+    final accompanist_version = '0.31.5-beta'
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
 
     // Preferences
