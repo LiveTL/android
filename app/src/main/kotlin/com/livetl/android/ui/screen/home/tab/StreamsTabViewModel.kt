@@ -14,7 +14,6 @@ class StreamsTabViewModel(
     private val prefs: AppPreferences,
     private val status: StreamStatus,
 ) : ViewModel() {
-
     var isRefreshing by mutableStateOf(false)
     var streams by mutableStateOf<List<Stream>>(emptyList())
 

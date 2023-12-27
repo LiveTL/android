@@ -53,9 +53,10 @@ fun MainNavHost(
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
     ) {
         NavHost(navController, startDestination = startRoute.id) {
             composable(Route.Home.id) {

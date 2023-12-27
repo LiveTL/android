@@ -104,9 +104,10 @@ fun WelcomeScreen(
     }
 }
 
-private val FAQ = listOf(
-    R.string.welcome_faq_q_how_it_works to R.string.welcome_faq_a_how_it_works,
-    R.string.welcome_faq_q_trust to R.string.welcome_faq_a_trust,
-    R.string.welcome_faq_q_no_translations to R.string.welcome_faq_a_no_translations,
-    R.string.welcome_faq_q_custom_filter to R.string.welcome_faq_a_custom_filter,
-)
+private val FAQ =
+    listOf(
+        R.string.welcome_faq_q_how_it_works to R.string.welcome_faq_a_how_it_works,
+        R.string.welcome_faq_q_trust to R.string.welcome_faq_a_trust,
+        R.string.welcome_faq_q_no_translations to R.string.welcome_faq_a_no_translations,
+        R.string.welcome_faq_q_custom_filter to R.string.welcome_faq_a_custom_filter,
+    )

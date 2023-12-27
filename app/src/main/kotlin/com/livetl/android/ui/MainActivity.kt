@@ -24,7 +24,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @Inject
     lateinit var prefs: AppPreferences
 
@@ -37,18 +36,20 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val startRoute = when (prefs.showWelcomeScreen().get()) {
-            true -> Route.Welcome
-            false -> Route.Home
-        }
+        val startRoute =
+            when (prefs.showWelcomeScreen().get()) {
+                true -> Route.Welcome
+                false -> Route.Home
+            }
 
         setContent {
             LiveTLTheme {
-                navController = MainNavHost(
-                    startRoute = startRoute,
-                    setKeepScreenOn = this::setKeepScreenOn,
-                    setFullscreen = this::setFullscreen,
-                )
+                navController =
+                    MainNavHost(
+                        startRoute = startRoute,
+                        setKeepScreenOn = this::setKeepScreenOn,
+                        setFullscreen = this::setFullscreen,
+                    )
             }
         }
 
@@ -80,11 +81,12 @@ class MainActivity : ComponentActivity() {
     private fun setKeepScreenOn(enabled: Boolean) {
         if (enabled) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            wakeLock = powerManager.run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LiveTL::WakelockTag").apply {
-                    acquire()
+            wakeLock =
+                powerManager.run {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LiveTL::WakelockTag").apply {
+                        acquire()
+                    }
                 }
-            }
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             wakeLock?.release()

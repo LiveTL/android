@@ -1,11 +1,17 @@
 package com.livetl.android.ui.navigation
 
 sealed class Route(val id: String) {
-    object Home : Route("home")
-    object StreamInfo : Route("stream")
-    object Welcome : Route("welcome")
-    object Player : Route("player")
-    object Settings : Route("settings")
-    object About : Route("about")
-    object Licenses : Route("licenses")
+    data object Home : Route("home")
+
+    data object StreamInfo : Route("stream")
+
+    data object Welcome : Route("welcome")
+
+    data object Player : Route("player")
+
+    data object Settings : Route("settings")
+
+    data object About : Route("about")
+
+    data object Licenses : Route("licenses")
 }

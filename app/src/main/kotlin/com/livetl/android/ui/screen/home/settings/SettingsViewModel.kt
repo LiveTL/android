@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    val prefs: AppPreferences,
-) : ViewModel()
+class SettingsViewModel
+    @Inject
+    constructor(
+        val prefs: AppPreferences,
+    ) : ViewModel()

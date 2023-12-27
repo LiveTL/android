@@ -16,7 +16,6 @@ class NativeJavascriptInterface(
     private val toggleAppFullscreen: () -> Unit,
     private val saveText: (String, String) -> Unit,
 ) : SharedPreferences.OnSharedPreferenceChangeListener {
-
     init {
         webViewStoragePolyfill.addListener(this)
     }
@@ -48,7 +47,10 @@ class NativeJavascriptInterface(
     }
 
     @JavascriptInterface
-    fun downloadText(text: String, fileName: String) {
+    fun downloadText(
+        text: String,
+        fileName: String,
+    ) {
         Timber.d("Downloading text to $fileName: $text")
         saveText(text, fileName)
     }
@@ -59,11 +61,17 @@ class NativeJavascriptInterface(
     }
 
     @JavascriptInterface
-    fun setAndroidStorage(key: String, value: String) {
+    fun setAndroidStorage(
+        key: String,
+        value: String,
+    ) {
         webViewStoragePolyfill.set(key, value)
     }
 
-    override fun onSharedPreferenceChanged(_prefs: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(
+        _prefs: SharedPreferences?,
+        key: String?,
+    ) {
         Timber.d("Emitting storage key change: $key")
         runOnMainThread {
             backgroundWebview.runJS(

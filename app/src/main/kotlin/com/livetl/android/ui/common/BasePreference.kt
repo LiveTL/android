@@ -33,9 +33,10 @@ fun PreferenceGroupHeader(
         color = MaterialTheme.colorScheme.secondary,
         fontSize = MaterialTheme.typography.titleMedium.fontSize,
         fontWeight = FontWeight.Medium,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
     )
 }
 
@@ -49,10 +50,11 @@ fun PreferenceRow(
     val height = if (subtitle != null) 72.dp else 56.dp
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .requiredHeight(height)
-            .clickable { onClick() },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .requiredHeight(height)
+                .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(

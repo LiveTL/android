@@ -49,15 +49,17 @@ fun StreamsTab(
         refreshFeed()
     }
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = viewModel.isRefreshing,
-        onRefresh = { refreshFeed() },
-    )
+    val pullRefreshState =
+        rememberPullRefreshState(
+            refreshing = viewModel.isRefreshing,
+            onRefresh = { refreshFeed() },
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pullRefresh(pullRefreshState),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState),
     ) {
         PullRefreshIndicator(
             refreshing = viewModel.isRefreshing,

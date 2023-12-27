@@ -11,25 +11,31 @@ import javax.inject.Inject
  *
  * This allows persisting basic key/value strings and listening to changes.
  */
-class WebViewStoragePolyfill @Inject constructor(@ApplicationContext context: Context) {
+class WebViewStoragePolyfill
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+    ) {
+        private val prefs = context.getSharedPreferences("webview_storage", Context.MODE_PRIVATE)
 
-    private val prefs = context.getSharedPreferences("webview_storage", Context.MODE_PRIVATE)
+        fun get(key: String): String? {
+            return prefs.getString(key, null)
+        }
 
-    fun get(key: String): String? {
-        return prefs.getString(key, null)
-    }
+        fun set(
+            key: String,
+            value: String,
+        ) {
+            prefs.edit {
+                set(key, value)
+            }
+        }
 
-    fun set(key: String, value: String) {
-        prefs.edit {
-            set(key, value)
+        fun addListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+            prefs.registerOnSharedPreferenceChangeListener(listener)
+        }
+
+        fun removeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+            prefs.unregisterOnSharedPreferenceChangeListener(listener)
         }
     }
-
-    fun addListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    fun removeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        prefs.unregisterOnSharedPreferenceChangeListener(listener)
-    }
-}

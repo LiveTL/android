@@ -12,27 +12,30 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val streamRepository: StreamRepository,
-    val prefs: AppPreferences,
-) : ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(
+        private val streamRepository: StreamRepository,
+        val prefs: AppPreferences,
+    ) : ViewModel() {
+        val tabs =
+            StreamStatus.values().map {
+                it to
+                    StreamsTabViewModel(
+                        streamRepository = streamRepository,
+                        prefs = prefs,
+                        status = it,
+                    )
+            }
 
-    val tabs = StreamStatus.values().map {
-        it to StreamsTabViewModel(
-            streamRepository = streamRepository,
-            prefs = prefs,
-            status = it,
-        )
+        var showOpenVideoDialog by mutableStateOf(false)
+        var openVideoUrl by mutableStateOf("")
+
+        fun showOpenVideoDialog() {
+            showOpenVideoDialog = true
+        }
+
+        fun hideOpenVideoDialog() {
+            showOpenVideoDialog = false
+        }
     }
-
-    var showOpenVideoDialog by mutableStateOf(false)
-    var openVideoUrl by mutableStateOf("")
-
-    fun showOpenVideoDialog() {
-        showOpenVideoDialog = true
-    }
-
-    fun hideOpenVideoDialog() {
-        showOpenVideoDialog = false
-    }
-}

@@ -21,9 +21,7 @@ import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
 import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 
 @Composable
-fun LicensesScreen(
-    onBackPressed: () -> Unit,
-) {
+fun LicensesScreen(onBackPressed: () -> Unit) {
     Scaffold(
         topBar = {
             Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
@@ -45,16 +43,18 @@ fun LicensesScreen(
         },
     ) { contentPadding ->
         LibrariesContainer(
-            modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
             contentPadding = contentPadding,
-            colors = LibraryDefaults.libraryColors(
-                backgroundColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-                badgeBackgroundColor = MaterialTheme.colorScheme.primary,
-                badgeContentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
+            colors =
+                LibraryDefaults.libraryColors(
+                    backgroundColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
+                    badgeBackgroundColor = MaterialTheme.colorScheme.primary,
+                    badgeContentColor = MaterialTheme.colorScheme.onPrimary,
+                ),
         )
     }
 }

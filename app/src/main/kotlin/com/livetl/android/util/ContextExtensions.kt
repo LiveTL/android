@@ -16,7 +16,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-fun Context.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toast(
+    text: String,
+    duration: Int = Toast.LENGTH_SHORT,
+) {
     Toast.makeText(this, text, duration).show()
 }
 
@@ -39,10 +42,11 @@ fun Context.copyToClipboard(text: String) {
 }
 
 fun Context.share(text: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, text)
-    }
+    val intent =
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
     startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
 }
 

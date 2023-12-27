@@ -49,52 +49,58 @@ fun PlayerScreen(
         }
     }
 
-    val webviews = remember {
-        val backgroundWebview = WebView(context).apply {
-            setDefaultSettings()
-            loadUrl("file:///android_asset/background.html")
-        }
-
-        val foregroundWebview = WebView(context).apply {
-            setDefaultSettings()
-
-            webViewClient = object : WebViewClient() {
-                override fun shouldInterceptRequest(
-                    view: WebView,
-                    request: WebResourceRequest,
-                ): WebResourceResponse? {
-                    val url = request.url.toString()
-
-                    return runBlocking { viewModel.getInjectedResponse(context, url) }
-                        ?: super.shouldInterceptRequest(view, request)
+    val webviews =
+        remember {
+            val backgroundWebview =
+                WebView(context).apply {
+                    setDefaultSettings()
+                    loadUrl("file:///android_asset/background.html")
                 }
-            }
+
+            val foregroundWebview =
+                WebView(context).apply {
+                    setDefaultSettings()
+
+                    webViewClient =
+                        object : WebViewClient() {
+                            override fun shouldInterceptRequest(
+                                view: WebView,
+                                request: WebResourceRequest,
+                            ): WebResourceResponse? {
+                                val url = request.url.toString()
+
+                                return runBlocking { viewModel.getInjectedResponse(context, url) }
+                                    ?: super.shouldInterceptRequest(view, request)
+                            }
+                        }
+                }
+
+            val jsInterface =
+                NativeJavascriptInterface(
+                    viewModel.webViewLocalStoragePolyfill,
+                    backgroundWebview,
+                    foregroundWebview,
+                    viewModel::toggleFullscreen,
+                    viewModel::saveText,
+                )
+            backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
+            foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
+
+            WebViews(jsInterface, backgroundWebview, foregroundWebview)
         }
-
-        val jsInterface = NativeJavascriptInterface(
-            viewModel.webViewLocalStoragePolyfill,
-            backgroundWebview,
-            foregroundWebview,
-            viewModel::toggleFullscreen,
-            viewModel::saveText,
-        )
-        backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
-        foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
-
-        WebViews(jsInterface, backgroundWebview, foregroundWebview)
-    }
 
     if (streamInfo == null) {
         LoadingIndicator()
     } else {
-        val modifier = if (isFullscreen) {
-            Modifier
-                .fillMaxSize()
-        } else {
-            Modifier
-                .fillMaxSize()
-                .safeDrawingPadding()
-        }
+        val modifier =
+            if (isFullscreen) {
+                Modifier
+                    .fillMaxSize()
+            } else {
+                Modifier
+                    .fillMaxSize()
+                    .safeDrawingPadding()
+            }
 
         AndroidView(
             modifier = modifier,
@@ -135,7 +141,9 @@ fun PlayerScreen(
                         if (newStream.isLive) {
                             webviews.foregroundWebview.loadUrl(url)
                         } else {
-                            webviews.foregroundWebview.loadUrl("$url&continuation=${newStream.chatContinuation}&isReplay=true")
+                            webviews.foregroundWebview.loadUrl(
+                                "$url&continuation=${newStream.chatContinuation}&isReplay=true",
+                            )
                         }
                     }
                 } catch (e: Throwable) {

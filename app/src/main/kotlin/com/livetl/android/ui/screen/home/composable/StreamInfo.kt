@@ -74,10 +74,11 @@ fun StreamInfo(
                 AsyncImage(
                     model = stream!!.thumbnail,
                     contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16 / 9f)
-                        .background(Color.Black),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16 / 9f)
+                            .background(Color.Black),
                 )
             }
 
@@ -111,10 +112,14 @@ fun StreamInfo(
                                 .firstOrNull()
                                 ?.let { annotation ->
                                     when (annotation.tag) {
-                                        SymbolAnnotationType.LINK.name -> uriHandler.openUri(
-                                            annotation.item,
-                                        )
-                                        SymbolAnnotationType.HASHTAG.name -> uriHandler.openUri("https://www.youtube.com/hashtag/${annotation.item}")
+                                        SymbolAnnotationType.LINK.name ->
+                                            uriHandler.openUri(
+                                                annotation.item,
+                                            )
+                                        SymbolAnnotationType.HASHTAG.name ->
+                                            uriHandler.openUri(
+                                                "https://www.youtube.com/hashtag/${annotation.item}",
+                                            )
                                         else -> Unit
                                     }
                                 }

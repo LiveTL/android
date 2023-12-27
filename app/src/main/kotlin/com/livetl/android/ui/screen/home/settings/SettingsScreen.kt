@@ -58,9 +58,10 @@ fun SettingsScreen(
         },
     ) { contentPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPadding),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding),
         ) {
             items(
                 items = ORGANIZATIONS,
@@ -69,10 +70,11 @@ fun SettingsScreen(
                 val selectOrganization = { viewModel.prefs.feedOrganization().set(organization) }
 
                 Row(
-                    modifier = Modifier
-                        .requiredHeight(48.dp)
-                        .fillMaxWidth()
-                        .clickable { selectOrganization() },
+                    modifier =
+                        Modifier
+                            .requiredHeight(48.dp)
+                            .fillMaxWidth()
+                            .clickable { selectOrganization() },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(
