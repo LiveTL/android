@@ -116,6 +116,12 @@ fun AboutScreen(
             }
             item {
                 PreferenceRow(
+                    title = R.string.privacy_policy,
+                    onClick = { uriHandler.openUri("https://livetl.app/privacy") },
+                )
+            }
+            item {
+                PreferenceRow(
                     title = R.string.show_welcome_screen,
                     onClick = { navigateToWelcome() },
                 )
