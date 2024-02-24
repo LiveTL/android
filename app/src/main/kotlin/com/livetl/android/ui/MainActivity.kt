@@ -13,7 +13,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
-import com.livetl.android.ui.navigation.MainNavHost
+import com.livetl.android.ui.navigation.mainNavHost
 import com.livetl.android.ui.navigation.Route
 import com.livetl.android.ui.navigation.navigateToPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LiveTLTheme {
                 navController =
-                    MainNavHost(
+                    mainNavHost(
                         startRoute = startRoute,
                         setKeepScreenOn = this::setKeepScreenOn,
                         setFullscreen = this::setFullscreen,

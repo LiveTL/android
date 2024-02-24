@@ -19,7 +19,7 @@ class HomeViewModel
         val prefs: AppPreferences,
     ) : ViewModel() {
         val tabs =
-            StreamStatus.values().map {
+            StreamStatus.entries.map {
                 it to
                     StreamsTabViewModel(
                         streamRepository = streamRepository,

@@ -46,12 +46,12 @@ import com.livetl.android.util.toRelativeString
 
 @Composable
 fun Stream(
-    modifier: Modifier = Modifier,
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
     openPlayer: (Stream) -> Unit,
     openStreamInfo: (Stream) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier =

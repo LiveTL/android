@@ -13,8 +13,8 @@ import timber.log.Timber
 @Suppress("UNUSED")
 class NativeJavascriptInterface(
     private val webViewStoragePolyfill: WebViewStoragePolyfill,
-    private val backgroundWebview: WebView,
-    private val foregroundWebview: WebView,
+    private val backgroundWebView: WebView,
+    private val foregroundWebView: WebView,
     private val toggleAppFullscreen: () -> Unit,
     private val saveText: (String, String) -> Unit,
 ) : SharedPreferences.OnSharedPreferenceChangeListener {
@@ -30,7 +30,7 @@ class NativeJavascriptInterface(
     fun sendToBackground(data: String) {
         Timber.d("Sending to background: $data")
         runOnMainThread {
-            backgroundWebview.runJS("window.postMessage($data, '*');")
+            backgroundWebView.runJS("window.postMessage($data, '*');")
         }
     }
 
@@ -38,7 +38,7 @@ class NativeJavascriptInterface(
     fun sendToForeground(data: String) {
         Timber.d("Sending to foreground: $data")
         runOnMainThread {
-            foregroundWebview.runJS("window.postMessage($data, '*');")
+            foregroundWebView.runJS("window.postMessage($data, '*');")
         }
     }
 
@@ -76,7 +76,7 @@ class NativeJavascriptInterface(
     ) {
         Timber.d("Emitting storage key change: $key")
         runOnMainThread {
-            backgroundWebview.runJS(
+            backgroundWebView.runJS(
                 """
                 window.dispatchEvent(
                     new CustomEvent("externalstorage", {

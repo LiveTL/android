@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PreferenceGroupHeader(
-    modifier: Modifier = Modifier,
     @StringRes title: Int,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = stringResource(title),
@@ -43,6 +43,7 @@ fun PreferenceGroupHeader(
 @Composable
 fun PreferenceRow(
     title: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     subtitle: String? = null,
     action: @Composable (() -> Unit)? = null,
@@ -51,7 +52,7 @@ fun PreferenceRow(
 
     Row(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .requiredHeight(height)
                 .clickable { onClick() },
@@ -92,9 +93,10 @@ fun PreferenceRow(
 @Composable
 fun PreferenceRow(
     @StringRes title: Int,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     subtitle: String? = null,
     action: @Composable (() -> Unit)? = null,
 ) {
-    PreferenceRow(stringResource(title), onClick, subtitle, action)
+    PreferenceRow(stringResource(title), modifier, onClick, subtitle, action)
 }

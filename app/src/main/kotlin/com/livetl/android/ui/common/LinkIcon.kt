@@ -16,20 +16,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LinkIcon(
-    modifier: Modifier = Modifier,
     @StringRes labelRes: Int,
     icon: ImageVector,
     url: String,
+    modifier: Modifier = Modifier,
 ) {
     val uriHandler = LocalUriHandler.current
-    LinkIcon(modifier, labelRes, icon) { uriHandler.openUri(url) }
+    LinkIcon(labelRes, icon, modifier) { uriHandler.openUri(url) }
 }
 
 @Composable
 fun LinkIcon(
-    modifier: Modifier = Modifier,
     @StringRes labelRes: Int,
     icon: ImageVector,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     Column(

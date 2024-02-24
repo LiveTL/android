@@ -51,13 +51,13 @@ fun PlayerScreen(
 
     val webviews =
         remember {
-            val backgroundWebview =
+            val backgroundWebView =
                 WebView(context).apply {
                     setDefaultSettings()
                     loadUrl("file:///android_asset/background.html")
                 }
 
-            val foregroundWebview =
+            val foregroundWebView =
                 WebView(context).apply {
                     setDefaultSettings()
 
@@ -78,15 +78,15 @@ fun PlayerScreen(
             val jsInterface =
                 NativeJavascriptInterface(
                     viewModel.webViewLocalStoragePolyfill,
-                    backgroundWebview,
-                    foregroundWebview,
+                    backgroundWebView,
+                    foregroundWebView,
                     viewModel::toggleFullscreen,
                     viewModel::saveText,
                 )
-            backgroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
-            foregroundWebview.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
+            backgroundWebView.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
+            foregroundWebView.addJavascriptInterface(jsInterface, JS_INTERFACE_NAME)
 
-            WebViews(jsInterface, backgroundWebview, foregroundWebview)
+            WebViews(jsInterface, backgroundWebView, foregroundWebView)
         }
 
     if (streamInfo == null) {
@@ -107,11 +107,11 @@ fun PlayerScreen(
             factory = {
                 if (context.isTvMode()) {
                     CursorLayout(it).apply {
-                        addView(webviews.foregroundWebview)
+                        addView(webviews.foregroundWebView)
                         requestFocus()
                     }
                 } else {
-                    webviews.foregroundWebview
+                    webviews.foregroundWebView
                 }
             },
         )
@@ -123,8 +123,8 @@ fun PlayerScreen(
         onDispose {
             setKeepScreenOn(false)
 
-            webviews.backgroundWebview.destroy()
-            webviews.foregroundWebview.destroy()
+            webviews.backgroundWebView.destroy()
+            webviews.foregroundWebView.destroy()
             webviews.jsInterface.destroy()
         }
     }
@@ -139,9 +139,9 @@ fun PlayerScreen(
 
                         val url = "file:///android_asset/watch.html?video=$videoId"
                         if (newStream.isLive) {
-                            webviews.foregroundWebview.loadUrl(url)
+                            webviews.foregroundWebView.loadUrl(url)
                         } else {
-                            webviews.foregroundWebview.loadUrl(
+                            webviews.foregroundWebView.loadUrl(
                                 "$url&continuation=${newStream.chatContinuation}&isReplay=true",
                             )
                         }
@@ -151,7 +151,7 @@ fun PlayerScreen(
 
                     // Fallback: attempt to load as a live stream
                     val url = "file:///android_asset/watch.html?video=$videoId"
-                    webviews.foregroundWebview.loadUrl(url)
+                    webviews.foregroundWebView.loadUrl(url)
                 }
             }
         }
@@ -162,6 +162,6 @@ private const val JS_INTERFACE_NAME = "nativeJavascriptInterface"
 
 private data class WebViews(
     val jsInterface: NativeJavascriptInterface,
-    val backgroundWebview: WebView,
-    val foregroundWebview: WebView,
+    val backgroundWebView: WebView,
+    val foregroundWebView: WebView,
 )

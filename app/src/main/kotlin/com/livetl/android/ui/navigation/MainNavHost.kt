@@ -1,6 +1,5 @@
 package com.livetl.android.ui.navigation
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -36,9 +35,8 @@ fun NavHostController.navigateToPlayer(urlOrId: String) {
     }
 }
 
-@SuppressLint("ComposableNaming")
 @Composable
-fun MainNavHost(
+fun mainNavHost(
     startRoute: Route,
     setKeepScreenOn: (Boolean) -> Unit,
     setFullscreen: (Boolean) -> Unit,
