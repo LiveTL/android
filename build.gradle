@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        kotlin_version = '1.9.21'
-        about_libs_version = '10.9.2'
+        kotlin_version = '1.9.22'
+        about_libs_version = '10.10.0'
         hilt_version = '2.50'
     }
     repositories {
@@ -10,7 +10,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.1.4"
+        classpath "com.android.tools.build:gradle:8.2.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:$about_libs_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
@@ -25,6 +25,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
 }

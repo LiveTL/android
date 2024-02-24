@@ -62,7 +62,7 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.5.7"
+        kotlinCompilerExtensionVersion "1.5.8"
     }
 
     lint {
@@ -73,11 +73,11 @@ android {
 
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.1.0'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.2.0'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Logging
@@ -87,7 +87,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.12.0'
 
     // Jetpack Compose
-    implementation platform("dev.chrisbanes.compose:compose-bom:2023.12.00-alpha04")
+    implementation platform("dev.chrisbanes.compose:compose-bom:2024.02.00-alpha01")
     implementation "androidx.compose.ui:ui"
     implementation "androidx.compose.material:material"
     implementation "androidx.compose.material:material-icons-extended"
@@ -95,20 +95,20 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling"
     implementation "androidx.compose.ui:ui-tooling-preview"
     implementation "androidx.compose.ui:ui-util"
-    implementation 'androidx.navigation:navigation-compose:2.7.6'
+    implementation 'androidx.navigation:navigation-compose:2.7.7'
 
     // Networking
     final ktor_version = '2.3.2'
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
 
     // Image loading
-    final coil_version = '2.5.0'
+    final coil_version = '2.6.0'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-compose:$coil_version"
 
-    final accompanist_version = '0.33.1-alpha'
+    final accompanist_version = '0.35.0-alpha'
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
 
     // Preferences
@@ -116,12 +116,12 @@ dependencies {
     implementation 'com.github.tfcporciuncula.flow-preferences:flow-preferences:1.4.0'
 
     // OSS licenses
-    implementation "com.mikepenz:aboutlibraries-compose:$about_libs_version"
+    implementation "com.mikepenz:aboutlibraries-compose-m3:$about_libs_version"
 }
 
 // Requires the submodules to already be initialized, i.e.:
 // git submodule update --init --recursive
-task buildExtensionSource {
+tasks.register('buildExtensionSource') {
     doLast {
         exec {
             workingDir "../extension/LiveTL"
@@ -133,7 +133,8 @@ task buildExtensionSource {
         }
     }
 }
-task copyExtensionArtifacts(dependsOn: buildExtensionSource, type: Copy) {
+tasks.register('copyExtensionArtifacts', Copy) {
+    dependsOn buildExtensionSource
     from '../extension/LiveTL/build'
     into './src/main/assets'
     include '**/*'

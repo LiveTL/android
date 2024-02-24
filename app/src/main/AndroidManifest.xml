@@ -6,6 +6,9 @@
 
     <!-- For Android TV -->
     <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
     <application
         android:label="@string/app_name"
@@ -21,7 +24,6 @@
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
-            android:label="@string/app_name"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true">
             <intent-filter>
@@ -42,23 +44,15 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- URLs handled by YouTube app -->
-                <data
-                    android:host="youtu.be"
-                    android:scheme="https" />
-                <data
-                    android:host="youtube.com"
-                    android:scheme="https" />
-                <data
-                    android:host="m.youtube.com"
-                    android:scheme="https" />
-                <data
-                    android:host="www.youtube.com"
-                    android:scheme="https" />
+                <data android:scheme="https"/>
+                <data android:host="youtu.be"/>
+                <data android:host="youtube.com"/>
+                <data android:host="m.youtube.com"/>
+                <data android:host="www.youtube.com"/>
 
                 <!-- LiveTL URI; e.g. livetl://translate/123456 -->
-                <data
-                    android:host="translate"
-                    android:scheme="livetl" />
+                <data android:scheme="livetl"/>
+                <data android:host="translate"/>
             </intent-filter>
         </activity>
     </application>

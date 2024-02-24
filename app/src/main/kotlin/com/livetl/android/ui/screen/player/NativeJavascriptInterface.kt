@@ -6,8 +6,10 @@ import android.webkit.WebView
 import com.livetl.android.util.WebViewStoragePolyfill
 import com.livetl.android.util.runJS
 import com.livetl.android.util.runOnMainThread
+import kotlinx.coroutines.DelicateCoroutinesApi
 import timber.log.Timber
 
+@OptIn(DelicateCoroutinesApi::class)
 @Suppress("UNUSED")
 class NativeJavascriptInterface(
     private val webViewStoragePolyfill: WebViewStoragePolyfill,

@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Icon
@@ -54,7 +54,7 @@ fun AboutScreen(
                     navigationIcon = {
                         IconButton(onClick = { onBackPressed() }) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = stringResource(R.string.cd_back),
                             )
                         }
@@ -88,7 +88,7 @@ fun AboutScreen(
                     )
                     LinkIcon(
                         labelRes = R.string.about_discord,
-                        icon = Icons.Outlined.Chat,
+                        icon = Icons.AutoMirrored.Outlined.Chat,
                         url = "https://discord.gg/uJrV3tmthg",
                     )
                     LinkIcon(

@@ -5,10 +5,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,8 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
-import com.mikepenz.aboutlibraries.ui.compose.LibrariesContainer
-import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
+import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @Composable
 fun LicensesScreen(onBackPressed: () -> Unit) {
@@ -33,7 +31,7 @@ fun LicensesScreen(onBackPressed: () -> Unit) {
                     navigationIcon = {
                         IconButton(onClick = { onBackPressed() }) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = stringResource(R.string.cd_back),
                             )
                         }
@@ -48,13 +46,6 @@ fun LicensesScreen(onBackPressed: () -> Unit) {
                     .fillMaxSize()
                     .navigationBarsPadding(),
             contentPadding = contentPadding,
-            colors =
-                LibraryDefaults.libraryColors(
-                    backgroundColor = MaterialTheme.colorScheme.background,
-                    contentColor = MaterialTheme.colorScheme.onBackground,
-                    badgeBackgroundColor = MaterialTheme.colorScheme.primary,
-                    badgeContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
         )
     }
 }
