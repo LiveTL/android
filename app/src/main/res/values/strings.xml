@@ -28,6 +28,22 @@
     <string name="youtube_url_hint">Enter a YouTube URL or ID</string>
     <string name="action_open">Open</string>
 
+    <string name="chat">Chat</string>
+    <string name="chat_no_messages">No chat messages</string>
+    <string name="error_chat_load">Failed to connect to chat</string>
+
+    <string name="setting_tl_languages">Languages</string>
+    <string name="setting_show_all_messages">All messages</string>
+    <string name="setting_show_mod_messages">Mod messages</string>
+    <string name="setting_show_verified_messages">Verified messages</string>
+    <string name="setting_show_owner_messages">Owner messages</string>
+    <plurals name="num_items">
+        <item quantity="one">%1$d item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
+    <string name="setting_text_size">Text size</string>
+    <string name="percentage">%1$d%%</string>
+
     <string name="about_version">Version %s</string>
     <string name="about_website">Website</string>
     <string name="about_discord" translatable="false">Discord</string>

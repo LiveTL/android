@@ -1,3 +1,0 @@
-[submodule "extension/LiveTL"]
-	path = extension/LiveTL
-	url = git@github.com:LiveTL/LiveTL.git

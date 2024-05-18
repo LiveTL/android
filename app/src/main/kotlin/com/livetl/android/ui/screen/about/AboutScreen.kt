@@ -7,13 +7,9 @@ import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Chat
@@ -38,8 +34,8 @@ import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.data.media.YouTubeNotificationListenerService
 import com.livetl.android.ui.common.LinkIcon
-import com.livetl.android.ui.common.PreferenceGroupHeader
-import com.livetl.android.ui.common.PreferenceRow
+import com.livetl.android.ui.common.preference.PreferenceGroupHeader
+import com.livetl.android.ui.common.preference.PreferenceRow
 
 @Composable
 fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navigateToWelcome: () -> Unit) {
@@ -48,9 +44,8 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
 
     Scaffold(
         topBar = {
-            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+            Surface {
                 TopAppBar(
-                    modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.about))
                     },
@@ -157,10 +152,6 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                         },
                     )
                 }
-            }
-
-            item {
-                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }

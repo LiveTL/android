@@ -14,3 +14,5 @@ fun String.escapeHtmlEntities(): String = if (Build.VERSION.SDK_INT >= Build.VER
 fun String.capitalize(): String = replaceFirstChar {
     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
 }
+
+fun String.trimToSingleLine(): String = trimIndent().replace("\n", "")

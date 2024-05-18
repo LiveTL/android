@@ -3,6 +3,8 @@ package com.livetl.android.ui.common
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,6 +35,9 @@ fun LinkIcon(@StringRes labelRes: Int, icon: ImageVector, modifier: Modifier = M
             imageVector = icon,
             contentDescription = null,
         )
+
+        Spacer(Modifier.height(4.dp))
+
         Text(stringResource(labelRes))
     }
 }

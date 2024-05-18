@@ -2,12 +2,28 @@ package com.livetl.android.util
 
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
+import android.util.Base64
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.livetl.android.BuildConfig
 
 fun createScriptTag(js: String): String = """<script type="text/javascript">$js</script>""".trimIndent()
+
+fun WebView.injectScript(js: String) {
+    val encodedJs = Base64.encodeToString(js.toByteArray(), Base64.NO_WRAP)
+    loadUrl(
+        """
+        javascript:(function() {
+            var parent = document.getElementsByTagName('head').item(0);
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.innerHTML = window.atob('$encodedJs');
+            parent.appendChild(script);
+        })()
+        """.trimToSingleLine(),
+    )
+}
 
 fun WebView.runJS(js: String) {
     evaluateJavascript("(function() { $js })()", null)
@@ -33,8 +49,9 @@ fun WebView.setDefaultSettings() {
         allowContentAccess = true
         allowFileAccess = true
 
-        // Desktop UAS to make the YT player default to the desktop version
-        userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-            "(KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+        userAgentString = USER_AGENT
     }
 }
+
+// Desktop UA to make the YT player default to the desktop version
+const val USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0"

@@ -5,6 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import com.livetl.android.data.chat.TranslatedLanguage
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,9 +17,14 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
 
     fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
 
-    fun wasPlayerFullscreen() = flowPrefs.getBoolean("player_fullscreen", false)
-
     fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
+
+    fun showAllMessages() = flowPrefs.getBoolean("all_chat_messages", false)
+    fun tlLanguages() = flowPrefs.getStringSet("tl_langs", setOf(TranslatedLanguage.ENGLISH.id))
+    fun showModMessages() = flowPrefs.getBoolean("show_mod_messages", true)
+    fun showVerifiedMessages() = flowPrefs.getBoolean("show_verified_messages", true)
+    fun showOwnerMessages() = flowPrefs.getBoolean("show_owner_messages", true)
+    fun tlScale() = flowPrefs.getFloat("tl_display_scale", 1f)
 }
 
 fun <T> Preference<Set<T>>.toggle(item: T) {

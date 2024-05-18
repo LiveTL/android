@@ -116,37 +116,14 @@ dependencies {
     // OSS licenses
     implementation(libs.aboutLibraries.compose)
 
+    // Tests
+    testImplementation(libs.bundles.test)
+
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // "debugImplementation"("com.squareup.leakcanary:leakcanary-android:2.2")
 }
 
 tasks {
-    // Requires the submodules to already be initialized, i.e.:
-    // git submodule update --init --recursive
-    val buildExtensionSource by register("buildExtensionSource") {
-        doLast {
-            exec {
-                workingDir = File("../extension/LiveTL")
-                setCommandLine("yarn", "install")
-            }
-            exec {
-                workingDir = File("../extension/LiveTL")
-                setCommandLine("yarn", "build", "android")
-            }
-        }
-    }
-
-    val copyExtensionArtifacts by register<Copy>("copyExtensionArtifacts") {
-        dependsOn(buildExtensionSource)
-        from("../extension/LiveTL/build")
-        into("./src/main/assets")
-        include("**/*")
-    }
-
-    project.afterEvaluate {
-        tasks.findByName("mergePlaystoreReleaseAssets")?.dependsOn(copyExtensionArtifacts)
-    }
-
     withType<KotlinCompile> {
         // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api-markers
         compilerOptions {
@@ -160,5 +137,9 @@ tasks {
                 "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
             )
         }
+    }
+
+    withType<Test> {
+        useJUnitPlatform()
     }
 }

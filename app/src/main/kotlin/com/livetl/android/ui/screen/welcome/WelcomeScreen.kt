@@ -1,13 +1,8 @@
 package com.livetl.android.ui.screen.welcome
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.HorizontalDivider
@@ -30,9 +25,8 @@ import com.livetl.android.R
 fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
-            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+            Surface {
                 TopAppBar(
-                    modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.welcome))
                     },
@@ -53,50 +47,48 @@ fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hilt
             }
         },
     ) { contentPadding ->
-        Box(Modifier.padding(contentPadding)) {
-            LazyColumn(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                item {
-                    Text(
-                        text = stringResource(R.string.welcome_thank_you),
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                }
+        LazyColumn(
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+        ) {
+            item {
+                Text(
+                    text = stringResource(R.string.welcome_thank_you),
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+            }
 
-                item {
-                    Text(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        text = stringResource(R.string.welcome_get_started),
-                    )
-                }
+            item {
+                Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    text = stringResource(R.string.welcome_get_started),
+                )
+            }
 
-                item {
-                    HorizontalDivider(Modifier.padding(8.dp))
-                }
+            item {
+                HorizontalDivider(Modifier.padding(8.dp))
+            }
 
-                item {
-                    Text(
-                        text = stringResource(R.string.welcome_faq),
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                }
+            item {
+                Text(
+                    text = stringResource(R.string.welcome_faq),
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+            }
 
-                items(
-                    items = FAQ,
-                    key = { it.first },
-                ) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        text = stringResource(it.first),
-                        fontWeight = FontWeight.W700,
-                    )
-                    Text(
-                        text = stringResource(it.second),
-                    )
-                }
-
-                item {
-                    Spacer(Modifier.navigationBarsPadding())
-                }
+            items(
+                items = FAQ,
+                key = { it.first },
+            ) {
+                Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    text = stringResource(it.first),
+                    fontWeight = FontWeight.W700,
+                )
+                Text(
+                    text = stringResource(it.second),
+                )
             }
         }
     }

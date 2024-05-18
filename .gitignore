@@ -1,5 +1,3 @@
-app/src/main/assets/*
-
 .idea/
 *.iml
 .gradle
@@ -8,3 +6,4 @@ app/src/main/assets/*
 /captures
 .externalNativeBuild
 local.properties
+.kotlin/

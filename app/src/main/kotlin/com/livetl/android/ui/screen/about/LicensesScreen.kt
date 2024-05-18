@@ -2,8 +2,6 @@ package com.livetl.android.ui.screen.about
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -22,9 +20,8 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 fun LicensesScreen(onBackPressed: () -> Unit) {
     Scaffold(
         topBar = {
-            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+            Surface {
                 TopAppBar(
-                    modifier = Modifier.statusBarsPadding(),
                     title = {
                         Text(text = stringResource(R.string.licenses))
                     },

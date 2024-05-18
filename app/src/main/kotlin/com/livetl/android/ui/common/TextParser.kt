@@ -36,7 +36,7 @@ typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 @Composable
 fun textParser(
     text: String,
-    parsedContentTypes: Collection<String> = SymbolAnnotationType.values().map { it.name },
+    parsedContentTypes: Collection<String> = SymbolAnnotationType.entries.map { it.name },
 ): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 

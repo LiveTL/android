@@ -2,12 +2,9 @@ package com.livetl.android.ui.screen.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToQueue
 import androidx.compose.material.icons.outlined.Info
@@ -32,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
-import com.livetl.android.ui.common.TabIndicator
 import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
 
@@ -52,21 +48,20 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+            Surface {
                 Column {
                     TopAppBar(
-                        modifier = Modifier.statusBarsPadding(),
                         title = {
                             Text(text = stringResource(R.string.app_name))
                         },
                         actions = {
-                            IconButton(onClick = { navigateToSettings() }) {
+                            IconButton(onClick = navigateToSettings) {
                                 Icon(
                                     imageVector = Icons.Outlined.Settings,
                                     contentDescription = stringResource(R.string.settings),
                                 )
                             }
-                            IconButton(onClick = { navigateToAbout() }) {
+                            IconButton(onClick = navigateToAbout) {
                                 Icon(
                                     imageVector = Icons.Outlined.Info,
                                     contentDescription = stringResource(R.string.about),
@@ -77,7 +72,6 @@ fun HomeScreen(
 
                     TabRow(
                         selectedTabIndex = pagerState.currentPage,
-                        indicator = { TabIndicator(it[pagerState.currentPage]) },
                     ) {
                         viewModel.tabs.forEachIndexed { index, tab ->
                             Tab(
@@ -92,7 +86,6 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                modifier = Modifier.navigationBarsPadding(),
                 onClick = { viewModel.showOpenVideoDialog() },
                 text = { Text(stringResource(R.string.action_open_video)) },
                 icon = {

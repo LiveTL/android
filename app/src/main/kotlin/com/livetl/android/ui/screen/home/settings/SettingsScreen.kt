@@ -2,15 +2,11 @@ package com.livetl.android.ui.screen.home.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -37,12 +33,11 @@ fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hil
 
     Scaffold(
         topBar = {
-            Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {
+            Surface {
                 TopAppBar(
                     title = {
                         Text(text = stringResource(R.string.setting_feed_org))
                     },
-                    modifier = Modifier.statusBarsPadding(),
                     navigationIcon = {
                         IconButton(onClick = { onBackPressed() }) {
                             Icon(
@@ -81,10 +76,6 @@ fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hil
                     )
                     Text(text = organization, modifier = Modifier.padding(start = 24.dp))
                 }
-            }
-
-            item {
-                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }

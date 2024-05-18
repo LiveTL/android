@@ -59,6 +59,10 @@ preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", vers
 
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.0-RC" }
 
+junit = "org.junit.jupiter:junit-jupiter:5.10.2"
+mockito = "org.mockito:mockito-core:5.12.0"
+mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.3.1"
+
 [bundles]
 coil = ["coil-core", "coil-compose"]
 compose = ["compose-activity", "compose-material", "compose-material-icons-extended", "compose-material3", "compose-ui", "compose-ui-tooling", "compose-ui-util"]
@@ -67,3 +71,4 @@ coroutines = ["coroutines-core", "coroutines-android"]
 ktor = ["ktor-core", "ktor-logging"]
 navigation = ["navigation-compose", "compose-material-navigation", "hilt-navigation"]
 preferences = ["preferences-androidx", "preferences-flow"]
+test = ["junit", "mockito", "mockito-kotlin"]

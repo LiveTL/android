@@ -33,11 +33,7 @@ fun NavHostController.navigateToPlayer(urlOrId: String) {
 }
 
 @Composable
-fun mainNavHost(
-    startRoute: Route,
-    setKeepScreenOn: (Boolean) -> Unit,
-    setFullscreen: (Boolean) -> Unit,
-): NavHostController {
+fun mainNavHost(startRoute: Route): NavHostController {
     val navController = rememberNavController()
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     navController.navigatorProvider += bottomSheetNavigator
@@ -87,7 +83,7 @@ fun mainNavHost(
                 val urlOrId = backStackEntry.toRoute<Route.Player>().urlOrId
                 val videoId = playerViewModel.getVideoId(urlOrId)
 
-                PlayerScreen(videoId, setKeepScreenOn, setFullscreen, playerViewModel)
+                PlayerScreen(videoId, playerViewModel)
             }
 
             composable<Route.Settings> {

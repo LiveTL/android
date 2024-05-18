@@ -1,4 +1,4 @@
-package com.livetl.android.ui.common
+package com.livetl.android.ui.common.preference
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalTextStyle
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
