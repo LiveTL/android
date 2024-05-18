@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.util.collectAsState
@@ -33,7 +34,7 @@ fun PlayerScreen(
     videoId: String,
     setKeepScreenOn: (Boolean) -> Unit,
     toggleFullscreen: (Boolean) -> Unit,
-    viewModel: PlayerViewModel,
+    viewModel: PlayerViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current

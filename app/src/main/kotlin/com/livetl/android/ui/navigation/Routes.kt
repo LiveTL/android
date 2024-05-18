@@ -1,17 +1,26 @@
 package com.livetl.android.ui.navigation
 
-sealed class Route(val id: String) {
-    data object Home : Route("home")
+import kotlinx.serialization.Serializable
 
-    data object StreamInfo : Route("stream")
+sealed interface Route {
+    @Serializable
+    data object Home : Route
 
-    data object Welcome : Route("welcome")
+    @Serializable
+    data class StreamInfo(val urlOrId: String) : Route
 
-    data object Player : Route("player")
+    @Serializable
+    data object Welcome : Route
 
-    data object Settings : Route("settings")
+    @Serializable
+    data class Player(val urlOrId: String) : Route
 
-    data object About : Route("about")
+    @Serializable
+    data object Settings : Route
 
-    data object Licenses : Route("licenses")
+    @Serializable
+    data object Licenses : Route
+
+    @Serializable
+    data object About : Route
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
@@ -39,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun StreamInfo(
     urlOrId: String,
-    viewModel: StreamInfoViewModel,
+    viewModel: StreamInfoViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     var loading by remember { mutableStateOf(true) }

@@ -13,8 +13,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
-import com.livetl.android.ui.navigation.mainNavHost
 import com.livetl.android.ui.navigation.Route
+import com.livetl.android.ui.navigation.mainNavHost
 import com.livetl.android.ui.navigation.navigateToPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.AppPreferences

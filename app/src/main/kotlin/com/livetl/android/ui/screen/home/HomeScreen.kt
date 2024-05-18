@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.TabIndicator
@@ -41,7 +42,7 @@ fun HomeScreen(
     navigateToPlayer: (String) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToAbout: () -> Unit,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState { viewModel.tabs.size }

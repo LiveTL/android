@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 import com.livetl.android.data.feed.ORGANIZATIONS
 import com.livetl.android.util.collectAsState
@@ -33,7 +34,7 @@ import com.livetl.android.util.collectAsState
 @Composable
 fun SettingsScreen(
     onBackPressed: () -> Unit,
-    viewModel: SettingsViewModel,
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val selectedOrganization by viewModel.prefs.feedOrganization().collectAsState()
 
@@ -59,9 +60,9 @@ fun SettingsScreen(
     ) { contentPadding ->
         LazyColumn(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(contentPadding),
+            Modifier
+                .fillMaxWidth()
+                .padding(contentPadding),
         ) {
             items(
                 items = ORGANIZATIONS,
