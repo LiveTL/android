@@ -1,7 +1,6 @@
 buildscript {
     dependencies {
         classpath(libs.hilt.gradle)
-        classpath(libs.aboutLibraries.gradle)
     }
 }
 

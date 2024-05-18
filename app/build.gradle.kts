@@ -2,11 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
-    id("com.mikepenz.aboutlibraries.plugin")
+    alias(libs.plugins.aboutLibraries)
     kotlin("android")
     kotlin("plugin.serialization")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlinter)
 }
 
@@ -66,18 +67,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
+}
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.version.get()
-    }
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -148,15 +149,16 @@ tasks {
 
     withType<KotlinCompile> {
         // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api-markers
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-opt-in=kotlin.Experimental",
-            "-opt-in=kotlin.RequiresOptIn",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-            "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
-        )
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
+            )
+        }
     }
 }
