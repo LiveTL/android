@@ -48,6 +48,11 @@ class StreamService @Inject constructor(
         }
     }
 
+    suspend fun findStreamInfo(title: String, channelName: String): StreamInfo? =
+        streamRepository.findStream(title, channelName)?.let {
+            getStreamInfo(it.id)
+        }
+
     private suspend fun getChatContinuation(videoId: String): String? {
         val result =
             client.get("https://www.youtube.com/watch?v=$videoId") {
