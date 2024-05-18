@@ -19,7 +19,7 @@ import javax.inject.Inject
 class EmojiCache @Inject constructor() {
     private val cache = LruCache<String, InlineTextContent>(50)
 
-    fun get(emote: ChatMessageContent.Emoji): InlineTextContent {
+    operator fun get(emote: ChatMessageContent.Emoji): InlineTextContent {
         val cached = cache[emote.id]
         return if (cached != null) {
             cached

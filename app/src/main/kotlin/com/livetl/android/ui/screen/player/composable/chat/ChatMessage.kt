@@ -71,7 +71,7 @@ private fun getAuthorName(author: MessageAuthor): AnnotatedString {
 private fun ChatMessage.getEmojiInlineContent(emojiCache: EmojiCache) = content
     .filterIsInstance<ChatMessageContent.Emoji>()
     .distinctBy { it.id }
-    .associate { it.id to emojiCache.get(it) }
+    .associate { it.id to emojiCache[it] }
 
 private val LocalAuthorNameColor = compositionLocalOf { Color.White }
 

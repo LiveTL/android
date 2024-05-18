@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-// TODO: draw over apps as overlay
 @Composable
 fun PlayerScreen(videoId: String, viewModel: PlayerViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
@@ -25,6 +24,7 @@ fun PlayerScreen(videoId: String, viewModel: PlayerViewModel = hiltViewModel()) 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
 
+    // TODO: handle time change for archives
     fun onCurrentSecond(second: Long) {
         // Live chats don't need to be progressed manually
         if (streamInfo?.isLive == false) {
