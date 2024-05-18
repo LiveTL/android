@@ -1,9 +1,5 @@
 package com.livetl.android.ui.screen.about
 
-import android.content.ComponentName
-import android.content.Intent
-import android.os.Build
-import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,7 +20,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,14 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.data.media.YouTubeNotificationListenerService
 import com.livetl.android.ui.common.LinkIcon
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.PreferenceRow
 
 @Composable
 fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navigateToWelcome: () -> Unit) {
-    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
@@ -125,33 +118,6 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                     title = R.string.show_welcome_screen,
                     onClick = { navigateToWelcome() },
                 )
-            }
-
-            if (BuildConfig.DEBUG) {
-                item {
-                    PreferenceRow(
-                        title = "Grant notification listener permissions",
-                        onClick = {
-                            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS).apply {
-                                    val componentName =
-                                        ComponentName(
-                                            context.packageName,
-                                            YouTubeNotificationListenerService::class.java.getName(),
-                                        )
-                                    putExtra(
-                                        Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
-                                        componentName.flattenToString(),
-                                    )
-                                }
-                            } else {
-                                Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-                            }
-
-                            context.startActivity(intent)
-                        },
-                    )
-                }
             }
         }
     }

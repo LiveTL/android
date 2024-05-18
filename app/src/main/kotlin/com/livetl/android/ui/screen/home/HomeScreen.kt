@@ -105,6 +105,10 @@ fun HomeScreen(
                 },
                 text = {
                     Column {
+//                        if (viewModel.youTubeSession != null) {
+//                            Text(text = viewModel.youTubeSession!!.title)
+//                        }
+
                         Text(
                             modifier = Modifier.padding(bottom = 16.dp),
                             text = stringResource(R.string.open_video_hint, stringResource(R.string.app_name)),
