@@ -26,96 +26,85 @@ import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayerViewModel
-    @Inject
-    constructor(
-        private val streamService: StreamService,
-        private val videoIdParser: VideoIdParser,
-        private val client: HttpClient,
-        val webViewLocalStoragePolyfill: WebViewStoragePolyfill,
-        val prefs: AppPreferences,
-    ) : ViewModel() {
-        fun getVideoId(urlOrId: String): String {
-            return videoIdParser.getVideoId(urlOrId)
+class PlayerViewModel @Inject constructor(
+    private val streamService: StreamService,
+    private val videoIdParser: VideoIdParser,
+    private val client: HttpClient,
+    val webViewLocalStoragePolyfill: WebViewStoragePolyfill,
+    val prefs: AppPreferences,
+) : ViewModel() {
+    fun getVideoId(urlOrId: String): String = videoIdParser.getVideoId(urlOrId)
+
+    suspend fun getStreamInfo(videoId: String): StreamInfo = streamService.getStreamInfo(videoId)
+
+    suspend fun getInjectedResponse(context: Context, url: String): WebResourceResponse? = withContext(Dispatchers.IO) {
+        val fileExtension = MimeTypeMap.getFileExtensionFromUrl(url)
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
+
+        // Load local assets from APK
+        if (url.startsWith(LOCAL_ASSET_BASEURL)) {
+            val assetPath = url.substringAfter(LOCAL_ASSET_BASEURL)
+            return@withContext WebResourceResponse(
+                mimeType,
+                StandardCharsets.UTF_8.toString(),
+                context.assets.open(assetPath),
+            )
         }
 
-        suspend fun getStreamInfo(videoId: String): StreamInfo {
-            return streamService.getStreamInfo(videoId)
-        }
-
-        suspend fun getInjectedResponse(
-            context: Context,
-            url: String,
-        ): WebResourceResponse? =
-            withContext(Dispatchers.IO) {
-                val fileExtension = MimeTypeMap.getFileExtensionFromUrl(url)
-                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
-
-                // Load local assets from APK
-                if (url.startsWith(LOCAL_ASSET_BASEURL)) {
-                    val assetPath = url.substringAfter(LOCAL_ASSET_BASEURL)
-                    return@withContext WebResourceResponse(
-                        mimeType,
-                        StandardCharsets.UTF_8.toString(),
-                        context.assets.open(assetPath),
+        // Mimics script injection defined in extension's manifest.json
+        val scriptsToInject =
+            when {
+                // "https://www.youtube.com/live_chat*",
+                // "https://www.youtube.com/live_chat_replay*"
+                url.startsWith("https://www.youtube.com/live_chat") -> {
+                    listOf(
+                        "chat-interceptor.bundle.js",
+                        "chat.bundle.js",
+                        "injector.bundle.js",
+                        "translatormode.bundle.js",
                     )
                 }
 
-                // Mimics script injection defined in extension's manifest.json
-                val scriptsToInject =
-                    when {
-                        // "https://www.youtube.com/live_chat*",
-                        // "https://www.youtube.com/live_chat_replay*"
-                        url.startsWith("https://www.youtube.com/live_chat") -> {
-                            listOf(
-                                "chat-interceptor.bundle.js",
-                                "chat.bundle.js",
-                                "injector.bundle.js",
-                                "translatormode.bundle.js",
-                            )
-                        }
-                        url.startsWith("https://www.youtube.com/error") -> {
-                            listOf(
-                                "video_embedder.bundle.js",
-                            )
-                        }
-                        else -> emptyList()
-                    }
-
-                if (scriptsToInject.isEmpty()) {
-                    return@withContext null
+                url.startsWith("https://www.youtube.com/error") -> {
+                    listOf(
+                        "video_embedder.bundle.js",
+                    )
                 }
 
-                val response =
-                    client.get(url) {
-                        headers {
-                            set("User-Agent", USER_AGENT)
-                        }
-                    }
-
-                val scripts =
-                    scriptsToInject
-                        .map { context.readFile(it) }
-                        .joinToString("\n") { createScriptTag(it) }
-
-                WebResourceResponse(
-                    mimeType,
-                    StandardCharsets.UTF_8.toString(),
-                    ByteArrayInputStream((response.bodyAsText() + scripts).toByteArray(StandardCharsets.UTF_8)),
-                )
+                else -> emptyList()
             }
 
-        fun toggleFullscreen() {
-            prefs.wasPlayerFullscreen().toggle()
+        if (scriptsToInject.isEmpty()) {
+            return@withContext null
         }
 
-        fun saveText(
-            text: String,
-            fileName: String,
-        ) {
-            // TODO
-            Timber.d("Save text to $fileName: $text")
-        }
+        val response =
+            client.get(url) {
+                headers {
+                    set("User-Agent", USER_AGENT)
+                }
+            }
+
+        val scripts =
+            scriptsToInject
+                .map { context.readFile(it) }
+                .joinToString("\n") { createScriptTag(it) }
+
+        WebResourceResponse(
+            mimeType,
+            StandardCharsets.UTF_8.toString(),
+            ByteArrayInputStream((response.bodyAsText() + scripts).toByteArray(StandardCharsets.UTF_8)),
+        )
     }
+
+    fun toggleFullscreen() {
+        prefs.wasPlayerFullscreen().toggle()
+    }
+
+    fun saveText(text: String, fileName: String) {
+        // TODO
+        Timber.d("Save text to $fileName: $text")
+    }
+}
 
 private const val LOCAL_ASSET_BASEURL = "https://__local_android_asset_baseurl__/"

@@ -49,31 +49,20 @@ class NativeJavascriptInterface(
     }
 
     @JavascriptInterface
-    fun downloadText(
-        text: String,
-        fileName: String,
-    ) {
+    fun downloadText(text: String, fileName: String) {
         Timber.d("Downloading text to $fileName: $text")
         saveText(text, fileName)
     }
 
     @JavascriptInterface
-    fun getAndroidStorage(key: String): String? {
-        return webViewStoragePolyfill.get(key)
-    }
+    fun getAndroidStorage(key: String): String? = webViewStoragePolyfill.get(key)
 
     @JavascriptInterface
-    fun setAndroidStorage(
-        key: String,
-        value: String,
-    ) {
+    fun setAndroidStorage(key: String, value: String) {
         webViewStoragePolyfill.set(key, value)
     }
 
-    override fun onSharedPreferenceChanged(
-        _prefs: SharedPreferences?,
-        key: String?,
-    ) {
+    override fun onSharedPreferenceChanged(_prefs: SharedPreferences?, key: String?) {
         Timber.d("Emitting storage key change: $key")
         runOnMainThread {
             backgroundWebView.runJS(

@@ -38,10 +38,7 @@ import com.livetl.android.ui.common.textParser
 import kotlinx.coroutines.launch
 
 @Composable
-fun StreamInfo(
-    urlOrId: String,
-    viewModel: StreamInfoViewModel = hiltViewModel(),
-) {
+fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
     var loading by remember { mutableStateOf(true) }
     var stream by remember { mutableStateOf<Stream?>(null) }
@@ -76,10 +73,10 @@ fun StreamInfo(
                     model = stream!!.thumbnail,
                     contentDescription = null,
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16 / 9f)
-                            .background(Color.Black),
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16 / 9f)
+                        .background(Color.Black),
                 )
             }
 
@@ -117,10 +114,12 @@ fun StreamInfo(
                                             uriHandler.openUri(
                                                 annotation.item,
                                             )
+
                                         SymbolAnnotationType.HASHTAG.name ->
                                             uriHandler.openUri(
                                                 "https://www.youtube.com/hashtag/${annotation.item}",
                                             )
+
                                         else -> Unit
                                     }
                                 }

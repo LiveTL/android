@@ -36,11 +36,7 @@ import com.livetl.android.ui.common.PreferenceGroupHeader
 import com.livetl.android.ui.common.PreferenceRow
 
 @Composable
-fun AboutScreen(
-    onBackPressed: () -> Unit,
-    navigateToLicenses: () -> Unit,
-    navigateToWelcome: () -> Unit,
-) {
+fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navigateToWelcome: () -> Unit) {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(

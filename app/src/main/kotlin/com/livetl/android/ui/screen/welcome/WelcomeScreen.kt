@@ -27,10 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 
 @Composable
-fun WelcomeScreen(
-    navigateToHome: () -> Unit,
-    viewModel: WelcomeViewModel = hiltViewModel(),
-) {
+fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
             Surface(tonalElevation = AppBarDefaults.TopAppBarElevation) {

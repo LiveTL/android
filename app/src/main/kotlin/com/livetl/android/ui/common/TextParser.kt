@@ -46,7 +46,9 @@ fun textParser(
         for (token in tokens) {
             append(text.slice(cursorPosition until token.range.first))
 
-            if (SymbolAnnotationType.EMOJI.name in parsedContentTypes && token.value.first() == SymbolAnnotationType.EMOJI.firstToken) {
+            if (SymbolAnnotationType.EMOJI.name in parsedContentTypes &&
+                token.value.first() == SymbolAnnotationType.EMOJI.firstToken
+            ) {
                 // Emotes are replaced with placeholders later
                 appendInlineContent(token.value, token.value)
             } else {
@@ -85,40 +87,42 @@ private fun getSymbolAnnotation(
     matchResult: MatchResult,
     colors: ColorScheme,
     parsedContentTypes: Collection<String>,
-): SymbolAnnotation {
-    return when {
-        SymbolAnnotationType.LINK.name in parsedContentTypes && matchResult.value.first() == SymbolAnnotationType.LINK.firstToken ->
-            SymbolAnnotation(
-                AnnotatedString(
-                    text = matchResult.value,
-                    spanStyle =
-                        SpanStyle(
-                            color = colors.primary,
-                        ),
+): SymbolAnnotation = when {
+    SymbolAnnotationType.LINK.name in parsedContentTypes &&
+        matchResult.value.first() == SymbolAnnotationType.LINK.firstToken ->
+        SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value,
+                spanStyle =
+                SpanStyle(
+                    color = colors.primary,
                 ),
-                StringAnnotation(
-                    item = matchResult.value,
-                    start = matchResult.range.first,
-                    end = matchResult.range.last,
-                    tag = SymbolAnnotationType.LINK.name,
+            ),
+            StringAnnotation(
+                item = matchResult.value,
+                start = matchResult.range.first,
+                end = matchResult.range.last,
+                tag = SymbolAnnotationType.LINK.name,
+            ),
+        )
+
+    SymbolAnnotationType.HASHTAG.name in parsedContentTypes &&
+        matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken ->
+        SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value,
+                spanStyle =
+                SpanStyle(
+                    color = colors.primary,
                 ),
-            )
-        SymbolAnnotationType.HASHTAG.name in parsedContentTypes && matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken ->
-            SymbolAnnotation(
-                AnnotatedString(
-                    text = matchResult.value,
-                    spanStyle =
-                        SpanStyle(
-                            color = colors.primary,
-                        ),
-                ),
-                StringAnnotation(
-                    item = matchResult.value.substring(1),
-                    start = matchResult.range.first,
-                    end = matchResult.range.last,
-                    tag = SymbolAnnotationType.HASHTAG.name,
-                ),
-            )
-        else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
-    }
+            ),
+            StringAnnotation(
+                item = matchResult.value.substring(1),
+                start = matchResult.range.first,
+                end = matchResult.range.last,
+                tag = SymbolAnnotationType.HASHTAG.name,
+            ),
+        )
+
+    else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
 }

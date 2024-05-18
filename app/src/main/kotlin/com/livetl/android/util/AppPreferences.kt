@@ -10,20 +10,16 @@ import com.tfcporciuncula.flow.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class AppPreferences
-    @Inject
-    constructor(
-        @ApplicationContext context: Context,
-    ) {
-        private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
-        private val flowPrefs = FlowSharedPreferences(prefs)
+class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
+    private val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
+    private val flowPrefs = FlowSharedPreferences(prefs)
 
-        fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
+    fun showWelcomeScreen() = flowPrefs.getBoolean("show_welcome_screen", true)
 
-        fun wasPlayerFullscreen() = flowPrefs.getBoolean("player_fullscreen", false)
+    fun wasPlayerFullscreen() = flowPrefs.getBoolean("player_fullscreen", false)
 
-        fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
-    }
+    fun feedOrganization() = flowPrefs.getString("feed_org", "Hololive")
+}
 
 fun <T> Preference<Set<T>>.toggle(item: T) {
     if (item in get()) {
@@ -46,6 +42,4 @@ fun Preference<Boolean>.toggle() {
 }
 
 @Composable
-fun <T> Preference<T>.collectAsState(): State<T> {
-    return asFlow().collectAsState(initial = get())
-}
+fun <T> Preference<T>.collectAsState(): State<T> = asFlow().collectAsState(initial = get())

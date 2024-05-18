@@ -15,28 +15,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LinkIcon(
-    @StringRes labelRes: Int,
-    icon: ImageVector,
-    url: String,
-    modifier: Modifier = Modifier,
-) {
+fun LinkIcon(@StringRes labelRes: Int, icon: ImageVector, url: String, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
     LinkIcon(labelRes, icon, modifier) { uriHandler.openUri(url) }
 }
 
 @Composable
-fun LinkIcon(
-    @StringRes labelRes: Int,
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
+fun LinkIcon(@StringRes labelRes: Int, icon: ImageVector, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
         modifier =
-            modifier
-                .clickable(onClick = onClick)
-                .padding(8.dp),
+        modifier
+            .clickable(onClick = onClick)
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(

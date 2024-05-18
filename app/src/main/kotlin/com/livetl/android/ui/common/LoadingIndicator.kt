@@ -9,9 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoadingIndicator(
-    modifier: Modifier = Modifier,
-) {
+fun LoadingIndicator(modifier: Modifier = Modifier) {
     Surface {
         Box(
             modifier = modifier.fillMaxSize(),

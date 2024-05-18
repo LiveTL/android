@@ -138,9 +138,9 @@ fun HomeScreen(
 
         HorizontalPager(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding),
+            Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
             state = pagerState,
         ) { page ->
             val (status, tabViewModel) = viewModel.tabs[page]

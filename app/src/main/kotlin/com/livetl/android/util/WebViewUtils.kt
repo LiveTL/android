@@ -7,9 +7,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import com.livetl.android.BuildConfig
 
-fun createScriptTag(js: String): String {
-    return """<script type="text/javascript">$js</script>""".trimIndent()
-}
+fun createScriptTag(js: String): String = """<script type="text/javascript">$js</script>""".trimIndent()
 
 fun WebView.runJS(js: String) {
     evaluateJavascript("(function() { $js })()", null)

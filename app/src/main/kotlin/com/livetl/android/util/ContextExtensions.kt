@@ -16,10 +16,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-fun Context.toast(
-    text: String,
-    duration: Int = Toast.LENGTH_SHORT,
-) {
+fun Context.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, text, duration).show()
 }
 
@@ -54,8 +51,8 @@ val Context.powerManager: PowerManager
     get() = getSystemService(Context.POWER_SERVICE) as PowerManager
 
 @Throws(IOException::class)
-fun Context.readFile(filePath: String): String {
-    return BufferedReader(InputStreamReader(assets.open(filePath))).use { reader ->
+fun Context.readFile(filePath: String): String =
+    BufferedReader(InputStreamReader(assets.open(filePath))).use { reader ->
         val total = StringBuilder()
         var line: String?
         while (reader.readLine().also { line = it } != null) {
@@ -63,8 +60,6 @@ fun Context.readFile(filePath: String): String {
         }
         total.toString()
     }
-}
 
-fun Context.isTvMode(): Boolean {
-    return getSystemService<UiModeManager>()?.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION
-}
+fun Context.isTvMode(): Boolean =
+    getSystemService<UiModeManager>()?.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION

@@ -42,9 +42,9 @@ fun LicensesScreen(onBackPressed: () -> Unit) {
     ) { contentPadding ->
         LibrariesContainer(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding(),
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
             contentPadding = contentPadding,
         )
     }

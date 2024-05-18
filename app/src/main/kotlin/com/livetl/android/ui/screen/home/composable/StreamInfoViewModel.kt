@@ -7,12 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class StreamInfoViewModel
-    @Inject
-    constructor(
-        private val streamRepository: StreamRepository,
-    ) : ViewModel() {
-        suspend fun getStream(urlOrId: String): Stream {
-            return streamRepository.getStream(urlOrId)
-        }
-    }
+class StreamInfoViewModel @Inject constructor(private val streamRepository: StreamRepository) : ViewModel() {
+    suspend fun getStream(urlOrId: String): Stream = streamRepository.getStream(urlOrId)
+}

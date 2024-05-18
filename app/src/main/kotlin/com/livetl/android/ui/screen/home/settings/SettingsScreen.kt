@@ -32,10 +32,7 @@ import com.livetl.android.data.feed.ORGANIZATIONS
 import com.livetl.android.util.collectAsState
 
 @Composable
-fun SettingsScreen(
-    onBackPressed: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel(),
-) {
+fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val selectedOrganization by viewModel.prefs.feedOrganization().collectAsState()
 
     Scaffold(
@@ -72,10 +69,10 @@ fun SettingsScreen(
 
                 Row(
                     modifier =
-                        Modifier
-                            .requiredHeight(48.dp)
-                            .fillMaxWidth()
-                            .clickable { selectOrganization() },
+                    Modifier
+                        .requiredHeight(48.dp)
+                        .fillMaxWidth()
+                        .clickable { selectOrganization() },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(

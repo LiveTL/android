@@ -7,10 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable
-data class HolodexVideosResponse(
-    val total: Int,
-    val items: List<Stream>,
-)
+data class HolodexVideosResponse(val total: Int, val items: List<Stream>)
 
 @Immutable
 @Serializable
@@ -66,8 +63,4 @@ enum class StreamStatus(
 
 @Immutable
 @Serializable
-data class Channel(
-    val name: String,
-    val photo: String,
-    val org: String? = null,
-)
+data class Channel(val name: String, val photo: String, val org: String? = null)

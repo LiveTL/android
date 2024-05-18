@@ -72,7 +72,11 @@ class CursorLayout : FrameLayout {
                 if (abs(cursorSpeed.y) < 0.1f) {
                     cursorSpeed.y = 0.0f
                 }
-                if (cursorDirection.x == 0 && cursorDirection.y == 0 && cursorSpeed.x == 0.0f && cursorSpeed.y == 0.0f) {
+                if (cursorDirection.x == 0 &&
+                    cursorDirection.y == 0 &&
+                    cursorSpeed.x == 0.0f &&
+                    cursorSpeed.y == 0.0f
+                ) {
                     if (this@CursorLayout.handler != null) {
                         this@CursorLayout.handler.postDelayed(cursorHideRunnable, 5000)
                     }
@@ -104,7 +108,8 @@ class CursorLayout : FrameLayout {
                         if (cursorSpeed.y > 0.0f && childAt.canScrollVertically(cursorSpeed.y.toInt())) {
                             childAt.scrollTo(childAt.scrollX, childAt.scrollY + cursorSpeed.y.toInt())
                         }
-                    } else if (cursorPosition.y < SCROLL_START_PADDING.toFloat() && cursorSpeed.y < 0.0f &&
+                    } else if (cursorPosition.y < SCROLL_START_PADDING.toFloat() &&
+                        cursorSpeed.y < 0.0f &&
                         childAt.canScrollVertically(
                             cursorSpeed.y.toInt(),
                         )
@@ -115,7 +120,8 @@ class CursorLayout : FrameLayout {
                         if (cursorSpeed.x > 0.0f && childAt.canScrollHorizontally(cursorSpeed.x.toInt())) {
                             childAt.scrollTo(childAt.scrollX + cursorSpeed.x.toInt(), childAt.scrollY)
                         }
-                    } else if (this@CursorLayout.cursorPosition.x < SCROLL_START_PADDING.toFloat() && this@CursorLayout.cursorSpeed.x < 0.0f &&
+                    } else if (this@CursorLayout.cursorPosition.x < SCROLL_START_PADDING.toFloat() &&
+                        this@CursorLayout.cursorSpeed.x < 0.0f &&
                         childAt.canScrollHorizontally(
                             cursorSpeed.x.toInt(),
                         )
@@ -138,10 +144,7 @@ class CursorLayout : FrameLayout {
         fun onUserInteraction()
     }
 
-    private fun bound(
-        f: Float,
-        f2: Float,
-    ): Float {
+    private fun bound(f: Float, f2: Float): Float {
         if (f > f2) {
             return f2
         }
@@ -178,12 +181,7 @@ class CursorLayout : FrameLayout {
         return super.onInterceptTouchEvent(motionEvent)
     }
 
-    override fun onSizeChanged(
-        i: Int,
-        i2: Int,
-        i3: Int,
-        i4: Int,
-    ) {
+    override fun onSizeChanged(i: Int, i2: Int, i3: Int, i4: Int) {
         super.onSizeChanged(i, i2, i3, i4)
         if (!isInEditMode) {
             cursorPosition[i.toFloat() / 2.0f] = i2.toFloat() / 2.0f
@@ -298,11 +296,7 @@ class CursorLayout : FrameLayout {
         return super.dispatchKeyEvent(keyEvent)
     }
 
-    private fun dispatchMotionEvent(
-        f: Float,
-        f2: Float,
-        i: Int,
-    ) {
+    private fun dispatchMotionEvent(f: Float, f2: Float, i: Int) {
         val uptimeMillis = SystemClock.uptimeMillis()
         val uptimeMillis2 = SystemClock.uptimeMillis()
         val pointerProperties =
@@ -338,12 +332,7 @@ class CursorLayout : FrameLayout {
         )
     }
 
-    private fun handleDirectionKeyEvent(
-        keyEvent: KeyEvent,
-        i: Int,
-        i2: Int,
-        z: Boolean,
-    ) {
+    private fun handleDirectionKeyEvent(keyEvent: KeyEvent, i: Int, i2: Int, z: Boolean) {
         var i = i
         var i2 = i2
         lastCursorUpdate = System.currentTimeMillis()

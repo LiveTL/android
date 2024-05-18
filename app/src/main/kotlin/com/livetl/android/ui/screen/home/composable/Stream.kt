@@ -55,45 +55,45 @@ fun Stream(
 ) {
     Box(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
+        Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
     ) {
         AsyncImage(
             model =
-                ImageRequest.Builder(LocalContext.current)
-                    .data(stream.thumbnail)
-                    .transformations()
-                    .crossfade(true)
-                    .build(),
+            ImageRequest.Builder(LocalContext.current)
+                .data(stream.thumbnail)
+                .transformations()
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             modifier =
-                Modifier
-                    .matchParentSize()
-                    .alpha(0.1f)
-                    .blur(5.dp),
+            Modifier
+                .matchParentSize()
+                .alpha(0.1f)
+                .blur(5.dp),
             contentScale = ContentScale.Crop,
         )
 
         Row(
             modifier =
-                modifier
-                    .combinedClickable(
-                        onClick = { openPlayer(stream) },
-                        onLongClick = { openStreamInfo(stream) },
-                    )
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, top = 8.dp, end = 0.dp, bottom = 8.dp)
-                    .requiredHeight(48.dp),
+            modifier
+                .combinedClickable(
+                    onClick = { openPlayer(stream) },
+                    onLongClick = { openStreamInfo(stream) },
+                )
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 8.dp, end = 0.dp, bottom = 8.dp)
+                .requiredHeight(48.dp),
         ) {
             AsyncImage(
                 model = stream.channel.photo,
                 contentDescription = null,
                 modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f)
-                        .clip(CircleShape),
+                Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
+                    .clip(CircleShape),
             )
 
             Column(
@@ -112,9 +112,9 @@ fun Stream(
                         Text(
                             stream.channel.name,
                             modifier =
-                                Modifier
-                                    .padding(start = 8.dp, end = 8.dp)
-                                    .weight(1f),
+                            Modifier
+                                .padding(start = 8.dp, end = 8.dp)
+                                .weight(1f),
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -155,20 +155,20 @@ private fun StreamPreview() {
     Column {
         Stream(
             stream =
-                Stream(
-                    id = "123",
-                    title = "Some very, extremely, quite long long long title for testing wow",
-                    description = "",
-                    status = "past",
-                    start_scheduled = "2020-01-01T00:00:00.000Z",
-                    start_actual = "2020-01-01T00:01:12.000Z",
-                    channel =
-                        Channel(
-                            name = "Wow Such YouTube Channel",
-                            org = "Hololive",
-                            photo = "",
-                        ),
+            Stream(
+                id = "123",
+                title = "Some very, extremely, quite long long long title for testing wow",
+                description = "",
+                status = "past",
+                start_scheduled = "2020-01-01T00:00:00.000Z",
+                start_actual = "2020-01-01T00:01:12.000Z",
+                channel =
+                Channel(
+                    name = "Wow Such YouTube Channel",
+                    org = "Hololive",
+                    photo = "",
                 ),
+            ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
             openPlayer = {},
@@ -176,19 +176,19 @@ private fun StreamPreview() {
         )
         Stream(
             stream =
-                Stream(
-                    id = "123",
-                    title = "Short title",
-                    description = "",
-                    status = "upcoming",
-                    start_scheduled = "2030-01-01T00:01:12.000Z",
-                    channel =
-                        Channel(
-                            name = "Smol Ch",
-                            org = "Hololive",
-                            photo = "",
-                        ),
+            Stream(
+                id = "123",
+                title = "Short title",
+                description = "",
+                status = "upcoming",
+                start_scheduled = "2030-01-01T00:01:12.000Z",
+                channel =
+                Channel(
+                    name = "Smol Ch",
+                    org = "Hololive",
+                    photo = "",
                 ),
+            ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
             openPlayer = {},

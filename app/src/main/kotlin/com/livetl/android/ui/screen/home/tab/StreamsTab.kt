@@ -57,9 +57,9 @@ fun StreamsTab(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .pullRefresh(pullRefreshState),
+        Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState),
     ) {
         PullRefreshIndicator(
             refreshing = viewModel.isRefreshing,

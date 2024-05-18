@@ -16,10 +16,8 @@ fun String.toDate(): Date {
 /**
  * Converts a Date to a localized relative string like "In 4 minutes" or "1 hour ago".
  */
-fun Date.toRelativeString(): String {
-    return DateUtils.getRelativeTimeSpanString(
-        time,
-        Instant.now().toEpochMilli(),
-        DateUtils.MINUTE_IN_MILLIS,
-    ).toString()
-}
+fun Date.toRelativeString(): String = DateUtils.getRelativeTimeSpanString(
+    time,
+    Instant.now().toEpochMilli(),
+    DateUtils.MINUTE_IN_MILLIS,
+).toString()

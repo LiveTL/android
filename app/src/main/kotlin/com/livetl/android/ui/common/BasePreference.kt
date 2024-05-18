@@ -24,19 +24,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PreferenceGroupHeader(
-    @StringRes title: Int,
-    modifier: Modifier = Modifier,
-) {
+fun PreferenceGroupHeader(@StringRes title: Int, modifier: Modifier = Modifier) {
     Text(
         text = stringResource(title),
         color = MaterialTheme.colorScheme.secondary,
         fontSize = MaterialTheme.typography.titleMedium.fontSize,
         fontWeight = FontWeight.Medium,
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     )
 }
 
@@ -52,10 +49,10 @@ fun PreferenceRow(
 
     Row(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .requiredHeight(height)
-                .clickable { onClick() },
+        modifier
+            .fillMaxWidth()
+            .requiredHeight(height)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(

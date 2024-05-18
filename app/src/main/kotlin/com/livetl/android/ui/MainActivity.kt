@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
 
         when (intent.action) {
             Intent.ACTION_VIEW -> handleVideoIntent(intent.dataString)
+
             Intent.ACTION_SEND -> {
                 if (intent.type == "text/plain") {
                     handleVideoIntent(intent.getStringExtra(Intent.EXTRA_TEXT))
