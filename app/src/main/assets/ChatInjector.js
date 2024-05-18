@@ -79,6 +79,20 @@ const messageReceiveCallback = async (response) => {
           return;
         }
 
+        const headerRuns = [];
+        if (messageItem.headerPrimaryText && messageItem.headerPrimaryText.runs) {
+          messageItem.headerPrimaryText.runs.forEach((run) => {
+            if (run.text) {
+              headerRuns.push({
+                type: 'text',
+                text: decodeURIComponent(escape(unescape(encodeURIComponent(
+                  run.text
+                ))))
+              });
+            }
+          });
+        }
+
         let isAuthorModerator = false;
         let isAuthorVerified = false;
         let isAuthorOwner = false;
@@ -134,6 +148,7 @@ const messageReceiveCallback = async (response) => {
 
         const timestampUsec = parseInt(messageItem.timestampUsec, 10);
         const authorThumbnails = messageItem.authorPhoto.thumbnails;
+        // Corresponds with "YTChatMessage" data class in Models.kt
         const item = {
           author: {
             name: messageItem.authorName.simpleText,
@@ -146,6 +161,7 @@ const messageReceiveCallback = async (response) => {
             membershipBadge: authorMembership,
           },
           messages: runs,
+          headerRuns: headerRuns,
           timestamp: timestampUsec,
           delay: isReplay
             ? getUsec(messageItem.timestampText.simpleText, timestampUsec)

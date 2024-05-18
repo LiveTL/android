@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -43,6 +45,7 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
         is ChatMessage.RegularChat -> LocalContentColor.current
         is ChatMessage.SuperChat -> message.level.textColor
         is ChatMessage.NewMember -> message.textColor
+        is ChatMessage.MemberMilestone -> message.textColor
     }
 
     val text = buildAnnotatedString {
@@ -75,6 +78,18 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
             )
         }
 
+        if (message is ChatMessage.MemberMilestone) {
+            append(
+                AnnotatedString(
+                    text = "${message.milestone} ",
+                    spanStyle = SpanStyle(
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
+                    )
+                )
+            )
+        }
+
         // Actual chat message contents
         if (message is ChatMessage.NewMember) {
             append(stringResource(R.string.new_member))
@@ -99,10 +114,15 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
                     .clip(ChatShape)
                     .background(color = message.backgroundColor)
                     .chatPadding()
+            is ChatMessage.MemberMilestone ->
+                modifier
+                    .clip(ChatShape)
+                    .background(color = message.backgroundColor)
+                    .chatPadding()
         },
         text = text,
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = LocalContentColor.current,
+            color = textColor,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize * fontScale,
         ),
         inlineContent = message.author.getPhotoInlineContent() +
@@ -183,3 +203,102 @@ private val parsedContentTypes = setOf(
     SymbolAnnotationType.LINK.name,
     SymbolAnnotationType.EMOJI.name,
 )
+
+
+@Preview
+@Composable
+private fun RegularChatPreviews() {
+    val author = MessageAuthor(
+        id = "1",
+        name = "Name",
+    )
+
+    Column {
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author,
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isModerator = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isVerified = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isOwner = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SuperChatPreview() {
+    Message(
+        message = ChatMessage.SuperChat(
+            author = MessageAuthor(
+                id = "2",
+                name = "Pekora Shachou",
+            ),
+            content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
+            timestamp = 1615001105,
+            amount = "$100.00",
+            level = ChatMessage.SuperChat.Level.RED,
+        ),
+        emojiCache = EmojiCache(),
+    )
+}
+
+@Preview
+@Composable
+private fun NewMemberPreview() {
+    Message(
+        message = ChatMessage.NewMember(
+            author = MessageAuthor(
+                id = "3",
+                name = "Ina Ina Ina",
+            ),
+            timestamp = 1615001105,
+        ),
+        emojiCache = EmojiCache(),
+    )
+}
+
+
+@Preview
+@Composable
+private fun MemberMilestonePreview() {
+    Message(
+        message = ChatMessage.MemberMilestone(
+            author = MessageAuthor(
+                id = "4",
+                name = "Rose",
+            ),
+            content = listOf(ChatMessageContent.Text("It's been 84 years...")),
+            timestamp = 1615001105,
+            milestone = "Member for 84 years",
+        ),
+        emojiCache = EmojiCache(),
+    )
+}

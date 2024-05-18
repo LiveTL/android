@@ -1,6 +1,7 @@
 package com.livetl.android.data.chat
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastMap
 import kotlinx.serialization.Serializable
 
@@ -42,22 +43,25 @@ sealed class ChatMessage {
         val textColor = Color.White
     }
 
+    data class MemberMilestone(
+        override val author: MessageAuthor,
+        override val content: List<ChatMessageContent>,
+        override val timestamp: Long,
+        val milestone: String,
+    ) : ChatMessage() {
+        val backgroundColor = Color(0xFF0E9D58)
+        val textColor = Color.White
+    }
+
     fun getTextContent(): String = content
         .joinToString("") { it.toString() }
         .trim()
 
     fun withContent(newContent: List<ChatMessageContent>): ChatMessage = when (this) {
-        is RegularChat -> {
-            copy(content = newContent)
-        }
-
-        is SuperChat -> {
-            copy(content = newContent)
-        }
-
-        is NewMember -> {
-            this
-        }
+        is RegularChat -> copy(content = newContent)
+        is SuperChat -> copy(content = newContent)
+        is MemberMilestone -> copy(content = newContent)
+        is NewMember -> this
     }
 }
 
@@ -107,6 +111,7 @@ data class YTChatMessages(val messages: List<YTChatMessage>, val isReplay: Boole
 data class YTChatMessage(
     val author: YTChatAuthor,
     val messages: List<YTChatMessageData>,
+    val headerRuns: List<YTChatMessageData>,
     val timestamp: Long,
     val delay: Long? = null,
     val superchat: YTSuperChat? = null,
@@ -126,6 +131,18 @@ data class YTChatMessage(
             ChatMessage.NewMember(
                 author = author.toMessageAuthor(),
                 timestamp = timestamp,
+            )
+        }
+
+        headerRuns.isNotEmpty() -> {
+            ChatMessage.MemberMilestone(
+                author = author.toMessageAuthor(),
+                content = messages.fastMap { it.toChatMessageContent() },
+                timestamp = timestamp,
+                milestone = headerRuns
+                    .fastMap { it.toChatMessageContent() }
+                    .filterIsInstance<ChatMessageContent.Text>()
+                    .joinToString { it.text },
             )
         }
 
