@@ -31,6 +31,7 @@
     <string name="chat">Chat</string>
     <string name="chat_no_messages">No chat messages</string>
     <string name="error_chat_load">Failed to connect to chat</string>
+    <string name="new_member">New member</string>
 
     <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_all_messages">All messages</string>

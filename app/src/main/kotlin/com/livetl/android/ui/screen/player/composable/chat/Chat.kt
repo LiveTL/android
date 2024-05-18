@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.player.composable.chat
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,10 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
+import com.livetl.android.data.chat.ChatMessageContent
+import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.ui.screen.player.PlayerViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -103,7 +107,7 @@ fun Chat(
                 state = scrollState,
             ) {
                 items(_messages) {
-                    ChatMessage(
+                    Message(
                         message = it,
                         emojiCache = playerViewModel.emojiCache,
                         fontScale = fontScale,
@@ -114,4 +118,84 @@ fun Chat(
 
         null -> {}
     }
+}
+
+@Preview
+@Composable
+private fun RegularChatPreviews() {
+    val author = MessageAuthor(
+        id = "1",
+        name = "Name",
+    )
+
+    Column {
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author,
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isModerator = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isVerified = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author.copy(isOwner = true),
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+            ),
+            emojiCache = EmojiCache(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SuperChatPreview() {
+    Message(
+        message = ChatMessage.SuperChat(
+            author = MessageAuthor(
+                id = "2",
+                name = "Pekora Shachou",
+            ),
+            content = listOf(ChatMessageContent.Text("HA↑HA↓HA↑HA↓ PE↗KO↘PE↗KO↘ 😂")),
+            timestamp = 1615001105,
+            amount = "$100.00",
+            level = ChatMessage.SuperChat.Level.RED,
+        ),
+        emojiCache = EmojiCache(),
+    )
+}
+
+@Preview
+@Composable
+private fun NewMemberPreview() {
+    Message(
+        message = ChatMessage.NewMember(
+            author = MessageAuthor(
+                id = "3",
+                name = "Ina Ina Ina",
+            ),
+            timestamp = 1615001105,
+        ),
+        emojiCache = EmojiCache(),
+    )
 }

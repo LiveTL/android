@@ -34,6 +34,7 @@ sealed class ChatMessage {
         }
     }
 
+    // TODO: handle member milestone messages
     data class NewMember(override val author: MessageAuthor, override val timestamp: Long) : ChatMessage() {
         override val content: List<ChatMessageContent> = emptyList()
 
@@ -79,21 +80,7 @@ data class MessageAuthor(
     val isNewMember: Boolean = false,
     val membershipRank: String? = null,
     val membershipBadgeUrl: String? = null,
-) {
-    fun toPrefItem(): String = "$id;;$name"
-
-    companion object {
-        fun getPrefItemId(prefString: String): String = prefString.split(";;", limit = 2)[0]
-
-        fun fromPrefItem(prefString: String): MessageAuthor {
-            val (id, name) = prefString.split(";;", limit = 2)
-            return MessageAuthor(
-                id = id,
-                name = name,
-            )
-        }
-    }
-}
+)
 
 enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     ENGLISH("en", setOf("en", "eng", "英訳", "trans")),
@@ -107,7 +94,7 @@ enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     ;
 
     companion object {
-        fun fromId(id: String): TranslatedLanguage? = values().find {
+        fun fromId(id: String): TranslatedLanguage? = entries.find {
             it.tags.any { tag -> id.lowercase().startsWith(tag) }
         }
     }
