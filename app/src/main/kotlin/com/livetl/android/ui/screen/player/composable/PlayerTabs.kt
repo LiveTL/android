@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -94,6 +95,7 @@ private fun FullPlayerTab(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     val pagerState = rememberPagerState(
         initialPage = tabs.indexOf(Tabs.Chat),
@@ -156,6 +158,7 @@ private fun FullPlayerTab(
                         context.findActivity().enterPictureInPictureMode(
                             PictureInPictureParams.Builder().build(),
                         )
+                        uriHandler.openUri("https://www.youtube.com/watch?v=${streamInfo?.videoId}")
                     },
                 ) {
                     Icon(
