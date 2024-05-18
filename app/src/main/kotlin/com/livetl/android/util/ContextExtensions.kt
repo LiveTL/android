@@ -75,7 +75,9 @@ fun Context.findActivity(): ComponentActivity {
 }
 
 @Composable
-fun rememberIsInPipMode(): Boolean {
+fun rememberIsInPipMode(): Boolean = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+    false
+} else {
     val activity = LocalContext.current.findActivity()
     var pipMode by remember { mutableStateOf(activity.isInPictureInPictureMode) }
     DisposableEffect(activity) {
@@ -87,5 +89,5 @@ fun rememberIsInPipMode(): Boolean {
         )
         onDispose { activity.removeOnPictureInPictureModeChangedListener(observer) }
     }
-    return pipMode
+    pipMode
 }

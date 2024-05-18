@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.player.composable
 
 import android.app.PictureInPictureParams
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,7 +93,7 @@ private fun FullPlayerTab(
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val activity = LocalContext.current.findActivity()
+    val context = LocalContext.current
 
     val pagerState = rememberPagerState(
         initialPage = tabs.indexOf(Tabs.Chat),
@@ -149,17 +150,19 @@ private fun FullPlayerTab(
                 )
             }
 
-            Button(
-                onClick = {
-                    activity.enterPictureInPictureMode(
-                        PictureInPictureParams.Builder().build(),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Button(
+                    onClick = {
+                        context.findActivity().enterPictureInPictureMode(
+                            PictureInPictureParams.Builder().build(),
+                        )
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PictureInPictureAlt,
+                        contentDescription = null,
                     )
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PictureInPictureAlt,
-                    contentDescription = null,
-                )
+                }
             }
         }
         HorizontalDivider()
