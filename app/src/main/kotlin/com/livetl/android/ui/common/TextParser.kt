@@ -93,8 +93,7 @@ private fun getSymbolAnnotation(
         SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
-                spanStyle =
-                SpanStyle(
+                spanStyle = SpanStyle(
                     color = colors.primary,
                 ),
             ),
@@ -111,8 +110,7 @@ private fun getSymbolAnnotation(
         SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
-                spanStyle =
-                SpanStyle(
+                spanStyle = SpanStyle(
                     color = colors.primary,
                 ),
             ),

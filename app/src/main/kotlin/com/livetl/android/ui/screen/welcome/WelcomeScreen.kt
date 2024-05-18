@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -26,26 +25,24 @@ import com.livetl.android.R
 fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
-            Surface {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.welcome))
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                viewModel.dismissWelcomeScreen()
-                                navigateToHome()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = stringResource(R.string.cd_close),
-                            )
-                        }
-                    },
-                )
-            }
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.welcome))
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            viewModel.dismissWelcomeScreen()
+                            navigateToHome()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.cd_close),
+                        )
+                    }
+                },
+            )
         },
     ) { contentPadding ->
         LazyColumn(

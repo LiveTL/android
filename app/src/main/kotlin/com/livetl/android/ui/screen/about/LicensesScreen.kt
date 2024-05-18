@@ -7,7 +7,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -20,21 +19,19 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 fun LicensesScreen(onBackPressed: () -> Unit) {
     Scaffold(
         topBar = {
-            Surface {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.licenses))
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { onBackPressed() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.cd_back),
-                            )
-                        }
-                    },
-                )
-            }
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.licenses))
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackPressed() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.cd_back),
+                        )
+                    }
+                },
+            )
         },
     ) { contentPadding ->
         LibrariesContainer(

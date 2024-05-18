@@ -15,7 +15,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -49,38 +48,36 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            Surface {
-                Column {
-                    TopAppBar(
-                        title = {
-                            Text(text = stringResource(R.string.app_name))
-                        },
-                        actions = {
-                            IconButton(onClick = navigateToSettings) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Settings,
-                                    contentDescription = stringResource(R.string.settings),
-                                )
-                            }
-                            IconButton(onClick = navigateToAbout) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Info,
-                                    contentDescription = stringResource(R.string.about),
-                                )
-                            }
-                        },
-                    )
-
-                    TabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                    ) {
-                        viewModel.tabs.forEachIndexed { index, tab ->
-                            Tab(
-                                text = { Text(stringResource(tab.first.headingRes)) },
-                                selected = pagerState.currentPage == index,
-                                onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
+            Column {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(R.string.app_name))
+                    },
+                    actions = {
+                        IconButton(onClick = navigateToSettings) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(R.string.settings),
                             )
                         }
+                        IconButton(onClick = navigateToAbout) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = stringResource(R.string.about),
+                            )
+                        }
+                    },
+                )
+
+                TabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                ) {
+                    viewModel.tabs.forEachIndexed { index, tab ->
+                        Tab(
+                            text = { Text(stringResource(tab.first.headingRes)) },
+                            selected = pagerState.currentPage == index,
+                            onClick = { coroutineScope.launch { pagerState.scrollToPage(index) } },
+                        )
                     }
                 }
             }

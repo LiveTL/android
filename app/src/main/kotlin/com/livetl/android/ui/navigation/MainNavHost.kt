@@ -6,6 +6,7 @@ import androidx.compose.material.navigation.ModalBottomSheetLayout
 import androidx.compose.material.navigation.bottomSheet
 import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,9 +66,9 @@ fun mainNavHost(startRoute: Route): NavHostController {
             ) { backStackEntry ->
                 val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
 
-                StreamInfo(
-                    urlOrId = urlOrId,
-                )
+                Surface {
+                    StreamInfo(urlOrId)
+                }
             }
 
             composable<Route.Welcome> {

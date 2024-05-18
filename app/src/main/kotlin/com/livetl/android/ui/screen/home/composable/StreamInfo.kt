@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,70 +63,67 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
 
     val uriHandler = LocalUriHandler.current
 
-    Surface {
-        LazyColumn(
-            modifier = Modifier.safeDrawingPadding(),
-        ) {
-            item {
-                AsyncImage(
-                    model = stream!!.thumbnail,
-                    contentDescription = null,
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16 / 9f)
-                        .background(Color.Black),
+    LazyColumn(
+        modifier = Modifier.safeDrawingPadding(),
+    ) {
+        item {
+            AsyncImage(
+                model = stream!!.thumbnail,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16 / 9f)
+                    .background(Color.Black),
+            )
+        }
+
+        item {
+            Column(
+                modifier = Modifier.padding(8.dp),
+            ) {
+                Text(
+                    text = stream!!.title,
+                    style = MaterialTheme.typography.headlineMedium,
                 )
-            }
+                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Text(
+                    text = stream!!.channel.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
 
-            item {
-                Column(
-                    modifier = Modifier.padding(8.dp),
-                ) {
-                    Text(
-                        text = stream!!.title,
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                    Spacer(modifier = Modifier.requiredHeight(8.dp))
-                    Text(
-                        text = stream!!.channel.name,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                StreamActions(stream!!.id)
 
-                    StreamActions(stream!!.id)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                val styledDescription = textParser(stream!!.description)
+                ClickableText(
+                    text = styledDescription,
+                    style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
+                    onClick = {
+                        styledDescription
+                            .getStringAnnotations(start = it, end = it)
+                            .firstOrNull()
+                            ?.let { annotation ->
+                                when (annotation.tag) {
+                                    SymbolAnnotationType.LINK.name ->
+                                        uriHandler.openUri(
+                                            annotation.item,
+                                        )
 
-                    val styledDescription = textParser(stream!!.description)
-                    ClickableText(
-                        text = styledDescription,
-                        style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
-                        onClick = {
-                            styledDescription
-                                .getStringAnnotations(start = it, end = it)
-                                .firstOrNull()
-                                ?.let { annotation ->
-                                    when (annotation.tag) {
-                                        SymbolAnnotationType.LINK.name ->
-                                            uriHandler.openUri(
-                                                annotation.item,
-                                            )
+                                    SymbolAnnotationType.HASHTAG.name ->
+                                        uriHandler.openUri(
+                                            "https://www.youtube.com/hashtag/${annotation.item}",
+                                        )
 
-                                        SymbolAnnotationType.HASHTAG.name ->
-                                            uriHandler.openUri(
-                                                "https://www.youtube.com/hashtag/${annotation.item}",
-                                            )
-
-                                        else -> Unit
-                                    }
+                                    else -> Unit
                                 }
-                        },
-                    )
+                            }
+                    },
+                )
 
-                    Spacer(Modifier.navigationBarsPadding())
-                }
+                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }

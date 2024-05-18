@@ -34,7 +34,7 @@
     <string name="new_member">New member</string>
 
     <string name="setting_tl_languages">Languages</string>
-    <string name="setting_show_all_messages">All messages</string>
+    <string name="setting_show_all_messages">Show all messages</string>
     <string name="setting_show_mod_messages">Mod messages</string>
     <string name="setting_show_verified_messages">Verified messages</string>
     <string name="setting_show_owner_messages">Owner messages</string>
