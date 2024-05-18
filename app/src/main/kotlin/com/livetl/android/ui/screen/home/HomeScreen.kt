@@ -1,6 +1,7 @@
 package com.livetl.android.ui.screen.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -134,11 +135,11 @@ fun HomeScreen(
         }
 
         HorizontalPager(
-            modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
             state = pagerState,
+            modifier = Modifier
+                .fillMaxSize()
+                .consumeWindowInsets(contentPadding),
+            contentPadding = contentPadding,
         ) { page ->
             val (status, tabViewModel) = viewModel.tabs[page]
             StreamsTab(

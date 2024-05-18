@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat
+import androidx.activity.enableEdgeToEdge
 import androidx.navigation.NavHostController
 import com.livetl.android.ui.navigation.Route
 import com.livetl.android.ui.navigation.mainNavHost
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
 
         val startRoute =
             when (prefs.showWelcomeScreen().get()) {

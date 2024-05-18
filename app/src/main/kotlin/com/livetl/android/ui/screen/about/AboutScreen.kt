@@ -1,8 +1,8 @@
 package com.livetl.android.ui.screen.about
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,9 +57,10 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentPadding),
+                .consumeWindowInsets(contentPadding)
+                .padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
+            contentPadding = contentPadding,
         ) {
             item {
                 Image(

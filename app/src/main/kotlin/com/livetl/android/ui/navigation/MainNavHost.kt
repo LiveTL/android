@@ -44,8 +44,7 @@ fun mainNavHost(startRoute: Route): NavHostController {
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {

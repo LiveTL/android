@@ -1,7 +1,7 @@
 package com.livetl.android.ui.screen.about
 
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -38,10 +38,9 @@ fun LicensesScreen(onBackPressed: () -> Unit) {
         },
     ) { contentPadding ->
         LibrariesContainer(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding(),
+                .consumeWindowInsets(contentPadding),
             contentPadding = contentPadding,
         )
     }

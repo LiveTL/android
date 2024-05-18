@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.home.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -51,10 +52,10 @@ fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hil
         },
     ) { contentPadding ->
         LazyColumn(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentPadding),
+                .consumeWindowInsets(contentPadding),
+            contentPadding = contentPadding,
         ) {
             items(
                 items = ORGANIZATIONS,

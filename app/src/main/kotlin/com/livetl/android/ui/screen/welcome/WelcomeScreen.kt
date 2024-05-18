@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.welcome
 
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,8 +50,9 @@ fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hilt
     ) { contentPadding ->
         LazyColumn(
             modifier = Modifier
-                .padding(contentPadding)
+                .consumeWindowInsets(contentPadding)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
+            contentPadding = contentPadding,
         ) {
             item {
                 Text(
