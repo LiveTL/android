@@ -2,9 +2,8 @@ package com.livetl.android.ui.common
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -25,18 +24,16 @@ fun LinkIcon(@StringRes labelRes: Int, icon: ImageVector, url: String, modifier:
 @Composable
 fun LinkIcon(@StringRes labelRes: Int, icon: ImageVector, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .clickable(onClick = onClick)
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
         )
-
-        Spacer(Modifier.height(4.dp))
 
         Text(stringResource(labelRes))
     }

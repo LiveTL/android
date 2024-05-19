@@ -56,8 +56,7 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
             baseHeaders()
         }
 
-        val body = result.bodyAsText()
-        json.decodeFromString(body)
+        json.decodeFromString(result.bodyAsText())
     }
 
     private fun URLBuilder.baseUrl() {

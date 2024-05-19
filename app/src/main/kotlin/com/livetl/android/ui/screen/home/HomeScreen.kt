@@ -1,8 +1,11 @@
 package com.livetl.android.ui.screen.home
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,6 +17,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -30,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.livetl.android.R
-import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.tab.StreamsTab
 import kotlinx.coroutines.launch
 
@@ -43,19 +46,29 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState { viewModel.tabs.size }
-
-    val openStreamInfo = { stream: Stream -> navigateToStreamInfo(stream.id) }
-    val openStream = { stream: Stream -> navigateToPlayer(stream.id) }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState { viewModel.tabs.size }
 
     Scaffold(
         topBar = {
             Column {
                 TopAppBar(
                     title = {
-                        Text(text = stringResource(R.string.app_name))
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable(onClick = navigateToSettings),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(text = stringResource(R.string.app_name))
+                            state.feedOrganization?.let {
+                                Text(
+                                    text = it,
+                                    style = MaterialTheme.typography.labelMedium,
+                                )
+                            }
+                        }
                     },
                     actions = {
                         IconButton(onClick = navigateToSettings) {
@@ -140,8 +153,8 @@ fun HomeScreen(
         ) { page ->
             val (status, tabViewModel) = viewModel.tabs[page]
             StreamsTab(
-                navigateToStream = openStream,
-                peekStream = openStreamInfo,
+                navigateToStream = { navigateToPlayer(it.id) },
+                peekStream = { navigateToStreamInfo(it.id) },
                 status = status,
                 viewModel = tabViewModel,
             )
