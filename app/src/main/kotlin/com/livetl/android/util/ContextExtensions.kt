@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import com.livetl.android.R
@@ -90,4 +91,20 @@ fun rememberIsInPipMode(): Boolean = if (Build.VERSION.SDK_INT < Build.VERSION_C
         onDispose { activity.removeOnPictureInPictureModeChangedListener(observer) }
     }
     pipMode
+}
+
+@Composable
+fun rememberIsInSplitScreenMode(): Boolean {
+    val activity = LocalContext.current.findActivity()
+    var splitScreenMode by remember { mutableStateOf(activity.isInMultiWindowMode) }
+    DisposableEffect(activity) {
+        val observer = Consumer<MultiWindowModeChangedInfo> { info ->
+            splitScreenMode = info.isInMultiWindowMode
+        }
+        activity.addOnMultiWindowModeChangedListener(
+            observer,
+        )
+        onDispose { activity.removeOnMultiWindowModeChangedListener(observer) }
+    }
+    return splitScreenMode
 }

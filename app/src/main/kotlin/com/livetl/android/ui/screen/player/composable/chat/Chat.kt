@@ -24,6 +24,7 @@ import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.util.rememberIsInPipMode
+import com.livetl.android.util.rememberIsInSplitScreenMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ fun Chat(
 ) {
     val scope = rememberCoroutineScope()
     val isInPipMode = rememberIsInPipMode()
+    val isInSplitScreenMode = rememberIsInSplitScreenMode()
 
     val scrollState = rememberLazyListState()
     var isScrolledToBottom by remember { mutableStateOf(true) }
@@ -65,7 +67,7 @@ fun Chat(
         checkIfAtBottom()
         _messages = messages
 
-        scrollToBottom(force = isInPipMode)
+        scrollToBottom(force = isInPipMode || isInSplitScreenMode)
     }
 
     when (state) {

@@ -47,6 +47,7 @@ import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.util.collectAsStateWithLifecycle
 import com.livetl.android.util.findActivity
 import com.livetl.android.util.rememberIsInPipMode
+import com.livetl.android.util.rememberIsInSplitScreenMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -64,11 +65,12 @@ fun PlayerTabs(
     viewModel: PlayerViewModel = viewModel(),
 ) {
     val isInPipMode = rememberIsInPipMode()
+    val isInSplitScreenMode = rememberIsInSplitScreenMode()
 
     val tlScale by viewModel.prefs.tlScale().collectAsStateWithLifecycle()
     val filteredMessages by viewModel.filteredMessages.collectAsStateWithLifecycle()
 
-    if (isInPipMode) {
+    if (isInPipMode || isInSplitScreenMode) {
         ChatTab(
             filteredMessages = filteredMessages,
             fontScale = tlScale,
