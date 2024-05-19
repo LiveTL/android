@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - stable
     tags:
       - v*
   pull_request:
@@ -20,11 +19,9 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -32,16 +29,11 @@ jobs:
           java-version: 17
           distribution: adopt
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build app
-        run: ./gradlew bundlePlaystoreRelease
+        run: ./gradlew test bundlePlaystoreRelease
 
       # Sign app bundle and create release for tags
 

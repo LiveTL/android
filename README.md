@@ -19,4 +19,3 @@ Translations are done in [Weblate](https://hosted.weblate.org/projects/livetl/an
 
 ### Requirements
 - [Android Studio](https://developer.android.com/studio)
-- [Yarn](https://yarnpkg.com/)
