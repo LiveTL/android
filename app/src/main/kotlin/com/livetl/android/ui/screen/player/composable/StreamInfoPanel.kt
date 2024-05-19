@@ -11,13 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.livetl.android.data.stream.StreamInfo
-import com.livetl.android.ui.common.LoadingIndicator
 import com.livetl.android.ui.common.StreamThumbnailBackground
 
 @Composable
 fun StreamInfoPanel(streamInfo: StreamInfo?, modifier: Modifier = Modifier) {
     if (streamInfo == null) {
-        LoadingIndicator()
         return
     }
 

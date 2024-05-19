@@ -88,7 +88,7 @@ class PlayerViewModel @Inject constructor(
             state.update { it.copy(chatState = ChatState.LOADED) }
         } catch (e: Throwable) {
             Timber.e(e)
-            state.update { it.copy(chatState = ChatState.ERROR) }
+            state.update { it.copy(chatState = ChatState.ERROR(e)) }
         }
     }
 
@@ -106,5 +106,5 @@ class PlayerViewModel @Inject constructor(
 sealed interface ChatState {
     data object LOADING : ChatState
     data object LOADED : ChatState
-    data object ERROR : ChatState
+    data class ERROR(val error: Throwable) : ChatState
 }

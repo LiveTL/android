@@ -102,11 +102,11 @@ fun HomeScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { viewModel.showOpenVideoDialog() },
-                text = { Text(stringResource(R.string.action_open_video)) },
+                text = { Text(stringResource(R.string.action_open_chat)) },
                 icon = {
                     Icon(
                         imageVector = Icons.Default.AddToQueue,
-                        contentDescription = stringResource(R.string.action_open_video),
+                        contentDescription = null,
                     )
                 },
             )
@@ -116,7 +116,7 @@ fun HomeScreen(
             AlertDialog(
                 onDismissRequest = { viewModel.hideOpenVideoDialog() },
                 title = {
-                    Text(stringResource(R.string.action_open_video))
+                    Text(stringResource(R.string.action_open_chat))
                 },
                 text = {
                     Column {

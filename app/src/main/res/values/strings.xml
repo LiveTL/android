@@ -23,7 +23,7 @@
     <string name="action_copy_link">Copy</string>
     <string name="action_share">Share</string>
 
-    <string name="action_open_video">Open video</string>
+    <string name="action_open_chat">Open chat</string>
     <string name="open_video_hint">You can also directly share a video to %s from the YouTube app!</string>
     <string name="youtube_url_hint">Enter a YouTube URL or ID</string>
     <string name="action_open">Open</string>
@@ -32,8 +32,8 @@
     <string name="chat_no_messages">No chat messages to show yet</string>
     <string name="error_chat_load">Failed to connect to chat</string>
     <string name="new_member">New member</string>
-    <string name="error_no_notification_access">To sync progress with YouTube, LiveTL needs notification access.</string>
-    <string name="action_grant_notification_access">Grant LiveTL notification access</string>
+    <string name="error_no_notification_access">To sync progress with YouTube, %s needs notification access.</string>
+    <string name="action_grant_notification_access">Grant notification access</string>
 
     <string name="action_open_youtube">Open YouTube</string>
 

@@ -1,11 +1,17 @@
 package com.livetl.android.ui.screen.player.composable.chat
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
@@ -75,12 +82,23 @@ fun Chat(
             LoadingIndicator()
         }
 
-        ChatState.ERROR -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
+        is ChatState.ERROR -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(stringResource(R.string.error_chat_load))
+
+                state.error.message?.let {
+                    Spacer(Modifier.requiredHeight(8.dp))
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
             }
         }
 

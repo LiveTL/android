@@ -128,7 +128,7 @@ private fun FullPlayerTab(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(R.string.error_no_notification_access),
+                    text = stringResource(R.string.error_no_notification_access, stringResource(R.string.app_name)),
                     textAlign = TextAlign.Center,
                 )
 
