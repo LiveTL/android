@@ -23,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +38,7 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
     var loading by remember { mutableStateOf(true) }
     var stream by remember { mutableStateOf<Stream?>(null) }
+    val description = remember(stream) { textParser(stream?.description.orEmpty()) }
 
     LaunchedEffect(urlOrId) {
         if (urlOrId.isNotEmpty()) {
@@ -58,8 +58,6 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
         Text(stringResource(R.string.select_a_stream))
         return
     }
-
-    val uriHandler = LocalUriHandler.current
 
     LazyColumn(
         modifier = Modifier.safeDrawingPadding(),
@@ -96,7 +94,7 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                 Text(
-                    text = textParser(stream!!.description),
+                    text = description,
                     style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
                 )
 

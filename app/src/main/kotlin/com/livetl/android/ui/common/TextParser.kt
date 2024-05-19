@@ -1,14 +1,12 @@
 package com.livetl.android.ui.common
 
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withLink
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableSet
 
 private val symbolPattern by lazy {
     """(https?://[^\s\t\n]+)|(:[\w+-]+:)|(#[\w+]+)""".toRegex()
@@ -20,26 +18,24 @@ enum class SymbolAnnotationType(val firstToken: Char) {
     EMOJI(':'),
     HASHTAG('#'),
 }
+private val DEFAULT_CONTENT_TYPES = SymbolAnnotationType.entries.map { it.name }.toImmutableSet()
 
 // Pair returning styled content and annotation for ClickableText when matching syntax token
 typealias SymbolAnnotation = Pair<String, LinkAnnotation?>
 
 /**
- * Parses a string so that it's renderable with its content.
+ * Parses a string so that it can be rendered with its content.
  *
  * http(s)://... -> clickable link, opening in a browser
  * :text:        -> default chat emote
  * :_text:       -> custom chat emote
- * #text         -> hashtag
+ * #text         -> YouTube hashtag
  *
  * @param text contains message to be parsed
- * @return AnnotatedString with annotations used inside the ClickableText wrapper
+ *
+ * @return AnnotatedString for use inside a (Basic)Text composable
  */
-@Composable
-fun textParser(
-    text: String,
-    parsedContentTypes: Collection<String> = SymbolAnnotationType.entries.map { it.name },
-): AnnotatedString {
+fun textParser(text: String, parsedContentTypes: ImmutableSet<String> = DEFAULT_CONTENT_TYPES): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 
     return buildAnnotatedString {
@@ -57,7 +53,6 @@ fun textParser(
                 val (string, linkAnnotation) =
                     getSymbolAnnotation(
                         matchResult = token,
-                        colors = MaterialTheme.colorScheme,
                         parsedContentTypes = parsedContentTypes,
                     )
 
@@ -82,39 +77,31 @@ fun textParser(
 }
 
 /**
- * Map regex matches found in a message with supported syntax symbols
+ * Map regex matches found in a message with supported syntax symbols.
  *
- * @param matchResult is a regex result matching our syntax symbols
- * @return pair of AnnotatedString with annotation (optional) used inside the ClickableText wrapper
+ * @param matchResult regex result matching our syntax symbols
+ *
+ * @return pair of AnnotatedString with annotation (optional) used inside the (Basic)Text composable
  */
-private fun getSymbolAnnotation(
-    matchResult: MatchResult,
-    colors: ColorScheme,
-    parsedContentTypes: Collection<String>,
-): SymbolAnnotation = when {
-    SymbolAnnotationType.LINK.name in parsedContentTypes &&
-        matchResult.value.first() == SymbolAnnotationType.LINK.firstToken ->
-        SymbolAnnotation(
-            matchResult.value,
-            LinkAnnotation.Url(
-                url = matchResult.value,
-                style = SpanStyle(
-                    color = colors.primary,
+private fun getSymbolAnnotation(matchResult: MatchResult, parsedContentTypes: ImmutableSet<String>): SymbolAnnotation =
+    when {
+        SymbolAnnotationType.LINK.name in parsedContentTypes &&
+            matchResult.value.first() == SymbolAnnotationType.LINK.firstToken ->
+            SymbolAnnotation(
+                matchResult.value,
+                LinkAnnotation.Url(
+                    url = matchResult.value,
                 ),
-            ),
-        )
+            )
 
-    SymbolAnnotationType.HASHTAG.name in parsedContentTypes &&
-        matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken ->
-        SymbolAnnotation(
-            matchResult.value,
-            LinkAnnotation.Url(
-                url = "https://www.youtube.com/hashtag/${matchResult.value.substring(1)}",
-                style = SpanStyle(
-                    color = colors.primary,
+        SymbolAnnotationType.HASHTAG.name in parsedContentTypes &&
+            matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken ->
+            SymbolAnnotation(
+                matchResult.value,
+                LinkAnnotation.Url(
+                    url = "https://www.youtube.com/hashtag/${matchResult.value.substring(1)}",
                 ),
-            ),
-        )
+            )
 
-    else -> SymbolAnnotation(matchResult.value, null)
-}
+        else -> SymbolAnnotation(matchResult.value, null)
+    }

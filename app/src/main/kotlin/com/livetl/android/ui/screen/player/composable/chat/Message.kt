@@ -39,6 +39,7 @@ import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = Modifier, fontScale: Float = 1f) {
@@ -204,7 +205,7 @@ private val LocalAuthorNameColor = compositionLocalOf { Color.White }
 private fun Modifier.chatPadding() = fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)
 private val ChatShape = RoundedCornerShape(4.dp)
 
-private val parsedContentTypes = setOf(
+private val parsedContentTypes = persistentSetOf(
     SymbolAnnotationType.LINK.name,
     SymbolAnnotationType.EMOJI.name,
 )
