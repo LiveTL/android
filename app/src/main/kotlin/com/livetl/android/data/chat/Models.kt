@@ -34,7 +34,6 @@ sealed interface ChatMessage {
         }
     }
 
-    // TODO: handle member milestone messages
     data class NewMember(override val author: MessageAuthor, override val timestamp: Long) : ChatMessage {
         override val content: List<ChatMessageContent> = emptyList()
 

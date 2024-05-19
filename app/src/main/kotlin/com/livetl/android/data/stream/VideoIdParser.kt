@@ -28,6 +28,11 @@ class VideoIdParser @Inject constructor() {
             return matcher.group(3)
         }
 
+        matcher = LIVE_LINK_PATTERN.matcher(url)
+        if (matcher.find()) {
+            return matcher.group(3)
+        }
+
         matcher = SHORT_LINK_PATTERN.matcher(url)
         if (matcher.find()) {
             return matcher.group(3)
@@ -42,6 +47,10 @@ class VideoIdParser @Inject constructor() {
 
 private val PAGE_LINK_PATTERN by lazy {
     "(http|https)://(www\\.|m.|)youtube\\.com/watch\\?v=(.+?)( |\\z|&)".toPattern()
+}
+
+private val LIVE_LINK_PATTERN by lazy {
+    "(http|https)://(www\\.|m.|)youtube\\.com/live/(.+?)( |\\z|&|\\?)".toPattern()
 }
 
 private val SHORT_LINK_PATTERN by lazy {

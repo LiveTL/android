@@ -134,7 +134,6 @@ tasks {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-                "-opt-in=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
             )
         }
     }

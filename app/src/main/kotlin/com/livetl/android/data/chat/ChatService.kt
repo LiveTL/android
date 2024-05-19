@@ -1,5 +1,5 @@
 package com.livetl.android.data.chat
-import android.annotation.SuppressLint
+
 import android.content.Context
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -36,9 +36,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
 
-@SuppressLint("SetJavaScriptEnabled")
 class ChatService @Inject constructor(
     @ApplicationContext context: Context,
     private val json: Json,
@@ -98,7 +96,6 @@ class ChatService @Inject constructor(
         clearMessages()
     }
 
-    @ExperimentalTime
     @Suppress("Unused")
     @JavascriptInterface
     fun receiveMessages(data: String) {
@@ -162,7 +159,6 @@ class ChatService @Inject constructor(
     /**
      * Calculates number of microseconds from [now] until [microseconds].
      */
-    @ExperimentalTime
     private fun getMicrosecondDiff(now: Long, microseconds: Long): Duration {
         val diff = now - microseconds
         Timber.d(
