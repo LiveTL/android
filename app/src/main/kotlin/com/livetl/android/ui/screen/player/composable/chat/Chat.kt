@@ -3,7 +3,6 @@ package com.livetl.android.ui.screen.player.composable.chat
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -18,8 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
@@ -90,11 +87,12 @@ fun Chat(
 
         ChatState.LOADED -> {
             if (messages.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.chat_no_messages),
-                    modifier = Modifier.fillMaxSize().padding(8.dp),
-                    textAlign = TextAlign.Center,
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(stringResource(R.string.chat_no_messages))
+                }
                 return
             }
 

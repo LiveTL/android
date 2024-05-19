@@ -29,7 +29,7 @@
     <string name="action_open">Open</string>
 
     <string name="chat">Chat</string>
-    <string name="chat_no_messages">No chat messages</string>
+    <string name="chat_no_messages">No chat messages to show yet</string>
     <string name="error_chat_load">Failed to connect to chat</string>
     <string name="new_member">New member</string>
 
