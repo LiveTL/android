@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +31,6 @@ import coil.compose.AsyncImage
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.LoadingIndicator
-import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 import kotlinx.coroutines.launch
 
@@ -97,30 +95,9 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                val styledDescription = textParser(stream!!.description)
-                ClickableText(
-                    text = styledDescription,
+                Text(
+                    text = textParser(stream!!.description),
                     style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
-                    onClick = {
-                        styledDescription
-                            .getStringAnnotations(start = it, end = it)
-                            .firstOrNull()
-                            ?.let { annotation ->
-                                when (annotation.tag) {
-                                    SymbolAnnotationType.LINK.name ->
-                                        uriHandler.openUri(
-                                            annotation.item,
-                                        )
-
-                                    SymbolAnnotationType.HASHTAG.name ->
-                                        uriHandler.openUri(
-                                            "https://www.youtube.com/hashtag/${annotation.item}",
-                                        )
-
-                                    else -> Unit
-                                }
-                            }
-                    },
                 )
 
                 Spacer(Modifier.navigationBarsPadding())

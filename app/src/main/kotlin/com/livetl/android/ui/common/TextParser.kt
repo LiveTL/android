@@ -5,8 +5,10 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
 
 private val symbolPattern by lazy {
     """(https?://[^\s\t\n]+)|(:[\w+]+:)|(#[\w+]+)""".toRegex()
@@ -18,12 +20,10 @@ enum class SymbolAnnotationType(val firstToken: Char) {
     EMOJI(':'),
     HASHTAG('#'),
 }
-typealias StringAnnotation = AnnotatedString.Range<String>
 
 // Pair returning styled content and annotation for ClickableText when matching syntax token
-typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
+typealias SymbolAnnotation = Pair<String, LinkAnnotation?>
 
-// TODO: default emoji don't seem to appear properly
 /**
  * Parses a string so that it's renderable with its content.
  *
@@ -54,17 +54,19 @@ fun textParser(
                 // Emotes are replaced with placeholders later
                 appendInlineContent(token.value, token.value)
             } else {
-                val (annotatedString, stringAnnotation) =
+                val (string, linkAnnotation) =
                     getSymbolAnnotation(
                         matchResult = token,
                         colors = MaterialTheme.colorScheme,
                         parsedContentTypes = parsedContentTypes,
                     )
-                append(annotatedString)
 
-                if (stringAnnotation != null) {
-                    val (item, start, end, tag) = stringAnnotation
-                    addStringAnnotation(tag = tag, start = start, end = end, annotation = item)
+                if (linkAnnotation != null) {
+                    withLink(linkAnnotation) {
+                        append(string)
+                    }
+                } else {
+                    append(string)
                 }
             }
 
@@ -93,36 +95,26 @@ private fun getSymbolAnnotation(
     SymbolAnnotationType.LINK.name in parsedContentTypes &&
         matchResult.value.first() == SymbolAnnotationType.LINK.firstToken ->
         SymbolAnnotation(
-            AnnotatedString(
-                text = matchResult.value,
-                spanStyle = SpanStyle(
+            matchResult.value,
+            LinkAnnotation.Url(
+                url = matchResult.value,
+                style = SpanStyle(
                     color = colors.primary,
                 ),
-            ),
-            StringAnnotation(
-                item = matchResult.value,
-                start = matchResult.range.first,
-                end = matchResult.range.last,
-                tag = SymbolAnnotationType.LINK.name,
             ),
         )
 
     SymbolAnnotationType.HASHTAG.name in parsedContentTypes &&
         matchResult.value.first() == SymbolAnnotationType.HASHTAG.firstToken ->
         SymbolAnnotation(
-            AnnotatedString(
-                text = matchResult.value,
-                spanStyle = SpanStyle(
+            matchResult.value,
+            LinkAnnotation.Url(
+                url = "https://www.youtube.com/hashtag/${matchResult.value.substring(1)}",
+                style = SpanStyle(
                     color = colors.primary,
                 ),
             ),
-            StringAnnotation(
-                item = matchResult.value.substring(1),
-                start = matchResult.range.first,
-                end = matchResult.range.last,
-                tag = SymbolAnnotationType.HASHTAG.name,
-            ),
         )
 
-    else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
+    else -> SymbolAnnotation(matchResult.value, null)
 }
