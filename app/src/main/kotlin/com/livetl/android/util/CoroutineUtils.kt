@@ -1,20 +1,14 @@
 package com.livetl.android.util
 
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@DelicateCoroutinesApi
-fun runOnMainThread(block: () -> Unit) {
-    GlobalScope.launch(Dispatchers.Main) {
-        block()
-    }
-}
+suspend fun <T> withUIContext(block: suspend CoroutineScope.() -> T): T = withContext(Dispatchers.Main, block)
 
 suspend fun waitUntil(
     predicate: () -> Boolean,

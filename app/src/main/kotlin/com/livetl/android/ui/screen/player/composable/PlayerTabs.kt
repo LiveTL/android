@@ -2,11 +2,13 @@ package com.livetl.android.ui.screen.player.composable
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -83,6 +86,7 @@ fun PlayerTabs(
         filteredMessages = state.filteredMessages,
         fontScale = state.fontScale,
         chatState = chatState,
+        showDifferentVideoWarning = state.isDifferentVideo,
         modifier = modifier,
     )
 }
@@ -93,6 +97,7 @@ private fun FullPlayerTab(
     filteredMessages: ImmutableList<ChatMessage>,
     fontScale: Float,
     chatState: ChatState,
+    showDifferentVideoWarning: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -111,6 +116,19 @@ private fun FullPlayerTab(
             .fillMaxSize()
             .safeDrawingPadding(),
     ) {
+        if (showDifferentVideoWarning) {
+            Text(
+                text = stringResource(R.string.different_video_warning),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.error)
+                    .padding(16.dp),
+                color = MaterialTheme.colorScheme.onError,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+            )
+        }
+
         AnimatedVisibility(
             visible = showStreamInfo,
         ) {

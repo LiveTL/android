@@ -16,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,17 +40,21 @@ class YouTubeSessionService @Inject constructor(
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             scope.launch {
-                session.value = getYouTubeSession()
+                val currentSession = getYouTubeSession()
+                session.update { currentSession }
 
                 // We don't really get progress updates, so we simulate per-second updates
                 // while it's playing
-                if (state?.state == PlaybackState.STATE_PLAYING && session.value?.isLive == false) {
+                if (state?.state == PlaybackState.STATE_PLAYING && currentSession?.isLive == false) {
                     progressJob = launch {
                         while (true) {
+                            Timber.d("Updating playback position")
+                            session.update {
+                                it?.copy(
+                                    positionInMs = (it.positionInMs ?: 0L) + 2000L,
+                                )
+                            }
                             delay(2.seconds)
-                            session.value = session.value?.copy(
-                                positionInMs = (session.value?.positionInMs ?: 0L) + 2000L,
-                            )
                         }
                     }
                 } else {
@@ -61,7 +66,8 @@ class YouTubeSessionService @Inject constructor(
 
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             scope.launch {
-                session.value = getYouTubeSession()
+                val currentSession = getYouTubeSession()
+                session.update { currentSession }
             }
         }
 
@@ -131,23 +137,23 @@ class YouTubeSessionService @Inject constructor(
         val streamInfo = streamService.findStreamInfo(title, channelName)
 
         return YouTubeSession(
-            title = title,
-            channelName = channelName,
-            playbackState = state,
-            isLive = position == 0L || streamInfo?.isLive == true,
-            positionInMs = position,
             videoId = streamInfo?.videoId,
+            videoTitle = title,
+            channelName = channelName,
+            isLive = position == 0L || streamInfo?.isLive == true,
+            playbackState = state,
+            positionInMs = position,
         )
     }
 }
 
 data class YouTubeSession(
-    val title: String,
-    val channelName: String,
-    val playbackState: YouTubeVideoPlaybackState,
-    val isLive: Boolean,
-    val positionInMs: Long?,
     val videoId: String?,
+    val videoTitle: String,
+    val channelName: String,
+    val isLive: Boolean,
+    val playbackState: YouTubeVideoPlaybackState,
+    val positionInMs: Long?,
 )
 
 enum class YouTubeVideoPlaybackState {

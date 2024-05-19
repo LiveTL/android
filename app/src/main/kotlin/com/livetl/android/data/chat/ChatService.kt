@@ -12,6 +12,7 @@ import com.livetl.android.util.readAssetFile
 import com.livetl.android.util.runJS
 import com.livetl.android.util.setDefaultSettings
 import com.livetl.android.util.toDebugTimestampString
+import com.livetl.android.util.withUIContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -28,7 +29,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
@@ -75,19 +75,19 @@ class ChatService @Inject constructor(
     }
 
     suspend fun seekTo(videoId: String, second: Long) {
-        withContext(Dispatchers.Main) {
-            if (second != currentSecond) {
-                Timber.d("$videoId: seeking to $second")
+        if (second != currentSecond) {
+            Timber.d("Seeking to $second")
+            withUIContext {
                 webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
-
-                // Clear out messages if we seem to be manually seeking
-                if (currentSecond - 10 > second || second > currentSecond + 10) {
-                    Timber.d("$videoId: manual seek")
-                    clearMessages()
-                }
-
-                currentSecond = second
             }
+
+            // Clear out messages if we seem to be manually seeking
+            if (currentSecond - 10 > second || second > currentSecond + 10) {
+                Timber.d("Manual seek")
+                clearMessages()
+            }
+
+            currentSecond = second
         }
     }
 
@@ -148,12 +148,12 @@ class ChatService @Inject constructor(
             }
         }
         val matches = CHAT_CONTINUATION_PATTERN.matcher(result.bodyAsText())
-        if (matches.find()) {
-            val continuation = matches.group(1)
-            return "${urlPrefix}_replay?continuation=$continuation&embed_domain=www.livetl.app"
-        } else {
+        if (!matches.find()) {
             throw NoChatContinuationFoundException(videoId)
         }
+
+        val continuation = matches.group(1)
+        return "${urlPrefix}_replay?continuation=$continuation&embed_domain=www.livetl.app"
     }
 
     /**

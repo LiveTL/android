@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livetl.android.data.chat.ChatFilterService
 import com.livetl.android.data.chat.ChatMessage
-import com.livetl.android.data.media.YouTubeSession
 import com.livetl.android.data.media.YouTubeSessionService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
@@ -15,16 +14,13 @@ import com.livetl.android.util.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
@@ -53,15 +49,22 @@ class PlayerViewModel @Inject constructor(
         }
 
         youTubeSessionService.attach()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             youTubeSessionService.session
                 .filterNotNull()
-                .debounce(2.seconds)
                 .collectLatest { session ->
                     Timber.d(
-                        "Current YouTube video: ${session.videoId} / ${session.title} / ${session.positionInMs} / ${session.playbackState}",
+                        "Current YouTube video: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}",
                     )
-                    state.update { it.copy(youTubeSession = session) }
+                    val isDifferentVideo =
+                        (session.videoId != null && session.videoId != state.value.streamInfo?.videoId) ||
+                            (session.videoTitle != state.value.streamInfo?.title) ||
+                            (session.channelName != state.value.streamInfo?.author)
+                    state.update {
+                        it.copy(
+                            isDifferentVideo = isDifferentVideo,
+                        )
+                    }
 
                     // Update chat progress based on playback state
                     if (!session.isLive && session.videoId != null && session.positionInMs != null) {
@@ -98,8 +101,7 @@ class PlayerViewModel @Inject constructor(
         val filteredMessages: ImmutableList<ChatMessage> = persistentListOf(),
         val fontScale: Float = 1f,
         val streamInfo: StreamInfo? = null,
-        // TODO: show message if playing video seems to have changed
-        val youTubeSession: YouTubeSession? = null,
+        val isDifferentVideo: Boolean = false,
     )
 }
 

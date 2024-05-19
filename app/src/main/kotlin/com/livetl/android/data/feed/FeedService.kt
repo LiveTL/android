@@ -47,6 +47,7 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
             }
         }
 
+    // TODO: fallback to YouTube API for things HoloDex doesn't have?
     suspend fun getVideoInfo(videoId: String): Stream = withContext(SupervisorJob() + Dispatchers.IO) {
         val result = client.get {
             url {
