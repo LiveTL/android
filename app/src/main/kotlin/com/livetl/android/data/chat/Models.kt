@@ -94,6 +94,7 @@ enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     CHINESE("zh", setOf("zh", "cn", "中文")),
     RUSSIAN("ru", setOf("ru")),
     FRENCH("fr", setOf("fr")),
+    GERMAN("de", setOf("de")),
     ;
 
     companion object {
