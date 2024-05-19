@@ -1,9 +1,5 @@
 package com.livetl.android.ui.screen.about
 
-import android.content.ComponentName
-import android.content.Intent
-import android.os.Build
-import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -31,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
-import com.livetl.android.data.media.YouTubeNotificationListenerService
 import com.livetl.android.ui.common.LinkIcon
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.PreferenceRow
@@ -123,34 +118,6 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                     title = R.string.show_welcome_screen,
                     onClick = { navigateToWelcome() },
                 )
-            }
-
-            // TODO: prompt this better
-            if (BuildConfig.DEBUG) {
-                item {
-                    PreferenceRow(
-                        title = "Grant notification listener permissions",
-                        onClick = {
-                            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS).apply {
-                                    val componentName =
-                                        ComponentName(
-                                            context.packageName,
-                                            YouTubeNotificationListenerService::class.java.name,
-                                        )
-                                    putExtra(
-                                        Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
-                                        componentName.flattenToString(),
-                                    )
-                                }
-                            } else {
-                                Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-                            }
-
-                            context.startActivity(intent)
-                        },
-                    )
-                }
             }
         }
     }

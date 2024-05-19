@@ -1,10 +1,12 @@
 package com.livetl.android.data.media
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.media.session.MediaSessionManager
+import android.os.Build
+import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -32,8 +34,19 @@ class YouTubeNotificationListenerService : NotificationListenerService() {
     }
 
     companion object {
-        fun isNotificationAccessGranted(context: Context): Boolean =
-            NotificationManagerCompat.getEnabledListenerPackages(context)
-                .any { it == context.packageName }
+        fun getPermissionScreenIntent(context: Context): Intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS).apply {
+                val componentName = ComponentName(
+                    context.packageName,
+                    YouTubeNotificationListenerService::class.java.name,
+                )
+                putExtra(
+                    Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
+                    componentName.flattenToString(),
+                )
+            }
+        } else {
+            Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+        }
     }
 }

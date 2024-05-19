@@ -32,6 +32,8 @@
     <string name="chat_no_messages">No chat messages to show yet</string>
     <string name="error_chat_load">Failed to connect to chat</string>
     <string name="new_member">New member</string>
+    <string name="error_no_notification_access">To sync progress with YouTube, LiveTL needs notification access.</string>
+    <string name="action_grant_notification_access">Grant LiveTL notification access</string>
 
     <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_all_messages">Show all messages</string>

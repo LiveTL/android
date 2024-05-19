@@ -8,7 +8,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -23,6 +26,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,19 +39,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
+import com.livetl.android.data.media.YouTubeNotificationListenerService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.PlayerViewModel
-import com.livetl.android.util.collectAsStateWithLifecycle
 import com.livetl.android.util.findActivity
 import com.livetl.android.util.rememberIsInPipMode
 import com.livetl.android.util.rememberIsInSplitScreenMode
+import com.livetl.android.util.rememberIsNotificationAccessGranted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
@@ -67,24 +73,23 @@ fun PlayerTabs(
     val isInPipMode = rememberIsInPipMode()
     val isInSplitScreenMode = rememberIsInSplitScreenMode()
 
-    val tlScale by viewModel.prefs.tlScale().collectAsStateWithLifecycle()
-    val filteredMessages by viewModel.filteredMessages.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     if (isInPipMode || isInSplitScreenMode) {
         ChatTab(
-            filteredMessages = filteredMessages,
-            fontScale = tlScale,
+            filteredMessages = state.filteredMessages,
+            fontScale = state.fontScale,
             state = chatState,
         )
         return
     }
 
     FullPlayerTab(
-        streamInfo,
-        filteredMessages,
-        tlScale,
-        chatState,
-        modifier,
+        streamInfo = streamInfo,
+        filteredMessages = state.filteredMessages,
+        fontScale = state.fontScale,
+        chatState = chatState,
+        modifier = modifier,
     )
 }
 
@@ -92,11 +97,12 @@ fun PlayerTabs(
 private fun FullPlayerTab(
     streamInfo: StreamInfo?,
     filteredMessages: ImmutableList<ChatMessage>,
-    tlScale: Float,
+    fontScale: Float,
     chatState: ChatState,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val isNotificationAccessGranted = rememberIsNotificationAccessGranted()
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
@@ -118,6 +124,34 @@ private fun FullPlayerTab(
             StreamInfoPanel(
                 streamInfo = streamInfo,
             )
+        }
+
+        if (streamInfo?.isLive == false && !isNotificationAccessGranted) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = stringResource(R.string.error_no_notification_access),
+                    textAlign = TextAlign.Center,
+                )
+
+                Spacer(Modifier.requiredHeight(8.dp))
+
+                Button(
+                    onClick = {
+                        val intent = YouTubeNotificationListenerService.getPermissionScreenIntent(context)
+                        context.startActivity(intent)
+                    },
+                ) {
+                    Text(text = stringResource(R.string.action_grant_notification_access))
+                }
+            }
+
+            return
         }
 
         Row(
@@ -188,7 +222,7 @@ private fun FullPlayerTab(
                     ChatTab(
                         modifier = Modifier.fillMaxSize(),
                         filteredMessages = filteredMessages,
-                        fontScale = tlScale,
+                        fontScale = fontScale,
                         state = chatState,
                     )
 

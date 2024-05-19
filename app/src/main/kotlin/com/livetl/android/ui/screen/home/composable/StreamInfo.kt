@@ -75,17 +75,17 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
                     text = state.stream!!.title,
                     style = MaterialTheme.typography.headlineMedium,
                 )
-                Spacer(modifier = Modifier.requiredHeight(8.dp))
+                Spacer(Modifier.requiredHeight(8.dp))
                 Text(
                     text = state.stream!!.channel.name,
                     style = MaterialTheme.typography.bodyMedium,
                 )
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                 StreamActions(state.stream!!.id)
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                 state.description?.let {
                     Text(

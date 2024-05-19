@@ -8,6 +8,7 @@ import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import androidx.core.content.getSystemService
 import com.livetl.android.data.stream.StreamService
+import com.livetl.android.util.isNotificationAccessGranted
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +72,7 @@ class YouTubeSessionService @Inject constructor(
     }
 
     fun attach() {
-        if (YouTubeNotificationListenerService.isNotificationAccessGranted(context)) {
+        if (context.isNotificationAccessGranted()) {
             Timber.d("Starting media session listener")
             val mediaSessionManager = context.getSystemService<MediaSessionManager>()
             mediaSessionManager?.addOnActiveSessionsChangedListener(this, component)

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livetl.android.data.chat.ChatFilterService
+import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.media.YouTubeSession
 import com.livetl.android.data.media.YouTubeSessionService
 import com.livetl.android.data.stream.StreamInfo
@@ -12,6 +13,8 @@ import com.livetl.android.data.stream.VideoIdParser
 import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
 import com.livetl.android.util.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -34,11 +37,22 @@ class PlayerViewModel @Inject constructor(
 ) : ViewModel() {
     val state = MutableStateFlow(State())
 
-    val filteredMessages = chatFilterService.messages
-
     init {
-        youTubeSessionService.attach()
+        viewModelScope.launch {
+            chatFilterService.messages
+                .collectLatest { messages ->
+                    state.update { it.copy(filteredMessages = messages) }
+                }
+        }
 
+        viewModelScope.launch {
+            prefs.tlScale().asFlow()
+                .collectLatest { tlScale ->
+                    state.update { it.copy(fontScale = tlScale) }
+                }
+        }
+
+        youTubeSessionService.attach()
         viewModelScope.launch(Dispatchers.IO) {
             youTubeSessionService.session
                 .filterNotNull()
@@ -81,6 +95,8 @@ class PlayerViewModel @Inject constructor(
     @Immutable
     data class State(
         val chatState: ChatState = ChatState.LOADING,
+        val filteredMessages: ImmutableList<ChatMessage> = persistentListOf(),
+        val fontScale: Float = 1f,
         val streamInfo: StreamInfo? = null,
         // TODO: show message if playing video seems to have changed
         val youTubeSession: YouTubeSession? = null,
