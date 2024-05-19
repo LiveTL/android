@@ -8,7 +8,7 @@ import androidx.compose.ui.util.fastForEach
 import com.livetl.android.util.USER_AGENT
 import com.livetl.android.util.epochMicro
 import com.livetl.android.util.injectScript
-import com.livetl.android.util.readFile
+import com.livetl.android.util.readAssetFile
 import com.livetl.android.util.runJS
 import com.livetl.android.util.setDefaultSettings
 import com.livetl.android.util.toDebugTimestampString
@@ -47,7 +47,18 @@ class ChatService @Inject constructor(
     private val client: HttpClient,
 ) {
 
-    private val webview = WebView(context)
+    private val webview by lazy {
+        WebView(context).apply {
+            setDefaultSettings()
+            addJavascriptInterface(this@ChatService, "Android")
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    super.onPageFinished(view, url)
+                    injectScript(context.readAssetFile("ChatInjector.js"))
+                }
+            }
+        }
+    }
 
     private var isLive: Boolean = false
     private var currentSecond: Long = 0
@@ -58,17 +69,6 @@ class ChatService @Inject constructor(
     private val _messages = MutableStateFlow<ImmutableList<ChatMessage>>(persistentListOf())
     val messages: SharedFlow<ImmutableList<ChatMessage>>
         get() = _messages.asSharedFlow()
-
-    init {
-        webview.setDefaultSettings()
-        webview.addJavascriptInterface(this, "Android")
-        webview.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
-                webview.injectScript(context.readFile("ChatInjector.js"))
-            }
-        }
-    }
 
     suspend fun connect(videoId: String, isLive: Boolean) {
         // Clear out previous chat contents, just in case

@@ -55,7 +55,7 @@ fun Context.share(text: String) {
 }
 
 @Throws(IOException::class)
-fun Context.readFile(filePath: String): String =
+fun Context.readAssetFile(filePath: String): String =
     BufferedReader(InputStreamReader(assets.open(filePath))).use { reader ->
         val total = StringBuilder()
         var line: String?
