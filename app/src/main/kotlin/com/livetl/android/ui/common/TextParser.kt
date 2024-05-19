@@ -11,7 +11,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withLink
 
 private val symbolPattern by lazy {
-    """(https?://[^\s\t\n]+)|(:[\w+]+:)|(#[\w+]+)""".toRegex()
+    """(https?://[^\s\t\n]+)|(:[\w+-]+:)|(#[\w+]+)""".toRegex()
 }
 
 // Accepted annotations
