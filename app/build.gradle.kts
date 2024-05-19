@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -140,5 +141,12 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+
+        testLogging {
+            events(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
+        }
     }
 }
