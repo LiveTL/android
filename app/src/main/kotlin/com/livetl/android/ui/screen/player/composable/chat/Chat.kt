@@ -49,29 +49,17 @@ fun Chat(
     val isInSplitScreenMode = rememberIsInSplitScreenMode()
 
     val scrollState = rememberLazyListState()
-    var isScrolledToBottom by remember { mutableStateOf(true) }
     var _messages by remember { mutableStateOf<ImmutableList<ChatMessage>>(persistentListOf()) }
 
-    fun checkIfAtBottom() {
-        isScrolledToBottom = if (_messages.isEmpty()) {
-            true
-        } else {
-            val visibleItems = scrollState.layoutInfo.visibleItemsInfo
-            visibleItems.lastOrNull()?.index == _messages.lastIndex
-        }
-    }
-
     fun scrollToBottom(force: Boolean) {
-        if ((isScrolledToBottom || force) && _messages.isNotEmpty()) {
+        if ((!scrollState.canScrollForward || force) && _messages.isNotEmpty()) {
             scope.launch {
                 scrollState.scrollToItem(_messages.lastIndex, 0)
-                checkIfAtBottom()
             }
         }
     }
 
     LaunchedEffect(messages) {
-        checkIfAtBottom()
         _messages = messages
 
         scrollToBottom(force = isInPipMode || isInSplitScreenMode)
@@ -113,17 +101,27 @@ fun Chat(
                 return
             }
 
-            LazyColumn(
-                modifier = modifier.fillMaxWidth(),
-                state = scrollState,
-            ) {
-                items(_messages) {
-                    Message(
-                        message = it,
-                        emojiCache = playerViewModel.emojiCache,
-                        fontScale = fontScale,
-                    )
+            Box {
+                LazyColumn(
+                    modifier = modifier.fillMaxWidth(),
+                    state = scrollState,
+                ) {
+                    items(_messages) {
+                        Message(
+                            message = it,
+                            emojiCache = playerViewModel.emojiCache,
+                            fontScale = fontScale,
+                        )
+                    }
                 }
+
+                JumpToBottomButton(
+                    enabled = scrollState.canScrollForward,
+                    onClicked = { scrollToBottom(force = true) },
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(start = 16.dp),
+                )
             }
         }
 
