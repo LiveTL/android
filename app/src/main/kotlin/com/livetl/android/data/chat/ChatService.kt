@@ -146,7 +146,7 @@ class ChatService @Inject constructor(
         val urlPrefix = "https://www.youtube.com/live_chat"
 
         if (isLive) {
-            return "$urlPrefix?v=$videoId&embed_domain=www.livetl.app&app=desktop"
+            return "$urlPrefix?v=$videoId&embed_domain=www.livetl.app"
         }
 
         val result = client.get("https://www.youtube.com/watch?v=$videoId") {
@@ -156,9 +156,8 @@ class ChatService @Inject constructor(
         }
         val matches = CHAT_CONTINUATION_PATTERN.matcher(result.bodyAsText())
         if (matches.find()) {
-            return "${urlPrefix}_replay?v=$videoId&continuation=${matches.group(
-                1,
-            )}&embed_domain=www.livetl.app&app=desktop"
+            val continuation = matches.group(1)
+            return "${urlPrefix}_replay?continuation=$continuation&embed_domain=www.livetl.app"
         } else {
             throw NoChatContinuationFoundException(videoId)
         }

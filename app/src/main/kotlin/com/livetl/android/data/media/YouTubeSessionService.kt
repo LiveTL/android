@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -36,7 +35,7 @@ class YouTubeSessionService @Inject constructor(
         get() = _session.asSharedFlow()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val component = ComponentName(context, YouTubeSessionService::class.java)
+    private val component = ComponentName(context, javaClass)
 
     private var mediaController: MediaController? = null
     private var progressJob: Job? = null
@@ -45,14 +44,15 @@ class YouTubeSessionService @Inject constructor(
             scope.launch {
                 _session.value = getYouTubeSession()
 
+                // We don't really get progress updates, so we simulate per-second updates
+                // while it's playing
                 if (state?.state == PlaybackState.STATE_PLAYING && _session.value?.isLive == false) {
                     progressJob = launch {
                         while (true) {
-                            delay(1.seconds)
+                            delay(2.seconds)
                             _session.value = _session.value?.copy(
-                                positionInMs = (_session.value?.positionInMs ?: 0L) + 1000L,
+                                positionInMs = (_session.value?.positionInMs ?: 0L) + 2000L,
                             )
-                            Timber.d("Updating progress to: ${_session.value?.positionInMs}")
                         }
                     }
                 } else {
@@ -91,7 +91,6 @@ class YouTubeSessionService @Inject constructor(
     }
 
     override fun onActiveSessionsChanged(controllers: List<MediaController>?) {
-        Timber.d("Active media sessions updated")
         listenToYouTubeMediaSession(controllers)
     }
 
@@ -99,21 +98,30 @@ class YouTubeSessionService @Inject constructor(
         controllers
             ?.find { it.packageName == YOUTUBE_PACKAGE_NAME }
             ?.let {
-                if (mediaController != null) {
-                    mediaController?.unregisterCallback(mediaControllerCallback)
-                    mediaController = null
-                }
+                if (mediaController?.sessionToken != it.sessionToken) {
+                    Timber.d("Found YouTube media session: ${it.sessionToken}")
 
-                mediaController = it
-                it.registerCallback(mediaControllerCallback)
+                    if (mediaController != null) {
+                        mediaController?.unregisterCallback(mediaControllerCallback)
+                        mediaController = null
+                    }
+
+                    mediaController = it
+                    it.registerCallback(mediaControllerCallback)
+                }
             }
     }
 
     private suspend fun getYouTubeSession(): YouTubeSession? {
         if (mediaController == null) return null
 
-        val title = mediaController?.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: return null
-        val channelName = mediaController?.metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: return null
+        val title = mediaController?.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
+        val channelName = mediaController?.metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST)
+
+        if (title.isNullOrEmpty() || channelName.isNullOrEmpty()) {
+            return null
+        }
+
         val state = when (mediaController?.playbackState?.state) {
             PlaybackState.STATE_PAUSED -> YouTubeVideoPlaybackState.PAUSED
             PlaybackState.STATE_PLAYING -> YouTubeVideoPlaybackState.PLAYING

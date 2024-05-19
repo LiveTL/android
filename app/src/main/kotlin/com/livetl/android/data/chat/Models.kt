@@ -4,16 +4,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.util.fastMap
 import kotlinx.serialization.Serializable
 
-sealed class ChatMessage {
-    abstract val author: MessageAuthor
-    abstract val content: List<ChatMessageContent>
-    abstract val timestamp: Long
+sealed interface ChatMessage {
+    val author: MessageAuthor
+    val content: List<ChatMessageContent>
+    val timestamp: Long
 
     data class RegularChat(
         override val author: MessageAuthor,
         override val content: List<ChatMessageContent>,
         override val timestamp: Long,
-    ) : ChatMessage()
+    ) : ChatMessage
 
     // TODO: handle super stickers
     data class SuperChat(
@@ -22,7 +22,7 @@ sealed class ChatMessage {
         override val timestamp: Long,
         val amount: String,
         val level: Level,
-    ) : ChatMessage() {
+    ) : ChatMessage {
         enum class Level(val backgroundColor: Color, val textColor: Color) {
             BLUE(Color(0xFF1565BF), Color.White),
             LIGHT_BLUE(Color(0xFF00E4FE), Color.Black),
@@ -35,7 +35,7 @@ sealed class ChatMessage {
     }
 
     // TODO: handle member milestone messages
-    data class NewMember(override val author: MessageAuthor, override val timestamp: Long) : ChatMessage() {
+    data class NewMember(override val author: MessageAuthor, override val timestamp: Long) : ChatMessage {
         override val content: List<ChatMessageContent> = emptyList()
 
         val backgroundColor = Color(0xFF0E9D58)
@@ -47,7 +47,7 @@ sealed class ChatMessage {
         override val content: List<ChatMessageContent>,
         override val timestamp: Long,
         val milestone: String,
-    ) : ChatMessage() {
+    ) : ChatMessage {
         val backgroundColor = Color(0xFF0E9D58)
         val textColor = Color.White
     }
@@ -64,11 +64,11 @@ sealed class ChatMessage {
     }
 }
 
-sealed class ChatMessageContent {
-    data class Text(val text: String) : ChatMessageContent() {
+sealed interface ChatMessageContent {
+    data class Text(val text: String) : ChatMessageContent {
         override fun toString() = text
     }
-    data class Emoji(val id: String, val src: String) : ChatMessageContent() {
+    data class Emoji(val id: String, val src: String) : ChatMessageContent {
         override fun toString() = id
     }
 }

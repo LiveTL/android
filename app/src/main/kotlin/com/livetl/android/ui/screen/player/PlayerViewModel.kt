@@ -16,11 +16,12 @@ import com.livetl.android.util.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
@@ -41,10 +42,10 @@ class PlayerViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             youTubeSessionService.session
-                .distinctUntilChanged()
                 .filterNotNull()
+                .debounce(2.seconds)
                 .collectLatest {
-                    Timber.i(
+                    Timber.d(
                         "Current YouTube video: ${it.videoId} / ${it.title} / ${it.positionInMs} / ${it.playbackState}",
                     )
                     youTubeSession = it

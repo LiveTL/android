@@ -26,10 +26,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
-sealed class ChatState {
-    data object LOADING : ChatState()
-    data object LOADED : ChatState()
-    data object ERROR : ChatState()
+sealed interface ChatState {
+    data object LOADING : ChatState
+    data object LOADED : ChatState
+    data object ERROR : ChatState
 }
 
 @Composable

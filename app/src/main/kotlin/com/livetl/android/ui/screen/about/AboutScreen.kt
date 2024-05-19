@@ -125,6 +125,7 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                 )
             }
 
+            // TODO: prompt this better
             if (BuildConfig.DEBUG) {
                 item {
                     PreferenceRow(
@@ -135,7 +136,7 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                                     val componentName =
                                         ComponentName(
                                             context.packageName,
-                                            YouTubeNotificationListenerService::class.java.getName(),
+                                            YouTubeNotificationListenerService::class.java.name,
                                         )
                                     putExtra(
                                         Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,

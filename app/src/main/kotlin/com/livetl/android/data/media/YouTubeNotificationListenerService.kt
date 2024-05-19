@@ -7,6 +7,7 @@ import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,10 +23,11 @@ class YouTubeNotificationListenerService : NotificationListenerService() {
             return
         }
 
+        Timber.d("YouTube notification posted")
+
         val mediaSessionManager = getSystemService<MediaSessionManager>() ?: return
 
-        val component = ComponentName(this, YouTubeNotificationListenerService::class.java)
-        val sessions = mediaSessionManager.getActiveSessions(component)
+        val sessions = mediaSessionManager.getActiveSessions(ComponentName(this, javaClass))
         youTubeSessionService.onActiveSessionsChanged(sessions)
     }
 
