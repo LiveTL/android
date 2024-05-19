@@ -41,8 +41,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.stream.StreamInfo
+import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.PlayerViewModel
-import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.util.collectAsStateWithLifecycle
 import com.livetl.android.util.findActivity
 import com.livetl.android.util.rememberIsInPipMode

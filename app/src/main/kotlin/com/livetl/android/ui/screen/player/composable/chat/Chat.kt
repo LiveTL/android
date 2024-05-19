@@ -21,16 +21,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.ui.common.LoadingIndicator
+import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.PlayerViewModel
+import com.livetl.android.util.rememberIsInPipMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
-
-sealed interface ChatState {
-    data object LOADING : ChatState
-    data object LOADED : ChatState
-    data object ERROR : ChatState
-}
 
 @Composable
 fun Chat(
@@ -41,6 +37,7 @@ fun Chat(
     playerViewModel: PlayerViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
+    val isInPipMode = rememberIsInPipMode()
 
     val scrollState = rememberLazyListState()
     var isScrolledToBottom by remember { mutableStateOf(true) }
@@ -68,7 +65,7 @@ fun Chat(
         checkIfAtBottom()
         _messages = messages
 
-        scrollToBottom(force = false)
+        scrollToBottom(force = isInPipMode)
     }
 
     when (state) {

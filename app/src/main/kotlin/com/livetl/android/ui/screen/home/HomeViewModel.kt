@@ -12,8 +12,10 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val streamRepository: StreamRepository, val prefs: AppPreferences) :
-    ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val streamRepository: StreamRepository,
+    private val prefs: AppPreferences,
+) : ViewModel() {
     val tabs =
         StreamStatus.entries.map {
             it to

@@ -9,7 +9,6 @@ import com.livetl.android.data.media.YouTubeSessionService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.VideoIdParser
-import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
 import com.livetl.android.util.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -86,4 +85,10 @@ class PlayerViewModel @Inject constructor(
         // TODO: show message if playing video seems to have changed
         val youTubeSession: YouTubeSession? = null,
     )
+}
+
+sealed interface ChatState {
+    data object LOADING : ChatState
+    data object LOADED : ChatState
+    data object ERROR : ChatState
 }

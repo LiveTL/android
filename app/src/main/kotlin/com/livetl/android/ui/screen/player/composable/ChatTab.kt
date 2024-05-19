@@ -3,8 +3,8 @@ package com.livetl.android.ui.screen.player.composable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.livetl.android.data.chat.ChatMessage
+import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.Chat
-import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
