@@ -32,7 +32,7 @@
     <string name="chat_no_messages">No chat messages to show yet</string>
     <string name="error_chat_load">Failed to connect to chat</string>
     <string name="new_member">New member</string>
-    <string name="error_no_notification_access">To sync progress with YouTube, %s needs notification access.</string>
+    <string name="error_no_notification_access">To sync progress while watching archives with the YouTube app, %s needs notification access.</string>
     <string name="action_grant_notification_access">Grant notification access</string>
     <string name="different_video_warning">The video playing in YouTube might be different than the one open here!</string>
 

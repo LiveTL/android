@@ -57,12 +57,11 @@ class StreamService @Inject constructor(
         }
 
     private suspend fun getChatContinuation(videoId: String): String? {
-        val result =
-            client.get("https://www.youtube.com/watch?v=$videoId") {
-                headers {
-                    set("User-Agent", USER_AGENT)
-                }
+        val result = client.get("https://www.youtube.com/watch?v=$videoId") {
+            headers {
+                set("User-Agent", USER_AGENT)
             }
+        }
         val matches = CHAT_CONTINUATION_PATTERN.matcher(result.bodyAsText())
         return if (matches.find()) {
             matches.group(1)

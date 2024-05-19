@@ -27,6 +27,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -122,10 +124,12 @@ class ChatService @Inject constructor(
                     }
 
                     val message = it.toChatMessage()
-                    messages.value = (messages.value + message)
-                        .distinct()
-                        .takeLast(MAX_MESSAGE_QUEUE_SIZE)
-                        .toImmutableList()
+                    messages.getAndUpdate { oldMessages ->
+                        (oldMessages + message)
+                            .distinct()
+                            .takeLast(MAX_MESSAGE_QUEUE_SIZE)
+                            .toImmutableList()
+                    }
                 }
         }
 
@@ -169,7 +173,7 @@ class ChatService @Inject constructor(
 
     private fun clearMessages() {
         jobs.forEach { it.cancel() }
-        messages.value = persistentListOf()
+        messages.update { persistentListOf() }
     }
 }
 

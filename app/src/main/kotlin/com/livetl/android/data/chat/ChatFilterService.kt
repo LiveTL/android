@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,8 +25,8 @@ class ChatFilterService @Inject constructor(
         chatService.connect(videoId, isLive)
 
         job = chatService.scope.launch {
-            chatService.messages.collect {
-                messages.value = it.mapNotNull(chatFilterer::filterMessage).toImmutableList()
+            chatService.messages.collect { newMessages ->
+                messages.update { newMessages.mapNotNull(chatFilterer::filterMessage).toImmutableList() }
             }
         }
     }
@@ -37,6 +38,6 @@ class ChatFilterService @Inject constructor(
     fun stop() {
         chatService.stop()
         job?.cancel()
-        messages.value = persistentListOf()
+        messages.update { persistentListOf() }
     }
 }

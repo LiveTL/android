@@ -43,18 +43,19 @@ class YouTubeSessionService @Inject constructor(
                 val currentSession = getYouTubeSession()
                 session.update { currentSession }
 
+                // TODO: need to check that this is even the right time
                 // We don't really get progress updates, so we simulate per-second updates
                 // while it's playing
                 if (state?.state == PlaybackState.STATE_PLAYING && currentSession?.isLive == false) {
                     progressJob = launch {
                         while (true) {
+                            delay(2.seconds)
                             Timber.d("Updating playback position")
                             session.update {
                                 it?.copy(
                                     positionInMs = (it.positionInMs ?: 0L) + 2000L,
                                 )
                             }
-                            delay(2.seconds)
                         }
                     }
                 } else {
