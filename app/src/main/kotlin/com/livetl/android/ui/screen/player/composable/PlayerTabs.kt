@@ -2,6 +2,7 @@ package com.livetl.android.ui.screen.player.composable
 
 import android.app.PictureInPictureParams
 import android.os.Build
+import android.util.Rational
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -158,7 +159,10 @@ private fun FullPlayerTab(
                 Button(
                     onClick = {
                         context.findActivity().enterPictureInPictureMode(
-                            PictureInPictureParams.Builder().build(),
+                            PictureInPictureParams.Builder()
+                                // Must be between 2.39:1 and 1:2.39 (inclusive)
+                                .setAspectRatio(Rational(239, 100))
+                                .build(),
                         )
                         uriHandler.openUri("https://www.youtube.com/watch?v=${streamInfo?.videoId}")
                     },
