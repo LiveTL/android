@@ -49,26 +49,23 @@ fun Stream(
     stream: Stream,
     @StringRes timestampFormatStringRes: Int?,
     timestampSupplier: (Stream) -> String?,
-    openPlayer: (Stream) -> Unit,
-    openStreamInfo: (Stream) -> Unit,
+    onClick: (Stream) -> Unit,
+    onClickDetails: (Stream) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
     ) {
         AsyncImage(
-            model =
-            ImageRequest.Builder(LocalContext.current)
+            model = ImageRequest.Builder(LocalContext.current)
                 .data(stream.thumbnail)
                 .transformations()
                 .crossfade(true)
                 .build(),
             contentDescription = null,
-            modifier =
-            Modifier
+            modifier = Modifier
                 .matchParentSize()
                 .alpha(0.1f)
                 .blur(5.dp),
@@ -76,11 +73,10 @@ fun Stream(
         )
 
         Row(
-            modifier =
-            modifier
+            modifier = modifier
                 .combinedClickable(
-                    onClick = { openPlayer(stream) },
-                    onLongClick = { openStreamInfo(stream) },
+                    onClick = { onClick(stream) },
+                    onLongClick = { onClickDetails(stream) },
                 )
                 .fillMaxWidth()
                 .padding(start = 16.dp, top = 8.dp, end = 0.dp, bottom = 8.dp)
@@ -89,8 +85,7 @@ fun Stream(
             AsyncImage(
                 model = stream.channel.photo,
                 contentDescription = null,
-                modifier =
-                Modifier
+                modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
                     .clip(CircleShape),
@@ -111,8 +106,7 @@ fun Stream(
                     CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelSmall) {
                         Text(
                             stream.channel.name,
-                            modifier =
-                            Modifier
+                            modifier = Modifier
                                 .padding(start = 8.dp, end = 8.dp)
                                 .weight(1f),
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
@@ -122,13 +116,11 @@ fun Stream(
 
                         timestampSupplier(stream)?.let {
                             val relativeDateString = it.toDate().toRelativeString()
-                            val timestampFormatString =
-                                timestampFormatStringRes?.let { res -> stringResource(res) }
-                            val timestampString =
-                                timestampFormatString?.format(relativeDateString)
-                                    ?: relativeDateString
+                            val timestampFormatString = timestampFormatStringRes?.let { res -> stringResource(res) }
+                            val timestampString = timestampFormatString?.format(relativeDateString)
+                                ?: relativeDateString
                             Text(
-                                timestampString,
+                                text = timestampString,
                                 color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                             )
                         }
@@ -138,7 +130,7 @@ fun Stream(
 
             IconButton(
                 modifier = Modifier.alpha(0.5f),
-                onClick = { openStreamInfo(stream) },
+                onClick = { onClickDetails(stream) },
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
@@ -154,16 +146,14 @@ fun Stream(
 private fun StreamPreview() {
     Column {
         Stream(
-            stream =
-            Stream(
+            stream = Stream(
                 id = "123",
                 title = "Some very, extremely, quite long long long title for testing wow",
                 description = "",
                 status = "past",
                 start_scheduled = "2020-01-01T00:00:00.000Z",
                 start_actual = "2020-01-01T00:01:12.000Z",
-                channel =
-                Channel(
+                channel = Channel(
                     name = "Wow Such YouTube Channel",
                     org = "Hololive",
                     photo = "",
@@ -171,19 +161,17 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = R.string.started_streaming,
             timestampSupplier = { "2020-01-01T00:01:12.000Z" },
-            openPlayer = {},
-            openStreamInfo = {},
+            onClick = {},
+            onClickDetails = {},
         )
         Stream(
-            stream =
-            Stream(
+            stream = Stream(
                 id = "123",
                 title = "Short title",
                 description = "",
                 status = "upcoming",
                 start_scheduled = "2030-01-01T00:01:12.000Z",
-                channel =
-                Channel(
+                channel = Channel(
                     name = "Smol Ch",
                     org = "Hololive",
                     photo = "",
@@ -191,8 +179,8 @@ private fun StreamPreview() {
             ),
             timestampFormatStringRes = null,
             timestampSupplier = { "2030-01-01T00:01:12.000Z" },
-            openPlayer = {},
-            openStreamInfo = {},
+            onClick = {},
+            onClickDetails = {},
         )
     }
 }

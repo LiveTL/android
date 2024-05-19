@@ -85,8 +85,8 @@ fun StreamsTab(
                     stream = stream,
                     timestampFormatStringRes = status.timestampFormatStringRes,
                     timestampSupplier = status.timestampSupplier,
-                    openPlayer = navigateToStream,
-                    openStreamInfo = peekStream,
+                    onClick = if (status != StreamStatus.UPCOMING) navigateToStream else peekStream,
+                    onClickDetails = peekStream,
                 )
             }
 
