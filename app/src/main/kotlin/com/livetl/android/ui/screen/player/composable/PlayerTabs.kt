@@ -1,8 +1,5 @@
 package com.livetl.android.ui.screen.player.composable
 
-import android.app.PictureInPictureParams
-import android.os.Build
-import android.util.Rational
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.PictureInPictureAlt
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -37,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,7 +45,6 @@ import com.livetl.android.data.media.YouTubeNotificationListenerService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.ChatState
 import com.livetl.android.ui.screen.player.PlayerViewModel
-import com.livetl.android.util.findActivity
 import com.livetl.android.util.rememberIsInPipMode
 import com.livetl.android.util.rememberIsInSplitScreenMode
 import com.livetl.android.util.rememberIsNotificationAccessGranted
@@ -104,7 +98,6 @@ private fun FullPlayerTab(
     val coroutineScope = rememberCoroutineScope()
     val isNotificationAccessGranted = rememberIsNotificationAccessGranted()
     val context = LocalContext.current
-    val uriHandler = LocalUriHandler.current
 
     val pagerState = rememberPagerState(
         initialPage = tabs.indexOf(Tabs.Chat),
@@ -189,25 +182,6 @@ private fun FullPlayerTab(
                     },
                     contentDescription = null,
                 )
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Button(
-                    onClick = {
-                        context.findActivity().enterPictureInPictureMode(
-                            PictureInPictureParams.Builder()
-                                // Must be between 2.39:1 and 1:2.39 (inclusive)
-                                .setAspectRatio(Rational(239, 100))
-                                .build(),
-                        )
-                        uriHandler.openUri("https://www.youtube.com/watch?v=${streamInfo?.videoId}")
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.PictureInPictureAlt,
-                        contentDescription = null,
-                    )
-                }
             }
         }
         HorizontalDivider()

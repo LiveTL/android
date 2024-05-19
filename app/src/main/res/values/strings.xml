@@ -35,6 +35,8 @@
     <string name="error_no_notification_access">To sync progress with YouTube, LiveTL needs notification access.</string>
     <string name="action_grant_notification_access">Grant LiveTL notification access</string>
 
+    <string name="action_open_youtube">Open YouTube</string>
+
     <string name="setting_tl_languages">Languages</string>
     <string name="setting_show_all_messages">Show all messages</string>
     <string name="setting_show_mod_messages">Mod messages</string>
