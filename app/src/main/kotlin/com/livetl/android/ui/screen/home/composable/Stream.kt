@@ -27,19 +27,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.livetl.android.R
 import com.livetl.android.data.feed.Channel
 import com.livetl.android.data.feed.Stream
+import com.livetl.android.ui.common.StreamThumbnailBackground
 import com.livetl.android.util.escapeHtmlEntities
 import com.livetl.android.util.toDate
 import com.livetl.android.util.toRelativeString
@@ -58,19 +55,7 @@ fun Stream(
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(stream.thumbnail)
-                .transformations()
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            modifier = Modifier
-                .matchParentSize()
-                .alpha(0.1f)
-                .blur(5.dp),
-            contentScale = ContentScale.Crop,
-        )
+        StreamThumbnailBackground(stream.thumbnail)
 
         Row(
             modifier = modifier

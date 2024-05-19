@@ -61,8 +61,7 @@ fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hil
                 val selectOrganization = { viewModel.prefs.feedOrganization().set(organization) }
 
                 Row(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .requiredHeight(48.dp)
                         .fillMaxWidth()
                         .clickable { selectOrganization() },

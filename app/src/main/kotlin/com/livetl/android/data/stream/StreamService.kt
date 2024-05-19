@@ -32,6 +32,7 @@ class StreamService @Inject constructor(
                 title = stream.title,
                 author = stream.channel.name,
                 shortDescription = stream.description,
+                thumbnail = stream.thumbnail,
                 isLive = stream.isLive,
                 chatContinuation = chatContinuation,
             )
@@ -43,6 +44,7 @@ class StreamService @Inject constructor(
                 title = "",
                 author = "",
                 shortDescription = "",
+                thumbnail = null,
                 isLive = false,
                 chatContinuation = getChatContinuation(videoId),
             )
