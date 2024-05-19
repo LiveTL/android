@@ -34,7 +34,7 @@ class ChatFilterService @Inject constructor(
         }
     }
 
-    fun seekTo(videoId: String, second: Long) {
+    suspend fun seekTo(videoId: String, second: Long) {
         chatService.seekTo(videoId, second)
     }
 

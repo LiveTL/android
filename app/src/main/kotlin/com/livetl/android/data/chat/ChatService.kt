@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,18 +80,20 @@ class ChatService @Inject constructor(
         webview.loadUrl(chatUrl)
     }
 
-    fun seekTo(videoId: String, second: Long) {
-        if (second != currentSecond) {
-            Timber.d("$videoId: seeking to $second")
-            webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
+    suspend fun seekTo(videoId: String, second: Long) {
+        withContext(Dispatchers.Main) {
+            if (second != currentSecond) {
+                Timber.d("$videoId: seeking to $second")
+                webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
 
-            // Clear out messages if we seem to be manually seeking
-            if (currentSecond - 10 > second || second > currentSecond + 10) {
-                Timber.d("$videoId: manual seek")
-                clearMessages()
+                // Clear out messages if we seem to be manually seeking
+                if (currentSecond - 10 > second || second > currentSecond + 10) {
+                    Timber.d("$videoId: manual seek")
+                    clearMessages()
+                }
+
+                currentSecond = second
             }
-
-            currentSecond = second
         }
     }
 
@@ -126,7 +129,10 @@ class ChatService @Inject constructor(
                     }
 
                     val message = it.toChatMessage()
-                    _messages.value = (_messages.value + message).takeLast(MAX_MESSAGE_QUEUE_SIZE).toImmutableList()
+                    _messages.value = (_messages.value + message)
+                        .distinct()
+                        .takeLast(MAX_MESSAGE_QUEUE_SIZE)
+                        .toImmutableList()
                 }
         }
 

@@ -1,7 +1,6 @@
 package com.livetl.android.data.chat
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastMap
 import kotlinx.serialization.Serializable
 
@@ -142,7 +141,7 @@ data class YTChatMessage(
                 milestone = headerRuns
                     .fastMap { it.toChatMessageContent() }
                     .filterIsInstance<ChatMessageContent.Text>()
-                    .joinToString { it.text },
+                    .joinToString(" ") { it.text },
             )
         }
 

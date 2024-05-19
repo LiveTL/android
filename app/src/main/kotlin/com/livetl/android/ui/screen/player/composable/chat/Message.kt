@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -61,7 +62,7 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
         if (message.author.membershipRank != null) {
             appendInlineContent(
                 message.author.membershipBadgeUrl!!,
-                message.author.membershipRank!!
+                message.author.membershipRank!!,
             )
         }
 
@@ -73,8 +74,8 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
                     spanStyle = SpanStyle(
                         color = textColor,
                         fontWeight = FontWeight.Bold,
-                    )
-                )
+                    ),
+                ),
             )
         }
 
@@ -85,8 +86,8 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
                     spanStyle = SpanStyle(
                         color = textColor,
                         fontWeight = FontWeight.Bold,
-                    )
-                )
+                    ),
+                ),
             )
         }
 
@@ -95,7 +96,7 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
             append(stringResource(R.string.new_member))
         } else {
             append(
-                textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes)
+                textParser(text = message.getTextContent(), parsedContentTypes = parsedContentTypes),
             )
         }
     }
@@ -104,16 +105,19 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
         modifier = when (message) {
             is ChatMessage.RegularChat ->
                 modifier.chatPadding()
+
             is ChatMessage.SuperChat ->
                 modifier
                     .clip(ChatShape)
                     .background(color = message.level.backgroundColor)
                     .chatPadding()
+
             is ChatMessage.NewMember ->
                 modifier
                     .clip(ChatShape)
                     .background(color = message.backgroundColor)
                     .chatPadding()
+
             is ChatMessage.MemberMilestone ->
                 modifier
                     .clip(ChatShape)
@@ -127,7 +131,7 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
         ),
         inlineContent = message.author.getPhotoInlineContent() +
             message.author.getBadgeInlineContent() +
-            message.getEmojiInlineContent(emojiCache)
+            message.getEmojiInlineContent(emojiCache),
     )
 }
 
@@ -172,8 +176,8 @@ private fun MessageAuthor.getPhotoInlineContent() = mapOf(
                     .aspectRatio(1f)
                     .clip(CircleShape),
             )
-        }
-    )
+        },
+    ),
 )
 
 private fun MessageAuthor.getBadgeInlineContent() = when {
@@ -188,22 +192,22 @@ private fun MessageAuthor.getBadgeInlineContent() = when {
                         .requiredWidth(16.dp)
                         .aspectRatio(1f),
                 )
-            }
-        )
+            },
+        ),
     )
+
     else -> emptyMap()
 }
 
 private val LocalAuthorNameColor = compositionLocalOf { Color.White }
 
-private fun Modifier.chatPadding() = padding(horizontal = 8.dp, vertical = 4.dp)
+private fun Modifier.chatPadding() = fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)
 private val ChatShape = RoundedCornerShape(4.dp)
 
 private val parsedContentTypes = setOf(
     SymbolAnnotationType.LINK.name,
     SymbolAnnotationType.EMOJI.name,
 )
-
 
 @Preview
 @Composable
@@ -284,7 +288,6 @@ private fun NewMemberPreview() {
         emojiCache = EmojiCache(),
     )
 }
-
 
 @Preview
 @Composable

@@ -23,10 +23,12 @@ typealias StringAnnotation = AnnotatedString.Range<String>
 // Pair returning styled content and annotation for ClickableText when matching syntax token
 typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
+// TODO: default emoji don't seem to appear properly
 /**
  * Parses a string so that it's renderable with its content.
  *
  * http(s)://... -> clickable link, opening in a browser
+ * :text:        -> default chat emote
  * :_text:       -> custom chat emote
  * #text         -> hashtag
  *

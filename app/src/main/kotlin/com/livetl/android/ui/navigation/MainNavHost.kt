@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +22,6 @@ import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.composable.StreamInfo
 import com.livetl.android.ui.screen.home.settings.SettingsScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
-import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.ui.screen.welcome.WelcomeScreen
 
 fun NavHostController.navigateToPlayer(urlOrId: String) {
@@ -49,7 +47,10 @@ fun mainNavHost(startRoute: Route): NavHostController {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        NavHost(navController, startDestination = startRoute) {
+        NavHost(
+            navController = navController,
+            startDestination = startRoute,
+        ) {
             composable<Route.Home> {
                 HomeScreen(
                     navigateToStreamInfo = { navController.navigate("${Route.StreamInfo}?urlOrId=$it") },
@@ -78,12 +79,9 @@ fun mainNavHost(startRoute: Route): NavHostController {
             }
 
             composable<Route.Player> { backStackEntry ->
-                val playerViewModel = hiltViewModel<PlayerViewModel>()
-
                 val urlOrId = backStackEntry.toRoute<Route.Player>().urlOrId
-                val videoId = playerViewModel.getVideoId(urlOrId)
 
-                PlayerScreen(videoId, playerViewModel)
+                PlayerScreen(urlOrId)
             }
 
             composable<Route.Settings> {

@@ -3,6 +3,7 @@ package com.livetl.android.ui.screen.player.composable
 import android.app.PictureInPictureParams
 import android.os.Build
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -109,7 +110,9 @@ private fun FullPlayerTab(
             .fillMaxSize()
             .safeDrawingPadding(),
     ) {
-        if (showStreamInfo) {
+        AnimatedVisibility(
+            visible = showStreamInfo,
+        ) {
             StreamInfoPanel(
                 streamInfo = streamInfo,
             )

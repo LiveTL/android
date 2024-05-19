@@ -12,37 +12,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.ui.screen.player.composable.PlayerTabs
 import com.livetl.android.ui.screen.player.composable.chat.ChatState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Composable
-fun PlayerScreen(videoId: String, viewModel: PlayerViewModel = hiltViewModel()) {
+fun PlayerScreen(urlOrId: String, viewModel: PlayerViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     var streamInfo by remember { mutableStateOf<StreamInfo?>(null) }
     var chatState by remember { mutableStateOf<ChatState>(ChatState.LOADING) }
 
-    // TODO: handle time change for archives
-    fun onCurrentSecond(second: Long) {
-        // Live chats don't need to be progressed manually
-        if (streamInfo?.isLive == false) {
-            viewModel.seekTo(videoId, second)
-        }
-    }
-
-    LaunchedEffect(videoId) {
-        if (videoId.isNotEmpty()) {
+    LaunchedEffect(urlOrId) {
+        if (urlOrId.isNotEmpty()) {
             coroutineScope.launch {
                 try {
-                    val newStream = viewModel.getStreamInfo(videoId)
-                    withContext(Dispatchers.Main) {
-                        streamInfo = newStream
-                    }
+                    val newStream = viewModel.loadStream(urlOrId)
+                    streamInfo = newStream
 
                     chatState = ChatState.LOADING
-                    viewModel.loadChat(videoId, newStream.isLive)
+                    viewModel.loadChat(newStream.videoId, newStream.isLive)
                     chatState = ChatState.LOADED
                 } catch (e: Throwable) {
                     Timber.e(e)
