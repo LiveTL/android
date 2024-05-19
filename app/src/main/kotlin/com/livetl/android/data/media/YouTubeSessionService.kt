@@ -15,8 +15,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,9 +28,7 @@ class YouTubeSessionService @Inject constructor(
     private val streamService: StreamService,
 ) : MediaSessionManager.OnActiveSessionsChangedListener {
 
-    private val _session = MutableStateFlow<YouTubeSession?>(null)
-    val session: SharedFlow<YouTubeSession?>
-        get() = _session.asSharedFlow()
+    val session = MutableStateFlow<YouTubeSession?>(null)
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val component = ComponentName(context, javaClass)
@@ -42,16 +38,16 @@ class YouTubeSessionService @Inject constructor(
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             scope.launch {
-                _session.value = getYouTubeSession()
+                session.value = getYouTubeSession()
 
                 // We don't really get progress updates, so we simulate per-second updates
                 // while it's playing
-                if (state?.state == PlaybackState.STATE_PLAYING && _session.value?.isLive == false) {
+                if (state?.state == PlaybackState.STATE_PLAYING && session.value?.isLive == false) {
                     progressJob = launch {
                         while (true) {
                             delay(2.seconds)
-                            _session.value = _session.value?.copy(
-                                positionInMs = (_session.value?.positionInMs ?: 0L) + 2000L,
+                            session.value = session.value?.copy(
+                                positionInMs = (session.value?.positionInMs ?: 0L) + 2000L,
                             )
                         }
                     }
@@ -64,7 +60,7 @@ class YouTubeSessionService @Inject constructor(
 
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             scope.launch {
-                _session.value = getYouTubeSession()
+                session.value = getYouTubeSession()
             }
         }
 

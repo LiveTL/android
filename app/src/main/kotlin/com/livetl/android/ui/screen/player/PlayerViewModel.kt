@@ -1,8 +1,6 @@
 package com.livetl.android.ui.screen.player
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livetl.android.data.chat.ChatFilterService
@@ -11,13 +9,16 @@ import com.livetl.android.data.media.YouTubeSessionService
 import com.livetl.android.data.stream.StreamInfo
 import com.livetl.android.data.stream.StreamService
 import com.livetl.android.data.stream.VideoIdParser
+import com.livetl.android.ui.screen.player.composable.chat.ChatState
 import com.livetl.android.ui.screen.player.composable.chat.EmojiCache
 import com.livetl.android.util.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,9 +33,8 @@ class PlayerViewModel @Inject constructor(
     val emojiCache: EmojiCache,
     val prefs: AppPreferences,
 ) : ViewModel() {
+    val state = MutableStateFlow(State())
 
-    // TODO: show message if playing video seems to have changed
-    var youTubeSession by mutableStateOf<YouTubeSession?>(null)
     val filteredMessages = chatFilterService.messages
 
     init {
@@ -44,15 +44,15 @@ class PlayerViewModel @Inject constructor(
             youTubeSessionService.session
                 .filterNotNull()
                 .debounce(2.seconds)
-                .collectLatest {
+                .collectLatest { session ->
                     Timber.d(
-                        "Current YouTube video: ${it.videoId} / ${it.title} / ${it.positionInMs} / ${it.playbackState}",
+                        "Current YouTube video: ${session.videoId} / ${session.title} / ${session.positionInMs} / ${session.playbackState}",
                     )
-                    youTubeSession = it
+                    state.update { it.copy(youTubeSession = session) }
 
                     // Update chat progress based on playback state
-                    if (!it.isLive && it.videoId != null && it.positionInMs != null) {
-                        chatFilterService.seekTo(it.videoId, it.positionInMs / 1000)
+                    if (!session.isLive && session.videoId != null && session.positionInMs != null) {
+                        chatFilterService.seekTo(session.videoId, session.positionInMs / 1000)
                     }
                 }
         }
@@ -64,12 +64,26 @@ class PlayerViewModel @Inject constructor(
         emojiCache.evictAll()
     }
 
-    suspend fun loadStream(urlOrId: String): StreamInfo {
-        val videoId = videoIdParser.getVideoId(urlOrId)
-        return streamService.getStreamInfo(videoId)
+    suspend fun loadStream(urlOrId: String) {
+        try {
+            val videoId = videoIdParser.getVideoId(urlOrId)
+            val streamInfo = streamService.getStreamInfo(videoId)
+            state.update { it.copy(streamInfo = streamInfo) }
+
+            state.update { it.copy(chatState = ChatState.LOADING) }
+            chatFilterService.connect(streamInfo.videoId, streamInfo.isLive)
+            state.update { it.copy(chatState = ChatState.LOADED) }
+        } catch (e: Throwable) {
+            Timber.e(e)
+            state.update { it.copy(chatState = ChatState.ERROR) }
+        }
     }
 
-    suspend fun loadChat(videoId: String, isLive: Boolean) {
-        chatFilterService.connect(videoId, isLive)
-    }
+    @Immutable
+    data class State(
+        val chatState: ChatState = ChatState.LOADING,
+        val streamInfo: StreamInfo? = null,
+        // TODO: show message if playing video seems to have changed
+        val youTubeSession: YouTubeSession? = null,
+    )
 }

@@ -22,11 +22,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.screen.home.tab.StreamsTab
@@ -45,6 +47,8 @@ fun HomeScreen(
 
     val openStreamInfo = { stream: Stream -> navigateToStreamInfo(stream.id) }
     val openStream = { stream: Stream -> navigateToPlayer(stream.id) }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -95,7 +99,7 @@ fun HomeScreen(
             )
         },
     ) { contentPadding ->
-        if (viewModel.showOpenVideoDialog) {
+        if (state.showOpenVideoDialog) {
             AlertDialog(
                 onDismissRequest = { viewModel.hideOpenVideoDialog() },
                 title = {
@@ -109,8 +113,8 @@ fun HomeScreen(
                         )
 
                         TextField(
-                            value = viewModel.openVideoUrl,
-                            onValueChange = { viewModel.openVideoUrl = it },
+                            value = state.openVideoUrl,
+                            onValueChange = { viewModel.setOpenVideoUrl(it) },
                             placeholder = { Text(stringResource(R.string.youtube_url_hint)) },
                             singleLine = true,
                         )
@@ -118,8 +122,8 @@ fun HomeScreen(
                 },
                 confirmButton = {
                     TextButton(
-                        enabled = viewModel.openVideoUrl.isNotEmpty(),
-                        onClick = { navigateToPlayer(viewModel.openVideoUrl) },
+                        enabled = state.openVideoUrl.isNotEmpty(),
+                        onClick = { navigateToPlayer(state.openVideoUrl) },
                     ) {
                         Text(stringResource(R.string.action_open))
                     }

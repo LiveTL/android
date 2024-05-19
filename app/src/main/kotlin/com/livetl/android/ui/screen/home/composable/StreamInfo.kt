@@ -17,44 +17,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.livetl.android.R
-import com.livetl.android.data.feed.Stream
 import com.livetl.android.ui.common.LoadingIndicator
-import com.livetl.android.ui.common.textParser
 import kotlinx.coroutines.launch
 
 @Composable
 fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
-    var loading by remember { mutableStateOf(true) }
-    var stream by remember { mutableStateOf<Stream?>(null) }
-    val description = remember(stream) { textParser(stream?.description.orEmpty()) }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(urlOrId) {
         if (urlOrId.isNotEmpty()) {
             coroutineScope.launch {
-                stream = viewModel.getStream(urlOrId)
-                loading = false
+                viewModel.loadStream(urlOrId)
             }
         }
     }
 
-    if (loading) {
+    if (state.isLoading) {
         LoadingIndicator()
         return
     }
 
-    if (stream == null) {
+    if (state.stream == null) {
         Text(stringResource(R.string.select_a_stream))
         return
     }
@@ -64,7 +58,7 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
     ) {
         item {
             AsyncImage(
-                model = stream!!.thumbnail,
+                model = state.stream!!.thumbnail,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,25 +72,27 @@ fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()
                 modifier = Modifier.padding(8.dp),
             ) {
                 Text(
-                    text = stream!!.title,
+                    text = state.stream!!.title,
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Spacer(modifier = Modifier.requiredHeight(8.dp))
                 Text(
-                    text = stream!!.channel.name,
+                    text = state.stream!!.channel.name,
                     style = MaterialTheme.typography.bodyMedium,
                 )
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                StreamActions(stream!!.id)
+                StreamActions(state.stream!!.id)
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
-                )
+                state.description?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodySmall.copy(color = LocalContentColor.current),
+                    )
+                }
 
                 Spacer(Modifier.navigationBarsPadding())
             }

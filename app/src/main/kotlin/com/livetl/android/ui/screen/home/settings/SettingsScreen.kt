@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 import com.livetl.android.data.feed.ORGANIZATIONS
-import com.livetl.android.util.collectAsState
+import com.livetl.android.util.collectAsStateWithLifecycle
 
 @Composable
 fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
-    val selectedOrganization by viewModel.prefs.feedOrganization().collectAsState()
+    val selectedOrganization by viewModel.prefs.feedOrganization().collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {

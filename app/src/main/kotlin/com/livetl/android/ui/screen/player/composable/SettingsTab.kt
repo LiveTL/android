@@ -13,12 +13,12 @@ import com.livetl.android.ui.common.preference.MultiChoicePreferenceRow
 import com.livetl.android.ui.common.preference.SwitchPreferenceRow
 import com.livetl.android.ui.screen.player.PlayerViewModel
 import com.livetl.android.util.capitalize
-import com.livetl.android.util.collectAsState
+import com.livetl.android.util.collectAsStateWithLifecycle
 import java.util.Locale
 
 @Composable
 fun SettingsTab(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel = viewModel()) {
-    val showAllMessages by playerViewModel.prefs.showAllMessages().collectAsState()
+    val showAllMessages by playerViewModel.prefs.showAllMessages().collectAsStateWithLifecycle()
 
     LazyColumn(modifier = modifier) {
         // Show all messages

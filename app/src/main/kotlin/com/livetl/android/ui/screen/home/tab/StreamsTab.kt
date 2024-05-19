@@ -13,18 +13,18 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.livetl.android.R
 import com.livetl.android.data.feed.Stream
 import com.livetl.android.data.feed.StreamStatus
 import com.livetl.android.ui.screen.home.composable.Stream
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun StreamsTab(
@@ -35,13 +35,11 @@ fun StreamsTab(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     fun refreshFeed() {
         coroutineScope.launch {
-            viewModel.isRefreshing = true
             viewModel.loadStreams()
-            withContext(Dispatchers.Main) {
-                viewModel.isRefreshing = false
-            }
         }
     }
 
@@ -49,25 +47,23 @@ fun StreamsTab(
         refreshFeed()
     }
 
-    val pullRefreshState =
-        rememberPullRefreshState(
-            refreshing = viewModel.isRefreshing,
-            onRefresh = { refreshFeed() },
-        )
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isLoading,
+        onRefresh = ::refreshFeed,
+    )
 
     Box(
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .pullRefresh(pullRefreshState),
     ) {
         PullRefreshIndicator(
-            refreshing = viewModel.isRefreshing,
+            refreshing = state.isLoading,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter),
         )
 
-        if (!viewModel.isRefreshing && viewModel.streams.isEmpty()) {
+        if (!state.isLoading && state.streams.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
@@ -81,7 +77,7 @@ fun StreamsTab(
             modifier = Modifier.fillMaxSize(),
         ) {
             items(
-                items = viewModel.streams,
+                items = state.streams,
                 key = { it.id },
             ) { stream ->
                 Stream(

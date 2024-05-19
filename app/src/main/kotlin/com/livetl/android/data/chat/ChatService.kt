@@ -26,8 +26,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,9 +64,7 @@ class ChatService @Inject constructor(
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var jobs: List<Job> = mutableListOf()
 
-    private val _messages = MutableStateFlow<ImmutableList<ChatMessage>>(persistentListOf())
-    val messages: SharedFlow<ImmutableList<ChatMessage>>
-        get() = _messages.asSharedFlow()
+    val messages = MutableStateFlow<ImmutableList<ChatMessage>>(persistentListOf())
 
     suspend fun connect(videoId: String, isLive: Boolean) {
         // Clear out previous chat contents, just in case
@@ -129,7 +125,7 @@ class ChatService @Inject constructor(
                     }
 
                     val message = it.toChatMessage()
-                    _messages.value = (_messages.value + message)
+                    messages.value = (messages.value + message)
                         .distinct()
                         .takeLast(MAX_MESSAGE_QUEUE_SIZE)
                         .toImmutableList()
@@ -177,7 +173,7 @@ class ChatService @Inject constructor(
 
     private fun clearMessages() {
         jobs.forEach { it.cancel() }
-        _messages.value = persistentListOf()
+        messages.value = persistentListOf()
     }
 }
 

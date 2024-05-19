@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.livetl.android.util.collectAsState
+import com.livetl.android.util.collectAsStateWithLifecycle
 import com.livetl.android.util.toggle
 import com.tfcporciuncula.flow.Preference
 
@@ -32,7 +32,7 @@ fun <Key> MultiChoicePreferenceRow(
     text: String? = null,
     onSelected: ((Key) -> Unit)? = null,
 ) {
-    val state by preference.collectAsState()
+    val state by preference.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
 
     PreferenceRow(

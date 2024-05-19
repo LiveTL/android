@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.livetl.android.data.chat.TranslatedLanguage
 import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
@@ -48,4 +48,5 @@ fun Preference<Boolean>.toggle() {
 }
 
 @Composable
-fun <T> Preference<T>.collectAsState(): State<T> = asFlow().collectAsState(initial = get())
+fun <T> Preference<T>.collectAsStateWithLifecycle(): State<T> =
+    asFlow().collectAsStateWithLifecycle(initialValue = get())
