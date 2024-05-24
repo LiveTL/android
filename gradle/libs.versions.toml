@@ -1,18 +1,18 @@
 [versions]
-aboutlib_version = "11.1.4"
+aboutlib_version = "11.2.0"
 coil_version = "2.6.0"
 coroutines_version = "1.8.1"
 hilt_version = "2.51.1"
-kotlin_version = "2.0.0-RC3"
+kotlin_version = "2.0.0"
 ktor_version = "2.3.11"
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.4.0" }
+android-application = { id = "com.android.application", version = "8.4.1" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_version" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin_version" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin_version" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-RC3-1.0.20" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
 
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlib_version" }
 kotlinter = { id = "org.jmailen.kotlinter", version = "4.3.0" }
