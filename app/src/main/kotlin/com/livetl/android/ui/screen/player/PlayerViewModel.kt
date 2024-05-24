@@ -57,13 +57,13 @@ class PlayerViewModel @Inject constructor(
                     Timber.d(
                         "Current YouTube video: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}",
                     )
-                    val isDifferentVideo =
-                        (session.videoId != null && session.videoId != state.value.streamInfo?.videoId) ||
-                            (session.videoTitle != state.value.streamInfo?.title) ||
-                            (session.channelName != state.value.streamInfo?.author)
+                    val isDifferentVideoId =
+                        session.videoId != null && session.videoId != state.value.streamInfo?.videoId
+                    val isDifferentTitle = session.videoTitle != state.value.streamInfo?.title
+                    val isDifferentChannel = session.channelName != state.value.streamInfo?.author
                     state.update {
                         it.copy(
-                            isDifferentVideo = isDifferentVideo,
+                            isDifferentVideo = isDifferentVideoId || (isDifferentTitle && isDifferentChannel),
                         )
                     }
 

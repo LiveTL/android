@@ -141,7 +141,7 @@ data class YTChatMessage(
                 milestone = headerRuns
                     .fastMap { it.toChatMessageContent() }
                     .filterIsInstance<ChatMessageContent.Text>()
-                    .joinToString(" ") { it.text },
+                    .joinToString("") { it.text },
             )
         }
 
