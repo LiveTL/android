@@ -13,6 +13,7 @@ sealed interface ChatMessage {
         override val author: MessageAuthor,
         override val content: List<ChatMessageContent>,
         override val timestamp: Long,
+        val superchatContext: SuperChatContext?,
     ) : ChatMessage
 
     // TODO: handle super stickers
@@ -84,6 +85,8 @@ data class MessageAuthor(
     val membershipBadgeUrl: String? = null,
 )
 
+data class SuperChatContext(val author: String, val level: ChatMessage.SuperChat.Level)
+
 enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     ENGLISH("en", setOf("en", "eng", "英訳", "trans")),
     JAPANESE("ja", setOf("ja", "jp", "日本語")),
@@ -112,6 +115,7 @@ data class YTChatMessage(
     val messages: List<YTChatMessageData>,
     val headerRuns: List<YTChatMessageData>,
     val timestamp: Long,
+    val superchatReplyContext: YTSuperchatReplyContext? = null,
     val delay: Long? = null,
     val superchat: YTSuperChat? = null,
 ) {
@@ -150,6 +154,7 @@ data class YTChatMessage(
                 author = author.toMessageAuthor(),
                 content = messages.fastMap { it.toChatMessageContent() },
                 timestamp = timestamp,
+                superchatContext = superchatReplyContext?.toSuperChatContext(),
             )
         }
     }
@@ -194,6 +199,14 @@ data class YTChatMessageData(
         "emoji" -> ChatMessageContent.Emoji(emojiId!!, emojiSrc!!)
         else -> throw Exception("Unknown YTChatMessageData type: $type")
     }
+}
+
+@Serializable
+data class YTSuperchatReplyContext(val author: String, val color: String) {
+    fun toSuperChatContext(): SuperChatContext = SuperChatContext(
+        author = author,
+        level = ChatMessage.SuperChat.Level.valueOf(color),
+    )
 }
 
 @Serializable

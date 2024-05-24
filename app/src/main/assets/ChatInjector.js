@@ -168,6 +168,18 @@ const messageReceiveCallback = async (response) => {
             : null
         };
 
+        if (messageItem.beforeContentButtons) {
+          // It's an array, but it's currently only a single item so this is fine
+          messageItem.beforeContentButtons.forEach((contentButton) => {
+            if (contentButton.buttonViewModel) {
+              item.superchatReplyContext = {
+                author: contentButton.buttonViewModel.title,
+                color: colorConversionTable[contentButton.buttonViewModel.customBackgroundColor],
+              };
+            }
+          });
+        }
+
         if (currentElement.liveChatPaidMessageRenderer) {
           item.superchat = {
             amount: messageItem.purchaseAmountText.simpleText,

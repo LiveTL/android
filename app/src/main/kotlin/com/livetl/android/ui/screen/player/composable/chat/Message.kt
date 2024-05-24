@@ -37,6 +37,7 @@ import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
+import com.livetl.android.data.chat.SuperChatContext
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 import kotlinx.collections.immutable.persistentSetOf
@@ -67,29 +68,45 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
             )
         }
 
-        // Superchat monetary amount
-        if (message is ChatMessage.SuperChat) {
-            append(
-                AnnotatedString(
-                    text = "${message.amount} ",
-                    spanStyle = SpanStyle(
-                        color = textColor,
-                        fontWeight = FontWeight.Bold,
+        // Content between name and actual text message
+        when {
+            message is ChatMessage.SuperChat -> {
+                append(
+                    AnnotatedString(
+                        text = "${message.amount} ",
+                        spanStyle = SpanStyle(
+                            color = textColor,
+                            fontWeight = FontWeight.Bold,
+                        ),
                     ),
-                ),
-            )
-        }
+                )
+            }
 
-        if (message is ChatMessage.MemberMilestone) {
-            append(
-                AnnotatedString(
-                    text = "${message.milestone} ",
-                    spanStyle = SpanStyle(
-                        color = textColor,
-                        fontWeight = FontWeight.Bold,
+            message is ChatMessage.MemberMilestone -> {
+                append(
+                    AnnotatedString(
+                        text = "${message.milestone} ",
+                        spanStyle = SpanStyle(
+                            color = textColor,
+                            fontWeight = FontWeight.Bold,
+                        ),
                     ),
-                ),
-            )
+                )
+            }
+
+            (message is ChatMessage.RegularChat && message.superchatContext != null) -> {
+                append(
+                    AnnotatedString(
+                        text = " ${message.superchatContext.author} ",
+                        spanStyle = SpanStyle(
+                            background = message.superchatContext.level.backgroundColor,
+                            color = message.superchatContext.level.textColor,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    ),
+                )
+                append(" ")
+            }
         }
 
         // Actual chat message contents
@@ -224,6 +241,20 @@ private fun RegularChatPreviews() {
                 author = author,
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
+                superchatContext = null,
+            ),
+            emojiCache = EmojiCache(),
+        )
+
+        Message(
+            message = ChatMessage.RegularChat(
+                author = author,
+                content = listOf(ChatMessageContent.Text("Hello world")),
+                timestamp = 1615001105,
+                superchatContext = SuperChatContext(
+                    author = "Oil baron",
+                    level = ChatMessage.SuperChat.Level.RED,
+                ),
             ),
             emojiCache = EmojiCache(),
         )
@@ -233,6 +264,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isModerator = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
+                superchatContext = null,
             ),
             emojiCache = EmojiCache(),
         )
@@ -242,6 +274,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isVerified = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
+                superchatContext = null,
             ),
             emojiCache = EmojiCache(),
         )
@@ -251,6 +284,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isOwner = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
+                superchatContext = null,
             ),
             emojiCache = EmojiCache(),
         )
