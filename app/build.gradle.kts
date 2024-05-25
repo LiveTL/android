@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = appPackageName
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 300
         versionName = "9.0.0"

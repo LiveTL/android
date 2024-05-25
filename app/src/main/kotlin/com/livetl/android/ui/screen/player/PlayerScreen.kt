@@ -1,7 +1,7 @@
 package com.livetl.android.ui.screen.player
 
 import android.app.PictureInPictureParams
-import android.os.Build
+import android.content.pm.PackageManager
 import android.util.Rational
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
@@ -48,7 +48,7 @@ fun PlayerScreen(urlOrId: String, viewModel: PlayerViewModel = hiltViewModel()) 
             if (!isInPipMode && !isInSplitScreenMode) {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
                             context.findActivity().enterPictureInPictureMode(
                                 PictureInPictureParams.Builder()
                                     // Must be between 2.39:1 and 1:2.39 (inclusive)
