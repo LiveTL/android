@@ -1,4 +1,4 @@
-package com.livetl.android.ui.screen.welcome
+package com.livetl.android.ui.screen.about.welcome
 
 import androidx.lifecycle.ViewModel
 import com.livetl.android.util.AppPreferences

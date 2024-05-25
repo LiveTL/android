@@ -18,11 +18,11 @@ import androidx.navigation.plusAssign
 import androidx.navigation.toRoute
 import com.livetl.android.ui.screen.about.AboutScreen
 import com.livetl.android.ui.screen.about.LicensesScreen
+import com.livetl.android.ui.screen.about.welcome.WelcomeScreen
 import com.livetl.android.ui.screen.home.HomeScreen
 import com.livetl.android.ui.screen.home.composable.StreamInfo
 import com.livetl.android.ui.screen.home.settings.SettingsScreen
 import com.livetl.android.ui.screen.player.PlayerScreen
-import com.livetl.android.ui.screen.welcome.WelcomeScreen
 
 fun NavHostController.navigateToPlayer(urlOrId: String) {
     navigate(Route.Player(urlOrId)) {

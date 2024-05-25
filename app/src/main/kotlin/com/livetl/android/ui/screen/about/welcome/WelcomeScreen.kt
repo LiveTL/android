@@ -1,5 +1,6 @@
-package com.livetl.android.ui.screen.welcome
+package com.livetl.android.ui.screen.about.welcome
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,6 +52,7 @@ fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hilt
                 .consumeWindowInsets(contentPadding)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             contentPadding = contentPadding,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item {
                 Text(
@@ -99,5 +101,5 @@ private val FAQ =
         R.string.welcome_faq_q_how_it_works to R.string.welcome_faq_a_how_it_works,
         R.string.welcome_faq_q_trust to R.string.welcome_faq_a_trust,
         R.string.welcome_faq_q_no_translations to R.string.welcome_faq_a_no_translations,
-        R.string.welcome_faq_q_custom_filter to R.string.welcome_faq_a_custom_filter,
+//        R.string.welcome_faq_q_custom_filter to R.string.welcome_faq_a_custom_filter,
     )
