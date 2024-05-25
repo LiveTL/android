@@ -1,7 +1,6 @@
-The app has been reworked. Instead of having YouTube videos and chat directly
-in the app, it's now designed to work in conjunction with the regular YouTube
-app while using LiveTL in split screen or picture-in-picture (PiP) mode to
-view filtered chat messages.
+Instead of having YouTube videos and chat directly in the app, LiveTL for Android is now designed
+to work in conjunction with the regular YouTube app while using LiveTL in picture-in-picture (PiP)
+or split screen mode to view the filtered chat messages.
 
 The app now requires Android 8.0 or higher.
 
