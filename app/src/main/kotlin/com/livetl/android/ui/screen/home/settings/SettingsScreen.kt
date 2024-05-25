@@ -13,7 +13,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -25,14 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
 import com.livetl.android.data.feed.ORGANIZATIONS
+import com.livetl.android.ui.common.ScreenScaffold
 import com.livetl.android.util.collectAsStateWithLifecycle
 
 @Composable
 fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val selectedOrganization by viewModel.prefs.feedOrganization().collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
+    ScreenScaffold(
+        topBar = { scrollBehavior ->
             TopAppBar(
                 title = {
                     Text(text = stringResource(R.string.setting_feed_org))
@@ -45,6 +45,7 @@ fun SettingsScreen(onBackPressed: () -> Unit, viewModel: SettingsViewModel = hil
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { contentPadding ->

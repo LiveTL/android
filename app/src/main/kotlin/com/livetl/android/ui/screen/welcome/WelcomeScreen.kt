@@ -10,7 +10,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -20,11 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.livetl.android.R
+import com.livetl.android.ui.common.ScreenScaffold
 
 @Composable
 fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hiltViewModel()) {
-    Scaffold(
-        topBar = {
+    ScreenScaffold(
+        topBar = { scrollBehavior ->
             TopAppBar(
                 title = {
                     Text(text = stringResource(R.string.welcome))
@@ -42,6 +42,7 @@ fun WelcomeScreen(navigateToHome: () -> Unit, viewModel: WelcomeViewModel = hilt
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { contentPadding ->

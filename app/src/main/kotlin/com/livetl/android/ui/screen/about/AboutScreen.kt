@@ -13,13 +13,11 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,16 +26,16 @@ import androidx.compose.ui.unit.dp
 import com.livetl.android.BuildConfig
 import com.livetl.android.R
 import com.livetl.android.ui.common.LinkIcon
+import com.livetl.android.ui.common.ScreenScaffold
 import com.livetl.android.ui.common.preference.PreferenceGroupHeader
 import com.livetl.android.ui.common.preference.PreferenceRow
 
 @Composable
 fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navigateToWelcome: () -> Unit) {
-    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
-    Scaffold(
-        topBar = {
+    ScreenScaffold(
+        topBar = { scrollBehavior ->
             TopAppBar(
                 title = {
                     Text(text = stringResource(R.string.about))
@@ -50,6 +48,7 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { contentPadding ->
