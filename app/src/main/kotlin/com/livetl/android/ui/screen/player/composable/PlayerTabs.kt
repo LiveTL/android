@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -112,9 +111,7 @@ private fun FullPlayerTab(
     var showStreamInfo by remember { mutableStateOf(true) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .safeDrawingPadding(),
+        modifier = modifier,
     ) {
         if (showDifferentVideoWarning) {
             Text(

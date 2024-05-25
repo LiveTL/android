@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,17 +36,15 @@ class YouTubeSessionService @Inject constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val component = ComponentName(context, javaClass)
 
+    // TODO: pause when backgrounded
     private var mediaController: MediaController? = null
     private var progressJob: Job? = null
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             scope.launch {
-                val currentSession = getYouTubeSession()
-                session.update { currentSession }
+                val currentSession = updateYouTubeSession()
 
-                // TODO: need to check that this is even the right time
-                // We don't really get progress updates, so we simulate per-second updates
-                // while it's playing
+                // We don't really get progress updates, so we poll for it
                 if (state?.state == PlaybackState.STATE_PLAYING && currentSession?.isLive == false) {
                     progressJob = launch {
                         while (true) {
@@ -53,22 +52,24 @@ class YouTubeSessionService @Inject constructor(
                             Timber.d("Updating playback position")
                             session.update {
                                 it?.copy(
-                                    positionInMs = (it.positionInMs ?: 0L) + 2000L,
+                                    positionInMs = mediaController?.playbackState?.position,
                                 )
                             }
                         }
                     }
                 } else {
-                    progressJob?.cancel()
-                    progressJob = null
+                    progressJob?.let {
+                        Timber.d("Stopping playback position update")
+                        it.cancel()
+                        progressJob = null
+                    }
                 }
             }
         }
 
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             scope.launch {
-                val currentSession = getYouTubeSession()
-                session.update { currentSession }
+                updateYouTubeSession()
             }
         }
 
@@ -103,7 +104,7 @@ class YouTubeSessionService @Inject constructor(
             ?.find { it.packageName == YOUTUBE_PACKAGE_NAME }
             ?.let {
                 if (mediaController?.sessionToken != it.sessionToken) {
-                    Timber.d("Found YouTube media session: ${it.sessionToken}")
+                    Timber.d("Found new YouTube media session: ${it.sessionToken}")
 
                     if (mediaController != null) {
                         mediaController?.unregisterCallback(mediaControllerCallback)
@@ -116,7 +117,7 @@ class YouTubeSessionService @Inject constructor(
             }
     }
 
-    private suspend fun getYouTubeSession(): YouTubeSession? {
+    private suspend fun updateYouTubeSession(): YouTubeSession? {
         if (mediaController == null) return null
 
         val title = mediaController?.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
@@ -131,20 +132,22 @@ class YouTubeSessionService @Inject constructor(
             PlaybackState.STATE_PLAYING -> YouTubeVideoPlaybackState.PLAYING
             else -> YouTubeVideoPlaybackState.UNKNOWN
         }
-        val position = mediaController?.playbackState?.position // in ms; 0 is live
+        val positionInMs = mediaController?.playbackState?.position
 
         // The media session doesn't expose the actual ID of the YouTube video, unfortunately
         Timber.d("Looking up stream for $title / $channelName")
         val streamInfo = streamService.findStreamInfo(title, channelName)
 
-        return YouTubeSession(
+        val newSession = YouTubeSession(
             videoId = streamInfo?.videoId,
             videoTitle = title,
             channelName = channelName,
-            isLive = position == 0L || streamInfo?.isLive == true,
+            isLive = positionInMs == 0L || streamInfo?.isLive == true,
             playbackState = state,
-            positionInMs = position,
+            positionInMs = positionInMs,
         )
+
+        return session.updateAndGet { newSession }
     }
 }
 

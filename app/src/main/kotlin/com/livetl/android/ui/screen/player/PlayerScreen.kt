@@ -3,6 +3,9 @@ package com.livetl.android.ui.screen.player
 import android.app.PictureInPictureParams
 import android.content.pm.PackageManager
 import android.util.Rational
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -13,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -70,6 +74,13 @@ fun PlayerScreen(urlOrId: String, viewModel: PlayerViewModel = hiltViewModel()) 
             }
         },
     ) { contentPadding ->
-        PlayerTabs(state.streamInfo, state.chatState)
+        PlayerTabs(
+            streamInfo = state.streamInfo,
+            chatState = state.chatState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .consumeWindowInsets(contentPadding),
+        )
     }
 }

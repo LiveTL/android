@@ -144,19 +144,17 @@ fun HomeScreen(
             )
         }
 
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxSize()
-                .consumeWindowInsets(contentPadding),
-            contentPadding = contentPadding,
-        ) { page ->
+        HorizontalPager(pagerState) { page ->
             val (status, tabViewModel) = viewModel.tabs[page]
             StreamsTab(
                 navigateToStream = { navigateToPlayer(it.id) },
                 peekStream = { navigateToStreamInfo(it.id) },
                 status = status,
                 viewModel = tabViewModel,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .consumeWindowInsets(contentPadding),
             )
         }
     }

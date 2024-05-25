@@ -32,6 +32,7 @@ fun StreamsTab(
     peekStream: (Stream) -> Unit,
     status: StreamStatus,
     viewModel: StreamsTabViewModel,
+    modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -53,16 +54,9 @@ fun StreamsTab(
     )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .pullRefresh(pullRefreshState),
     ) {
-        PullRefreshIndicator(
-            refreshing = state.isLoading,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
-
         if (!state.isLoading && state.streams.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -98,5 +92,11 @@ fun StreamsTab(
                 )
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = state.isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }

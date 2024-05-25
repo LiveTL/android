@@ -55,8 +55,9 @@ class PlayerViewModel @Inject constructor(
                 .filterNotNull()
                 .collectLatest { session ->
                     Timber.d(
-                        "Current YouTube video: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}",
+                        "Session: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}",
                     )
+
                     val isDifferentVideoId =
                         session.videoId != null && session.videoId != state.value.streamInfo?.videoId
                     val isDifferentTitle = session.videoTitle != state.value.streamInfo?.title
