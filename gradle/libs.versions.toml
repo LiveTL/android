@@ -25,19 +25,17 @@ androidx-core = "androidx.core:core-ktx:1.13.1"
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil_version" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil_version" }
 
-compose-bom = { module = "dev.chrisbanes.compose:compose-bom", version = "2024.05.00-alpha02" }
+compose-bom = { module = "dev.chrisbanes.compose:compose-bom", version = "2024.05.00-alpha03" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material-navigation = { module = "androidx.compose.material:material-navigation" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling-debug = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 compose-activity = { module = "androidx.activity:activity-compose", version = "1.9.0" }
 compose-lintchecks = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.3.1" }
-
-navigation-compose = "androidx.navigation:navigation-compose:2.8.0-beta01"
-compose-material-navigation = { module = "androidx.compose.material:material-navigation", version = "1.7.0-beta01" }
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines_version" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_version" }
@@ -47,6 +45,8 @@ desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.4" }
 hilt-gradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt_version" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt_version" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt_version" }
+
+navigation-compose = "androidx.navigation:navigation-compose:2.8.0-beta02"
 hilt-navigation = "androidx.hilt:hilt-navigation-compose:1.2.0"
 
 timber = "com.jakewharton.timber:timber:5.0.1"
@@ -65,10 +65,10 @@ mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.3.1"
 
 [bundles]
 coil = ["coil-core", "coil-compose"]
-compose = ["compose-activity", "compose-material", "compose-material-icons-extended", "compose-material3", "compose-ui", "compose-ui-tooling", "compose-ui-util"]
+compose = ["compose-activity", "compose-material", "compose-material-icons-extended", "compose-material3", "compose-material-navigation", "compose-ui", "compose-ui-tooling", "compose-ui-util"]
 compose-debug = ["compose-ui-tooling-debug"]
 coroutines = ["coroutines-core", "coroutines-android"]
 ktor = ["ktor-core", "ktor-logging"]
-navigation = ["navigation-compose", "compose-material-navigation", "hilt-navigation"]
+navigation = ["navigation-compose", "hilt-navigation"]
 preferences = ["preferences-androidx", "preferences-flow"]
 test = ["junit", "mockito", "mockito-kotlin"]
