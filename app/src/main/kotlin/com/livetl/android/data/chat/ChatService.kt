@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import timber.log.Timber
+import logcat.logcat
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
@@ -72,20 +72,20 @@ class ChatService @Inject constructor(
 
         this.isLive = isLive
         val chatUrl = getChatUrl(videoId, isLive)
-        Timber.d("Loading URL: $chatUrl")
+        logcat { "Loading URL: $chatUrl" }
         webview.loadUrl(chatUrl)
     }
 
     suspend fun seekTo(videoId: String, second: Long) {
         if (second != currentSecond) {
-            Timber.d("Seeking to $second")
+            logcat { "Seeking to $second" }
             withUIContext {
                 webview.runJS("window.postMessage({ 'yt-player-video-progress': $second, video: '$videoId'}, '*');")
             }
 
             // Clear out messages if we seem to be manually seeking
             if (currentSecond - 10 > second || second > currentSecond + 10) {
-                Timber.d("Manual seek")
+                logcat { "Manual seek" }
                 clearMessages()
             }
 
@@ -112,9 +112,9 @@ class ChatService @Inject constructor(
                 .fastForEach {
                     if (isLive) {
                         delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp))
-                        Timber.d(
-                            "Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}",
-                        )
+                        logcat {
+                            "Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}"
+                        }
                     } else {
                         delay(it.delay!!.microseconds)
                     }
@@ -165,9 +165,9 @@ class ChatService @Inject constructor(
      */
     private fun getMicrosecondDiff(now: Long, microseconds: Long): Duration {
         val diff = now - microseconds
-        Timber.d(
-            "Now: $now (${now.toDebugTimestampString()}), time: $microseconds (${microseconds.toDebugTimestampString()}), diff: $diff",
-        )
+        logcat {
+            "Now: $now (${now.toDebugTimestampString()}), time: $microseconds (${microseconds.toDebugTimestampString()}), diff: $diff"
+        }
         return diff.microseconds
     }
 

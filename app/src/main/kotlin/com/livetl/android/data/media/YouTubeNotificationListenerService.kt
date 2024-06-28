@@ -9,7 +9,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.core.content.getSystemService
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import logcat.logcat
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,7 +25,7 @@ class YouTubeNotificationListenerService : NotificationListenerService() {
             return
         }
 
-        Timber.d("YouTube notification posted")
+        logcat { "YouTube notification posted" }
 
         val mediaSessionManager = getSystemService<MediaSessionManager>() ?: return
 

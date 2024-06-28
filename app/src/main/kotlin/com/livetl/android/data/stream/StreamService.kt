@@ -6,7 +6,9 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.bodyAsText
-import timber.log.Timber
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 import javax.inject.Inject
 
 class StreamService @Inject constructor(
@@ -18,7 +20,7 @@ class StreamService @Inject constructor(
         val videoId = videoIdParser.getVideoId(pageUrl)
 
         return try {
-            Timber.d("Fetching stream: $videoId")
+            logcat { "Fetching stream: $videoId" }
             val stream = streamRepository.getStream(videoId)
 
             val chatContinuation: String? =
@@ -37,7 +39,7 @@ class StreamService @Inject constructor(
                 chatContinuation = chatContinuation,
             )
         } catch (e: ClientRequestException) {
-            Timber.e(e, "Error getting video info for $videoId from HoloDex")
+            logcat(LogPriority.ERROR) { "Error getting video info for $videoId from HoloDex: ${e.asLog()}" }
 
             StreamInfo(
                 videoId = videoId,
@@ -66,7 +68,7 @@ class StreamService @Inject constructor(
         return if (matches.find()) {
             matches.group(1)
         } else {
-            Timber.w("Chat continuation found for $videoId")
+            logcat(LogPriority.WARN) { "Chat continuation not found for $videoId" }
             null
         }
     }

@@ -91,7 +91,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     // Logging
-    implementation(libs.timber)
+    implementation(libs.logcat)
 
     implementation(libs.androidx.core)
 

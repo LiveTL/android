@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
@@ -49,7 +49,7 @@ class YouTubeSessionService @Inject constructor(
                     progressJob = launch {
                         while (true) {
                             delay(2.seconds)
-                            Timber.d("Updating playback position")
+                            logcat { "Updating playback position" }
                             session.update {
                                 it?.copy(
                                     positionInMs = mediaController?.playbackState?.position,
@@ -59,7 +59,7 @@ class YouTubeSessionService @Inject constructor(
                     }
                 } else {
                     progressJob?.let {
-                        Timber.d("Stopping playback position update")
+                        logcat { "Stopping playback position update" }
                         it.cancel()
                         progressJob = null
                     }
@@ -81,17 +81,17 @@ class YouTubeSessionService @Inject constructor(
 
     fun attach() {
         if (context.isNotificationAccessGranted()) {
-            Timber.d("Starting media session listener")
+            logcat { "Starting media session listener" }
             val mediaSessionManager = context.getSystemService<MediaSessionManager>()
             mediaSessionManager?.addOnActiveSessionsChangedListener(this, component)
             mediaSessionManager?.getActiveSessions(component)?.let(::listenToYouTubeMediaSession)
         } else {
-            Timber.d("Can't start media session listener due to missing notification listener permissions")
+            logcat { "Can't start media session listener due to missing notification listener permissions" }
         }
     }
 
     fun detach() {
-        Timber.d("Stopping media session listener")
+        logcat { "Stopping media session listener" }
         context.getSystemService<MediaSessionManager>()?.removeOnActiveSessionsChangedListener(this)
     }
 
@@ -104,7 +104,7 @@ class YouTubeSessionService @Inject constructor(
             ?.find { it.packageName == YOUTUBE_PACKAGE_NAME }
             ?.let {
                 if (mediaController?.sessionToken != it.sessionToken) {
-                    Timber.d("Found new YouTube media session: ${it.sessionToken}")
+                    logcat { "Found new YouTube media session: ${it.sessionToken}" }
 
                     if (mediaController != null) {
                         mediaController?.unregisterCallback(mediaControllerCallback)
@@ -135,7 +135,7 @@ class YouTubeSessionService @Inject constructor(
         val positionInMs = mediaController?.playbackState?.position
 
         // The media session doesn't expose the actual ID of the YouTube video, unfortunately
-        Timber.d("Looking up stream for $title / $channelName")
+        logcat { "Looking up stream for $title / $channelName" }
         val streamInfo = streamService.findStreamInfo(title, channelName)
 
         val newSession = YouTubeSession(

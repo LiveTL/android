@@ -13,7 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import timber.log.Timber
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 import javax.inject.Inject
 
 class FeedService @Inject constructor(private val client: HttpClient, private val json: Json) {
@@ -42,7 +44,7 @@ class FeedService @Inject constructor(private val client: HttpClient, private va
                 val response: HolodexVideosResponse = json.decodeFromString(result.bodyAsText())
                 response.items
             } catch (e: Exception) {
-                Timber.e(e)
+                logcat(LogPriority.ERROR) { e.asLog() }
                 emptyList()
             }
         }

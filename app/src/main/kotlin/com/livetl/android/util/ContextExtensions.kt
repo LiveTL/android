@@ -19,7 +19,9 @@ import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import com.livetl.android.R
-import timber.log.Timber
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -32,7 +34,7 @@ fun Context.copyToClipboard(text: String) {
     try {
         val clipboard: ClipboardManager =
             getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(/* label = */ text, text)
+        val clip = ClipData.newPlainText(text, text)
         clipboard.setPrimaryClip(clip)
 
         // Android 13 and higher shows a visual confirmation of copied contents
@@ -42,7 +44,7 @@ fun Context.copyToClipboard(text: String) {
         }
     } catch (e: Throwable) {
         toast(getString(R.string.copied_error))
-        Timber.e(e)
+        logcat(LogPriority.ERROR) { e.asLog() }
     }
 }
 

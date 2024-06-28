@@ -2,16 +2,17 @@ package com.livetl.android
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
-import timber.log.Timber.DebugTree
+import logcat.AndroidLogcatLogger
+import logcat.LogPriority
+import logcat.LogcatLogger
 
 @HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(DebugTree())
+        if (!LogcatLogger.isInstalled) {
+            LogcatLogger.install(AndroidLogcatLogger(if (BuildConfig.DEBUG) LogPriority.VERBOSE else LogPriority.ERROR))
         }
     }
 }

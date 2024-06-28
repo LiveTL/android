@@ -19,7 +19,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,9 +56,9 @@ class PlayerViewModel @Inject constructor(
             youTubeSessionService.session
                 .filterNotNull()
                 .collectLatest { session ->
-                    Timber.d(
-                        "Session: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}",
-                    )
+                    logcat {
+                        "Session: ${session.videoId} / ${session.videoTitle} / ${session.positionInMs} / ${session.playbackState}"
+                    }
 
                     val isDifferentVideoId =
                         session.videoId != null && session.videoId != state.value.streamInfo?.videoId
@@ -92,7 +94,7 @@ class PlayerViewModel @Inject constructor(
             chatFilterService.connect(streamInfo.videoId, streamInfo.isLive)
             state.update { it.copy(chatState = ChatState.LOADED) }
         } catch (e: Throwable) {
-            Timber.e(e)
+            logcat(LogPriority.ERROR) { e.asLog() }
             state.update { it.copy(chatState = ChatState.ERROR(e)) }
         }
     }
