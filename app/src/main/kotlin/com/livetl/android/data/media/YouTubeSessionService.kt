@@ -36,25 +36,22 @@ class YouTubeSessionService @Inject constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val component = ComponentName(context, javaClass)
 
-    // TODO: pause when backgrounded
     private var mediaController: MediaController? = null
     private var progressJob: Job? = null
     private val mediaControllerCallback = object : MediaController.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackState?) {
-            scope.launch {
+            progressJob = scope.launch {
                 val currentSession = updateYouTubeSession()
 
                 // We don't really get progress updates, so we poll for it
                 if (state?.state == PlaybackState.STATE_PLAYING && currentSession?.isLive == false) {
-                    progressJob = launch {
-                        while (true) {
-                            delay(2.seconds)
-                            logcat { "Updating playback position" }
-                            session.update {
-                                it?.copy(
-                                    positionInMs = mediaController?.playbackState?.position,
-                                )
-                            }
+                    while (true) {
+                        delay(2.seconds)
+                        logcat { "Updating playback position" }
+                        session.update {
+                            it?.copy(
+                                positionInMs = mediaController?.playbackState?.position,
+                            )
                         }
                     }
                 } else {

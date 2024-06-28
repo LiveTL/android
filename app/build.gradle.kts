@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.logcat)
 
     implementation(libs.androidx.core)
+    implementation(libs.androidx.lifecycle.process)
 
     // Jetpack Compose
     implementation(platform(libs.compose.bom))

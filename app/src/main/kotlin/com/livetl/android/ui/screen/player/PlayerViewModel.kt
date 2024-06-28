@@ -50,9 +50,8 @@ class PlayerViewModel @Inject constructor(
                 }
         }
 
-        // TODO: clean this up; attach when permissions granted?
-        youTubeSessionService.attach()
         viewModelScope.launch {
+            // TODO: clean this up
             youTubeSessionService.session
                 .filterNotNull()
                 .collectLatest { session ->
