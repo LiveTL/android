@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -192,7 +193,8 @@ private fun MessageAuthor.getPhotoInlineContent() = mapOf(
                 modifier = Modifier
                     .requiredWidth(16.dp)
                     .aspectRatio(1f)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .blur(2.dp),
             )
         },
     ),
