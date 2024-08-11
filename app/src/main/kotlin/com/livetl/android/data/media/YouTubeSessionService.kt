@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import logcat.asLog
 import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -77,13 +78,17 @@ class YouTubeSessionService @Inject constructor(
     }
 
     fun attach() {
-        if (context.isNotificationAccessGranted()) {
-            logcat { "Starting media session listener" }
-            val mediaSessionManager = context.getSystemService<MediaSessionManager>()
-            mediaSessionManager?.addOnActiveSessionsChangedListener(this, component)
-            mediaSessionManager?.getActiveSessions(component)?.let(::listenToYouTubeMediaSession)
-        } else {
-            logcat { "Can't start media session listener due to missing notification listener permissions" }
+        try {
+            if (context.isNotificationAccessGranted()) {
+                logcat { "Starting media session listener" }
+                val mediaSessionManager = context.getSystemService<MediaSessionManager>()
+                mediaSessionManager?.addOnActiveSessionsChangedListener(this, component)
+                mediaSessionManager?.getActiveSessions(component)?.let(::listenToYouTubeMediaSession)
+            } else {
+                logcat { "Can't start media session listener due to missing notification listener permissions" }
+            }
+        } catch (e: SecurityException) {
+            logcat { "Failed to start media session listener: ${e.asLog()}" }
         }
     }
 

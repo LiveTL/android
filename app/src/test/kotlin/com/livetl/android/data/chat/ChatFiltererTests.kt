@@ -95,6 +95,22 @@ class ChatFiltererTests {
     }
 
     @Test
+    fun `handles tokens that aren't actually language tags`() {
+        whenever(sharedPrefs.getStringSet(eq("tl_langs"), any())).thenReturn(setOf(TranslatedLanguage.ENGLISH.id))
+
+        val messages = listOf(
+            ChatMessageContent.Text("[] Hello world"),
+            ChatMessageContent.Text("Hello world (...)"),
+            ChatMessageContent.Text("Hello <> world"),
+            ChatMessageContent.Text("| Hello world"),
+        )
+
+        messages.forEach {
+            assertNull(filterer.filterMessage(baseChatMessage.copy(content = listOf(it))))
+        }
+    }
+
+    @Test
     fun `does not filter message if language doesn't match`() {
         whenever(sharedPrefs.getStringSet(eq("tl_langs"), any())).thenReturn(setOf(TranslatedLanguage.FRENCH.id))
 

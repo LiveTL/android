@@ -43,7 +43,9 @@ class ChatFilterer @Inject constructor(private val prefs: AppPreferences) {
         // We assume anything that roughly starts with something like "[EN]" is a translation
         val leftToken = trimmedText[0]
         val rightToken = LANG_TOKENS[leftToken]
-        val isTagged = rightToken != null && trimmedText.indexOf(rightToken) < MAX_LANG_TAG_LEN
+        val isTagged = rightToken != null &&
+            trimmedText.indexOf(rightToken) < MAX_LANG_TAG_LEN &&
+            trimmedText.indexOf(rightToken) > 1
         if (!isTagged) {
             return null
         }
