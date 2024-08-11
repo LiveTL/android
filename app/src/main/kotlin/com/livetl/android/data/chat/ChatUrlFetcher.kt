@@ -13,7 +13,7 @@ class ChatUrlFetcher @Inject constructor(private val client: HttpClient) {
         val urlPrefix = "https://www.youtube.com/live_chat"
 
         if (isLive) {
-            return "$urlPrefix?v=$videoId&embed_domain=www.livetl.app"
+            return "$urlPrefix?v=$videoId&$EMBED_SUFFIX"
         }
 
         val result = client.get("https://www.youtube.com/watch?v=$videoId") {
@@ -27,7 +27,11 @@ class ChatUrlFetcher @Inject constructor(private val client: HttpClient) {
         }
 
         val continuation = matches.group(1)
-        return "${urlPrefix}_replay?continuation=$continuation&embed_domain=www.livetl.app"
+        return "${urlPrefix}_replay?continuation=$continuation&$EMBED_SUFFIX"
+    }
+
+    companion object {
+        const val EMBED_SUFFIX = "embed_domain=www.livetl.app"
     }
 }
 

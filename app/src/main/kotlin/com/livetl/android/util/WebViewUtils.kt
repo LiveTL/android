@@ -8,15 +8,13 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import com.livetl.android.BuildConfig
 
-fun createScriptTag(js: String): String = """<script type="text/javascript">$js</script>""".trimIndent()
-
 fun WebView.injectScript(js: String) {
     val encodedJs = Base64.encodeToString(js.toByteArray(), Base64.NO_WRAP)
     loadUrl(
         """
         javascript:(function() {
-            var parent = document.getElementsByTagName('head').item(0);
-            var script = document.createElement('script');
+            const parent = document.getElementsByTagName('head').item(0);
+            const script = document.createElement('script');
             script.type = 'text/javascript';
             script.innerHTML = window.atob('$encodedJs');
             parent.appendChild(script);

@@ -2,6 +2,9 @@ package com.livetl.android.data.chat
 
 import android.content.Context
 import android.webkit.JavascriptInterface
+import android.webkit.MimeTypeMap
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.ui.util.fastForEach
@@ -13,6 +16,11 @@ import com.livetl.android.util.setDefaultSettings
 import com.livetl.android.util.toDebugTimestampString
 import com.livetl.android.util.withUIContext
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.util.flattenEntries
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -26,8 +34,10 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import logcat.logcat
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
@@ -38,13 +48,48 @@ class ChatService @Inject constructor(
     @ApplicationContext context: Context,
     private val json: Json,
     private val chatUrlFetcher: ChatUrlFetcher,
+    private val client: HttpClient,
 ) {
 
     private val webview by lazy {
         WebView(context).apply {
             setDefaultSettings()
-            addJavascriptInterface(this@ChatService, "Android")
+            addJavascriptInterface(this@ChatService, "livetl")
             webViewClient = object : WebViewClient() {
+                // Overwrite "Content-Security-Policy": "require-trusted-types-for 'script'"
+                // so that we can inject our interceptor script to get the chat data
+                override fun shouldInterceptRequest(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                ): WebResourceResponse? {
+                    if (request == null || request.url == null) {
+                        return null
+                    }
+
+                    val url = request.url.toString()
+
+                    if (ChatUrlFetcher.EMBED_SUFFIX !in url) {
+                        return super.shouldInterceptRequest(view, request)
+                    }
+
+                    return runBlocking {
+                        val result = client.get(url) {
+                            headers {
+                                request.requestHeaders.forEach { (name, value) -> set(name, value) }
+                            }
+                        }
+
+                        WebResourceResponse(
+                            MimeTypeMap.getFileExtensionFromUrl(url),
+                            StandardCharsets.UTF_8.name(),
+                            result.status.value,
+                            result.status.description,
+                            result.headers.flattenEntries().toMap() - "content-security-policy",
+                            result.body(),
+                        )
+                    }
+                }
+
                 override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
                     injectScript(context.readAssetFile("ChatInjector.js"))

@@ -25,7 +25,7 @@ window.fetch = async (...args) => {
 window.addEventListener('messageReceive', d => messageReceiveCallback(d.detail));
 
 // Send processed data back to app
-window.addEventListener('messagePostProcess', d => window.Android.receiveMessages(d.detail))
+window.addEventListener('messagePostProcess', d => window.livetl.receiveMessages(d.detail))
 
 const isReplay = window.location.href.startsWith('https://www.youtube.com/live_chat_replay');
 
