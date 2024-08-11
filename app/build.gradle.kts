@@ -49,13 +49,6 @@ android {
         }
     }
 
-    flavorDimensions.add("variant")
-    productFlavors {
-        create("playstore") {
-            dimension = "variant"
-        }
-    }
-
     lint {
         disable.addAll(listOf("MissingTranslation", "ExtraTranslation"))
         enable.addAll(listOf("ObsoleteSdkInt"))

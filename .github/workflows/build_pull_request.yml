@@ -31,4 +31,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build app
-        run: ./gradlew :app:testPlaystoreReleaseUnitTest :app:bundlePlaystoreRelease
+        run: ./gradlew :app:testReleaseUnitTest :app:bundleRelease
