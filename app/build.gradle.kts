@@ -15,13 +15,13 @@ plugins {
 val appPackageName = "com.livetl.android"
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = appPackageName
 
     defaultConfig {
         applicationId = appPackageName
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 301
         versionName = "9.0.0"
     }
@@ -72,14 +72,14 @@ android {
     }
 }
 
+val jvmTarget = 17
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(jvmTarget))
     }
 }
-
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(jvmTarget)
 }
 
 dependencies {
