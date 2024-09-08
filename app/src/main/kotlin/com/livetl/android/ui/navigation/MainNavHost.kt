@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.plusAssign
 import androidx.navigation.toRoute
 import com.livetl.android.ui.screen.about.AboutScreen
@@ -53,19 +52,15 @@ fun mainNavHost(startRoute: Route): NavHostController {
         ) {
             composable<Route.Home> {
                 HomeScreen(
-                    navigateToStreamInfo = { navController.navigate("${Route.StreamInfo}?urlOrId=$it") },
+                    navigateToStreamInfo = { navController.navigate(Route.StreamInfo(it)) },
                     navigateToPlayer = { navController.navigateToPlayer(it) },
                     navigateToSettings = { navController.navigate(Route.Settings) },
                     navigateToAbout = { navController.navigate(Route.About) },
                 )
             }
 
-            // TODO: use typesafe data class when possible
-            bottomSheet(
-                "${Route.StreamInfo}?urlOrId={urlOrId}",
-                arguments = listOf(navArgument("urlOrId") { defaultValue = "" }),
-            ) { backStackEntry ->
-                val urlOrId = backStackEntry.arguments?.getString("urlOrId")!!
+            bottomSheet<Route.StreamInfo> { backStackEntry ->
+                val urlOrId = backStackEntry.toRoute<Route.StreamInfo>().urlOrId
 
                 Surface {
                     StreamInfo(urlOrId)
