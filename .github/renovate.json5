@@ -8,7 +8,7 @@
         {
             "groupName": "Compose BOM",
             "matchPackageNames": [
-                "dev.chrisbanes.compose:compose-bom"
+                "androidx.compose:compose-bom"
             ],
             "ignoreUnstable": false
         },
