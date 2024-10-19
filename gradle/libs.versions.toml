@@ -47,7 +47,7 @@ hilt-gradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt_version" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt_version" }
 
-navigation-compose = "androidx.navigation:navigation-compose:2.8.2"
+navigation-compose = "androidx.navigation:navigation-compose:2.8.3"
 hilt-navigation = "androidx.hilt:hilt-navigation-compose:1.2.0"
 
 logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
