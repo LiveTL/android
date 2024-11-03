@@ -20,7 +20,7 @@ kotlinter = { id = "org.jmailen.kotlinter", version = "4.4.1" }
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlib_version" }
 
-androidx-core = "androidx.core:core-ktx:1.13.1"
+androidx-core = "androidx.core:core-ktx:1.15.0"
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version = "2.8.7" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil_version" }
