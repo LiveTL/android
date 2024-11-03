@@ -3,18 +3,17 @@ package com.livetl.android.util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
@@ -68,43 +67,34 @@ fun Context.readAssetFile(filePath: String): String =
         total.toString()
     }
 
-fun Context.findActivity(): ComponentActivity {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is ComponentActivity) return context
-        context = context.baseContext
-    }
-    throw IllegalStateException("No Activity context found")
-}
-
 @Composable
 fun rememberIsInPipMode(): Boolean {
-    val activity = LocalContext.current.findActivity()
-    var pipMode by remember { mutableStateOf(activity.isInPictureInPictureMode) }
+    val activity = LocalActivity.current as? ComponentActivity
+    var pipMode by remember { mutableStateOf(activity?.isInPictureInPictureMode ?: false) }
     DisposableEffect(activity) {
         val observer = Consumer<PictureInPictureModeChangedInfo> { info ->
             pipMode = info.isInPictureInPictureMode
         }
-        activity.addOnPictureInPictureModeChangedListener(
+        activity?.addOnPictureInPictureModeChangedListener(
             observer,
         )
-        onDispose { activity.removeOnPictureInPictureModeChangedListener(observer) }
+        onDispose { activity?.removeOnPictureInPictureModeChangedListener(observer) }
     }
     return pipMode
 }
 
 @Composable
 fun rememberIsInSplitScreenMode(): Boolean {
-    val activity = LocalContext.current.findActivity()
-    var splitScreenMode by remember { mutableStateOf(activity.isInMultiWindowMode) }
+    val activity = LocalActivity.current as? ComponentActivity
+    var splitScreenMode by remember { mutableStateOf(activity?.isInMultiWindowMode ?: false) }
     DisposableEffect(activity) {
         val observer = Consumer<MultiWindowModeChangedInfo> { info ->
             splitScreenMode = info.isInMultiWindowMode
         }
-        activity.addOnMultiWindowModeChangedListener(
+        activity?.addOnMultiWindowModeChangedListener(
             observer,
         )
-        onDispose { activity.removeOnMultiWindowModeChangedListener(observer) }
+        onDispose { activity?.removeOnMultiWindowModeChangedListener(observer) }
     }
     return splitScreenMode
 }

@@ -26,7 +26,7 @@ androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil_version" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil_version" }
 
-compose-bom = { module = "androidx.compose:compose-bom-alpha", version = "2024.10.00" }
+compose-bom = { module = "androidx.compose:compose-bom-alpha", version = "2024.10.01" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
@@ -35,7 +35,7 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling-debug = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util" }
-compose-activity = { module = "androidx.activity:activity-compose", version = "1.9.3" }
+compose-activity = { module = "androidx.activity:activity-compose", version = "1.10.0-alpha03" }
 compose-lintchecks = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.4.2" }
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines_version" }
