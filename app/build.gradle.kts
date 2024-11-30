@@ -1,11 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.aboutLibraries)
-    kotlin("android")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
@@ -118,21 +117,21 @@ dependencies {
     // "debugImplementation"("com.squareup.leakcanary:leakcanary-android:2.2")
 }
 
-tasks {
-    withType<KotlinCompile> {
+kotlin {
+    compilerOptions {
         // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api-markers
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                "-opt-in=kotlin.RequiresOptIn",
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            )
-        }
+        freeCompilerArgs.addAll(
+            "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+            "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        )
     }
+}
 
+tasks {
     withType<Test> {
         useJUnitPlatform()
 
