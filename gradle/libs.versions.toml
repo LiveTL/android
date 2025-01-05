@@ -61,7 +61,7 @@ preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", vers
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
 
 junit = "org.junit.jupiter:junit-jupiter:5.11.4"
-mockito = "org.mockito:mockito-core:5.14.2"
+mockito = "org.mockito:mockito-core:5.15.2"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
 
 [bundles]
