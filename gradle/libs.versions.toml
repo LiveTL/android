@@ -3,6 +3,7 @@ aboutlib = "11.6.3"
 coil = "2.7.0"
 coroutines = "1.10.1"
 hilt = "2.56.1"
+junit = "5.12.1"
 kotlin = "2.1.20"
 ktor = "3.1.2"
 
@@ -60,7 +61,10 @@ preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", vers
 
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0" }
 
-junit = "org.junit.jupiter:junit-jupiter:5.11.4"
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.12.1" }
+
 mockito = "org.mockito:mockito-core:5.16.1"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
 
@@ -72,4 +76,5 @@ coroutines = ["coroutines-core", "coroutines-android"]
 ktor = ["ktor-core", "ktor-logging"]
 navigation = ["navigation-compose", "hilt-navigation"]
 preferences = ["preferences-androidx", "preferences-flow"]
-test = ["junit", "mockito", "mockito-kotlin"]
+junit-runtime = ["junit-platform-launcher", "junit-jupiter-engine"]
+mockito = ["mockito", "mockito-kotlin"]

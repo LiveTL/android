@@ -111,7 +111,9 @@ dependencies {
     implementation(libs.aboutLibraries.compose)
 
     // Tests
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.bundles.junit.runtime)
+    testImplementation(libs.bundles.mockito)
 
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // "debugImplementation"("com.squareup.leakcanary:leakcanary-android:2.2")
