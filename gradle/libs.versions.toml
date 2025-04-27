@@ -16,7 +16,7 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.32" }
 
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlib" }
-kotlinter = { id = "org.jmailen.kotlinter", version = "5.0.1" }
+kotlinter = { id = "org.jmailen.kotlinter", version = "5.0.2" }
 
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlib" }
