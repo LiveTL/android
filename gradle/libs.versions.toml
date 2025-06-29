@@ -63,7 +63,7 @@ serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", v
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.13.1" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.13.2" }
 
 mockito = "org.mockito:mockito-core:5.18.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
