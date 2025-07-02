@@ -53,7 +53,7 @@ import com.livetl.android.util.rememberIsNotificationAccessGranted
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
-private enum class Tabs(@StringRes val nameRes: Int, val icon: ImageVector) {
+private enum class Tabs(@param:StringRes val nameRes: Int, val icon: ImageVector) {
     Chat(R.string.chat, Icons.AutoMirrored.Outlined.Chat),
     Settings(R.string.settings, Icons.Outlined.Settings),
 }

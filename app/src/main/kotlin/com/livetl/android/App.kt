@@ -8,7 +8,6 @@ import com.livetl.android.data.media.YouTubeSessionService
 import dagger.hilt.android.HiltAndroidApp
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
-import logcat.LogcatLogger
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -22,9 +21,7 @@ class App :
     override fun onCreate() {
         super<Application>.onCreate()
 
-        if (!LogcatLogger.isInstalled) {
-            LogcatLogger.install(AndroidLogcatLogger(if (BuildConfig.DEBUG) LogPriority.VERBOSE else LogPriority.ERROR))
-        }
+        AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }

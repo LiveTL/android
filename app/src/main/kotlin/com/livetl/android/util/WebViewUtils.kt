@@ -37,7 +37,6 @@ fun WebView.setDefaultSettings() {
     with(settings) {
         javaScriptEnabled = true
         domStorageEnabled = true
-        databaseEnabled = true
         useWideViewPort = true
         loadWithOverviewMode = true
         scrollBarStyle = WebView.SCROLLBARS_INSIDE_INSET

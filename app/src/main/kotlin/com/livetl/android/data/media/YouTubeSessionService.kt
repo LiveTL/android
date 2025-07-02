@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.seconds
 // TODO: clean this up
 @Singleton
 class YouTubeSessionService @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val streamService: StreamService,
 ) : MediaSessionManager.OnActiveSessionsChangedListener {
 

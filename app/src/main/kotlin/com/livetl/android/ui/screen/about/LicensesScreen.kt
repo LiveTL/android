@@ -9,14 +9,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
 import com.livetl.android.ui.common.ScreenScaffold
+import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @Composable
 fun LicensesScreen(onBackPressed: () -> Unit) {
+    val libs by rememberLibraries()
+
     ScreenScaffold(
         topBar = { scrollBehavior ->
             TopAppBar(
@@ -40,6 +44,7 @@ fun LicensesScreen(onBackPressed: () -> Unit) {
                 .fillMaxSize()
                 .consumeWindowInsets(contentPadding),
             contentPadding = contentPadding,
+            libraries = libs,
         )
     }
 }

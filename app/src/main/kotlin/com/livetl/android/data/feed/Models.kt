@@ -33,8 +33,8 @@ enum class StreamStatus(
     val apiValue: String,
     val sortField: String,
     val sortAscending: Boolean = true,
-    @StringRes val headingRes: Int,
-    @StringRes val timestampFormatStringRes: Int? = null,
+    @param:StringRes val headingRes: Int,
+    @param:StringRes val timestampFormatStringRes: Int? = null,
     val timestampSupplier: (Stream) -> String?,
 ) {
     LIVE(

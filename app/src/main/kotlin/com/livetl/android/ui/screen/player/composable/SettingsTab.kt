@@ -1,5 +1,6 @@
 package com.livetl.android.ui.screen.player.composable
 
+import android.os.Build
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,7 @@ fun SettingsTab(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel 
                     title = stringResource(R.string.setting_tl_languages),
                     preference = playerViewModel.prefs.tlLanguages(),
                     choices = TranslatedLanguage.entries.associate {
-                        val locale = Locale(it.id)
+                        val locale = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.BAKLAVA) Locale(it.id) else Locale.of(it.id)
                         it.id to locale.getDisplayName(locale).capitalize()
                     },
                 )
