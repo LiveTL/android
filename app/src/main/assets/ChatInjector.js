@@ -44,7 +44,10 @@ const colorConversionTable = {
   4294953512: 'YELLOW',
   4294278144: 'ORANGE',
   4293467747: 'PINK',
-  4293271831: 'RED'
+  4293271831: 'RED',
+  ['#1']: 'LEADERBOARD_1',
+  ['#2']: 'LEADERBOARD_2',
+  ['#3']: 'LEADERBOARD_3',
 };
 
 const messageReceiveCallback = async (response) => {
@@ -172,9 +175,9 @@ const messageReceiveCallback = async (response) => {
           // It's an array, but it's currently only a single item so this is fine
           messageItem.beforeContentButtons.forEach((contentButton) => {
             if (contentButton.buttonViewModel) {
-              item.superchatReplyContext = {
+              item.replyContext = {
                 author: contentButton.buttonViewModel.title,
-                color: colorConversionTable[contentButton.buttonViewModel.customBackgroundColor],
+                color: colorConversionTable[contentButton.buttonViewModel.customBackgroundColor] ?? colorConversionTable[contentButton.buttonViewModel.title],
               };
             }
           });

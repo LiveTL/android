@@ -27,7 +27,7 @@ class ChatFiltererTests {
         author = MessageAuthor(id = "author", name = "Author"),
         content = emptyList(),
         timestamp = 1L,
-        superchatContext = null,
+        replyContext = null,
     )
     private val baseChatMessage = emptyChatMessage.copy(
         content = listOf(

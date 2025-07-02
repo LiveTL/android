@@ -13,7 +13,7 @@ sealed interface ChatMessage {
         override val author: MessageAuthor,
         override val content: List<ChatMessageContent>,
         override val timestamp: Long,
-        val superchatContext: SuperChatContext?,
+        val replyContext: ReplyContext?,
     ) : ChatMessage
 
     // TODO: handle super stickers
@@ -32,6 +32,10 @@ sealed interface ChatMessage {
             ORANGE(Color(0xFFF57C00), Color.White),
             PINK(Color(0xFFE91E63), Color.White),
             RED(Color(0xFFE62117), Color.White),
+
+            LEADERBOARD_1(Color(0xFF7B3EDB), Color.Black),
+            LEADERBOARD_2(Color(0xFF36008C), Color.White),
+            LEADERBOARD_3(Color(0xFF36008C), Color.White),
         }
     }
 
@@ -85,7 +89,7 @@ data class MessageAuthor(
     val membershipBadgeUrl: String? = null,
 )
 
-data class SuperChatContext(val author: String, val level: ChatMessage.SuperChat.Level)
+data class ReplyContext(val author: String, val level: ChatMessage.SuperChat.Level)
 
 enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     ENGLISH("en", setOf("en", "eng", "英訳", "trans")),
@@ -115,7 +119,7 @@ data class YTChatMessage(
     val messages: List<YTChatMessageData>,
     val headerRuns: List<YTChatMessageData>,
     val timestamp: Long,
-    val superchatReplyContext: YTSuperchatReplyContext? = null,
+    val replyContext: YTReplyContext? = null,
     val delay: Long? = null,
     val superchat: YTSuperChat? = null,
 ) {
@@ -154,7 +158,7 @@ data class YTChatMessage(
                 author = author.toMessageAuthor(),
                 content = messages.fastMap { it.toChatMessageContent() },
                 timestamp = timestamp,
-                superchatContext = superchatReplyContext?.toSuperChatContext(),
+                replyContext = replyContext?.toReplyContext(),
             )
         }
     }
@@ -202,8 +206,8 @@ data class YTChatMessageData(
 }
 
 @Serializable
-data class YTSuperchatReplyContext(val author: String, val color: String) {
-    fun toSuperChatContext(): SuperChatContext = SuperChatContext(
+data class YTReplyContext(val author: String, val color: String) {
+    fun toReplyContext(): ReplyContext = ReplyContext(
         author = author,
         level = ChatMessage.SuperChat.Level.valueOf(color),
     )
