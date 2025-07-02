@@ -36,6 +36,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import logcat.LogPriority
 import logcat.logcat
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -145,32 +146,36 @@ class ChatService @Inject constructor(
             val nowMicro = epochMicro() - CHAT_DELAY_OFFSET_SECS.seconds
                 .toDouble(DurationUnit.MICROSECONDS)
 
-            val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
+            try {
+                val ytChatMessages = json.decodeFromString<YTChatMessages>(data)
 
-            // TODO: for archive replays, consider jumping around when seeking, pausing, etc.
-            ytChatMessages.messages
-                .fastForEach {
-                    if (isLive) {
-                        delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp))
-                        logcat {
-                            "Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}"
+                // TODO: for archive replays, consider jumping around when seeking, pausing, etc.
+                ytChatMessages.messages
+                    .fastForEach {
+                        if (isLive) {
+                            delay(getMicrosecondDiff(nowMicro.toLong(), it.timestamp))
+                            logcat {
+                                "Now: ${epochMicro().toDebugTimestampString()}, message timestamp: ${it.timestamp.toDebugTimestampString()}"
+                            }
+                        } else {
+                            delay(it.delay!!.microseconds)
                         }
-                    } else {
-                        delay(it.delay!!.microseconds)
-                    }
 
-                    if (!isActive) {
-                        return@launch
-                    }
+                        if (!isActive) {
+                            return@launch
+                        }
 
-                    val message = it.toChatMessage()
-                    messages.getAndUpdate { oldMessages ->
-                        (oldMessages + message)
-                            .distinct()
-                            .takeLast(MAX_MESSAGE_QUEUE_SIZE)
-                            .toImmutableList()
+                        val message = it.toChatMessage()
+                        messages.getAndUpdate { oldMessages ->
+                            (oldMessages + message)
+                                .distinct()
+                                .takeLast(MAX_MESSAGE_QUEUE_SIZE)
+                                .toImmutableList()
+                        }
                     }
-                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Failed to parse message: $data" }
+            }
         }
 
         jobs += job
