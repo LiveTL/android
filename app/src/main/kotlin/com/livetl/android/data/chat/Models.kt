@@ -13,7 +13,7 @@ sealed interface ChatMessage {
         override val author: MessageAuthor,
         override val content: List<ChatMessageContent>,
         override val timestamp: Long,
-        val replyContext: ReplyContext?,
+        val context: MessageContext?,
     ) : ChatMessage
 
     // TODO: handle super stickers
@@ -35,7 +35,6 @@ sealed interface ChatMessage {
 
             LEADERBOARD_1(Color(0xFF7B3EDB), Color.Black),
             LEADERBOARD_2(Color(0xFF36008C), Color.White),
-            LEADERBOARD_3(Color(0xFF36008C), Color.White),
         }
     }
 
@@ -89,7 +88,7 @@ data class MessageAuthor(
     val membershipBadgeUrl: String? = null,
 )
 
-data class ReplyContext(val author: String, val level: ChatMessage.SuperChat.Level)
+data class MessageContext(val author: String, val level: ChatMessage.SuperChat.Level)
 
 enum class TranslatedLanguage(val id: String, val tags: Set<String>) {
     ENGLISH("en", setOf("en", "eng", "英訳", "trans")),
@@ -119,7 +118,7 @@ data class YTChatMessage(
     val messages: List<YTChatMessageData>,
     val headerRuns: List<YTChatMessageData>,
     val timestamp: Long,
-    val replyContext: YTReplyContext? = null,
+    val context: YTMessageContext? = null,
     val delay: Long? = null,
     val superchat: YTSuperChat? = null,
 ) {
@@ -158,7 +157,7 @@ data class YTChatMessage(
                 author = author.toMessageAuthor(),
                 content = messages.fastMap { it.toChatMessageContent() },
                 timestamp = timestamp,
-                replyContext = replyContext?.toReplyContext(),
+                context = context?.toMessageContext(),
             )
         }
     }
@@ -206,8 +205,8 @@ data class YTChatMessageData(
 }
 
 @Serializable
-data class YTReplyContext(val author: String, val color: String) {
-    fun toReplyContext(): ReplyContext = ReplyContext(
+data class YTMessageContext(val author: String, val color: String) {
+    fun toMessageContext(): MessageContext = MessageContext(
         author = author,
         level = ChatMessage.SuperChat.Level.valueOf(color),
     )

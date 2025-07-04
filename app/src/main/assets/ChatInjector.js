@@ -45,9 +45,8 @@ const colorConversionTable = {
   4294278144: 'ORANGE',
   4293467747: 'PINK',
   4293271831: 'RED',
-  ['#1']: 'LEADERBOARD_1',
-  ['#2']: 'LEADERBOARD_2',
-  ['#3']: 'LEADERBOARD_3',
+  4286267099: 'LEADERBOARD_1',
+  4281729164: 'LEADERBOARD_2',
 };
 
 const messageReceiveCallback = async (response) => {
@@ -175,9 +174,9 @@ const messageReceiveCallback = async (response) => {
           // It's an array, but it's currently only a single item so this is fine
           messageItem.beforeContentButtons.forEach((contentButton) => {
             if (contentButton.buttonViewModel) {
-              item.replyContext = {
+              item.context = {
                 author: contentButton.buttonViewModel.title,
-                color: colorConversionTable[contentButton.buttonViewModel.customBackgroundColor] ?? colorConversionTable[contentButton.buttonViewModel.title],
+                color: colorConversionTable[contentButton.buttonViewModel.customBackgroundColor],
               };
             }
           });

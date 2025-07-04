@@ -37,7 +37,7 @@ import com.livetl.android.R
 import com.livetl.android.data.chat.ChatMessage
 import com.livetl.android.data.chat.ChatMessageContent
 import com.livetl.android.data.chat.MessageAuthor
-import com.livetl.android.data.chat.ReplyContext
+import com.livetl.android.data.chat.MessageContext
 import com.livetl.android.ui.common.SymbolAnnotationType
 import com.livetl.android.ui.common.textParser
 import kotlinx.collections.immutable.persistentSetOf
@@ -94,13 +94,13 @@ fun Message(message: ChatMessage, emojiCache: EmojiCache, modifier: Modifier = M
                 )
             }
 
-            (message is ChatMessage.RegularChat && message.replyContext != null) -> {
+            (message is ChatMessage.RegularChat && message.context != null) -> {
                 append(
                     AnnotatedString(
-                        text = " ${message.replyContext.author} ",
+                        text = " ${message.context.author} ",
                         spanStyle = SpanStyle(
-                            background = message.replyContext.level.backgroundColor,
-                            color = message.replyContext.level.textColor,
+                            background = message.context.level.backgroundColor,
+                            color = message.context.level.textColor,
                             fontWeight = FontWeight.Bold,
                         ),
                     ),
@@ -241,7 +241,7 @@ private fun RegularChatPreviews() {
                 author = author,
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
-                replyContext = null,
+                context = null,
             ),
             emojiCache = EmojiCache(),
         )
@@ -251,7 +251,7 @@ private fun RegularChatPreviews() {
                 author = author,
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
-                replyContext = ReplyContext(
+                context = MessageContext(
                     author = "Oil baron",
                     level = ChatMessage.SuperChat.Level.RED,
                 ),
@@ -264,7 +264,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isModerator = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
-                replyContext = null,
+                context = null,
             ),
             emojiCache = EmojiCache(),
         )
@@ -274,7 +274,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isVerified = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
-                replyContext = null,
+                context = null,
             ),
             emojiCache = EmojiCache(),
         )
@@ -284,7 +284,7 @@ private fun RegularChatPreviews() {
                 author = author.copy(isOwner = true),
                 content = listOf(ChatMessageContent.Text("Hello world")),
                 timestamp = 1615001105,
-                replyContext = null,
+                context = null,
             ),
             emojiCache = EmojiCache(),
         )
