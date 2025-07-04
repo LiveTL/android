@@ -78,7 +78,7 @@ fun AboutScreen(onBackPressed: () -> Unit, navigateToLicenses: () -> Unit, navig
                     LinkIcon(
                         labelRes = R.string.about_discord,
                         icon = Icons.AutoMirrored.Outlined.Chat,
-                        url = "https://discord.gg/uJrV3tmthg",
+                        url = "https://discord.com/invite/fZZasP9bj3",
                     )
                     LinkIcon(
                         labelRes = R.string.about_github,
