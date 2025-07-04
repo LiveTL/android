@@ -1,6 +1,6 @@
-- Fix chat not loading due to YouTube updates
+- Show leaderboard status
 - Fix some crashes
-- Target Android 15
+- Target Android 16 / require Android 9+
 
 ---
 
