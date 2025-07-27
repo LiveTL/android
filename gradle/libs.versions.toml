@@ -51,7 +51,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 navigation-compose = "androidx.navigation:navigation-compose:2.9.1"
 hilt-navigation = "androidx.hilt:hilt-navigation-compose:1.2.0"
 
-logcat = { module = "com.squareup.logcat:logcat", version = "0.2.3" }
+logcat = { module = "com.squareup.logcat:logcat", version = "0.3" }
 
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
