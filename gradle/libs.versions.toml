@@ -2,7 +2,7 @@
 aboutlib = "12.2.4"
 coil = "2.7.0"
 coroutines = "1.10.2"
-hilt = "2.56.2"
+hilt = "2.57"
 junit = "5.13.4"
 kotlin = "2.2.0"
 ktor = "3.2.1"
