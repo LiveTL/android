@@ -65,7 +65,7 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.13.4" }
 
-mockito = "org.mockito:mockito-core:5.19.0"
+mockito = "org.mockito:mockito-core:5.20.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:6.0.0"
 
 [bundles]
