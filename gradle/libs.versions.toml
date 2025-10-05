@@ -3,7 +3,7 @@ aboutlib = "12.2.4"
 coil = "2.7.0"
 coroutines = "1.10.2"
 hilt = "2.57.2"
-junit = "5.14.0"
+junit = "6.0.0"
 kotlin = "2.2.20"
 ktor = "3.3.0"
 
@@ -63,7 +63,7 @@ serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", v
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.14.0" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.0" }
 
 mockito = "org.mockito:mockito-core:5.20.0"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:6.1.0"
