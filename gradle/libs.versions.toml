@@ -5,7 +5,7 @@ coroutines = "1.10.2"
 hilt = "2.57.2"
 junit = "6.0.1"
 kotlin = "2.2.21"
-ktor = "3.3.1"
+ktor = "3.3.2"
 
 [plugins]
 android-application = { id = "com.android.application", version = "8.13.0" }
