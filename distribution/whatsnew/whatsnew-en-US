@@ -1,6 +1,4 @@
-- Show leaderboard status
-- Fix some crashes
-- Target Android 16 / require Android 9+
+- Fix chat not loading for archive streams
 
 ---
 
