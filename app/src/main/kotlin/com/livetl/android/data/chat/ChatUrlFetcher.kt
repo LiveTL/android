@@ -37,4 +37,4 @@ class ChatUrlFetcher @Inject constructor(private val client: HttpClient) {
 
 class NoChatContinuationFoundException(videoId: String) : Exception("Continuation not found for $videoId")
 
-private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"(\w+)"""".toPattern() }
+private val CHAT_CONTINUATION_PATTERN by lazy { """continuation":"([\w%]+)"""".toPattern() }
