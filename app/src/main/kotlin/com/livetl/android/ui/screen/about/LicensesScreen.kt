@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.livetl.android.R
 import com.livetl.android.ui.common.ScreenScaffold
-import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
+import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @Composable
 fun LicensesScreen(onBackPressed: () -> Unit) {
-    val libs by rememberLibraries()
+    val libs by produceLibraries()
 
     ScreenScaffold(
         topBar = { scrollBehavior ->
