@@ -27,7 +27,7 @@ androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
-compose-bom = { module = "androidx.compose:compose-bom-alpha", version = "2025.11.01" }
+compose-bom = { module = "androidx.compose:compose-bom-alpha", version = "2025.12.00" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
