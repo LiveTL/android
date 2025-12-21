@@ -81,6 +81,7 @@ dependencies {
     // DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    ksp(libs.kotlin.metadata)
 
     // Logging
     implementation(libs.logcat)
