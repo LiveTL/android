@@ -5,9 +5,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.fredporciuncula.flow.preferences.Preference
 import com.livetl.android.util.collectAsStateWithLifecycle
 import com.livetl.android.util.toggle
-import com.tfcporciuncula.flow.Preference
 
 @Composable
 fun SwitchPreferenceRow(preference: Preference<Boolean>, title: String, subtitle: String? = null) {

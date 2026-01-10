@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.fredporciuncula.flow.preferences.Preference
 import com.livetl.android.util.collectAsStateWithLifecycle
-import com.tfcporciuncula.flow.Preference
 
 @Composable
 fun <T> ChoicePreferenceRow(

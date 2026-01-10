@@ -58,7 +58,7 @@ ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 
 preferences-androidx = { module = "androidx.preference:preference-ktx", version = "1.2.1" }
-preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", version = "1.4.0" }
+preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", version = "1.9.1" }
 
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 
