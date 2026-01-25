@@ -76,6 +76,7 @@ kotlin {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
     implementation(libs.bundles.coroutines)
+    implementation(libs.immutables)
 
     // DI
     implementation(libs.hilt.android)
