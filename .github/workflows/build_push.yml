@@ -33,7 +33,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Build app
-        run: ./gradlew :app:testReleaseUnitTest :app:bundleRelease
+        run: ./gradlew :app:testDebugUnitTest :app:bundleRelease
 
       # Sign app bundle and create release for tags
 
