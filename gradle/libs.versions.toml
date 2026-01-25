@@ -2,13 +2,13 @@
 aboutlib = "13.2.1"
 coil = "2.7.0"
 coroutines = "1.10.2"
-hilt = "2.58"
+hilt = "2.59"
 junit = "6.0.2"
 kotlin = "2.3.0"
 ktor = "3.4.0"
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.13.2" }
+android-application = { id = "com.android.application", version = "9.0.0" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -60,6 +60,7 @@ ktor-logging = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 preferences-androidx = { module = "androidx.preference:preference-ktx", version = "1.2.1" }
 preferences-flow = { module = "com.github.tfcporciuncula:flow-preferences", version = "1.9.1" }
 
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }

@@ -3,7 +3,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.aboutLibraries)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.ksp)
@@ -64,7 +63,7 @@ android {
     }
 }
 
-val jvmTarget = 17
+val jvmTarget = 21
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(jvmTarget))
