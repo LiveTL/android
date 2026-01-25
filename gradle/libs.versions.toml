@@ -67,7 +67,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "6.0.2" }
 
 mockito = "org.mockito:mockito-core:5.21.0"
-mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:6.2.1"
+mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:6.2.2"
 
 [bundles]
 coil = ["coil-core", "coil-compose"]
