@@ -8,7 +8,7 @@ kotlin = "2.3.10"
 ktor = "3.4.0"
 
 [plugins]
-android-application = { id = "com.android.application", version = "9.0.0" }
+android-application = { id = "com.android.application", version = "9.0.1" }
 
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
