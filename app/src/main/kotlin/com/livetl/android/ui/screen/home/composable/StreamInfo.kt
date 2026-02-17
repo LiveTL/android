@@ -15,9 +15,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,21 +25,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.livetl.android.R
 import com.livetl.android.ui.common.LoadingIndicator
-import kotlinx.coroutines.launch
+import com.livetl.android.ui.navigation.Route
 
 @Composable
-fun StreamInfo(urlOrId: String, viewModel: StreamInfoViewModel = hiltViewModel()) {
-    val coroutineScope = rememberCoroutineScope()
-
+fun StreamInfo(route: Route.StreamInfo) {
+    val viewModel = hiltViewModel<StreamInfoViewModel, StreamInfoViewModel.Factory>(
+        creationCallback = { factory -> factory.create(route) },
+    )
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(urlOrId) {
-        if (urlOrId.isNotEmpty()) {
-            coroutineScope.launch {
-                viewModel.loadStream(urlOrId)
-            }
-        }
-    }
 
     if (state.isLoading) {
         LoadingIndicator()

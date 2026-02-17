@@ -143,8 +143,9 @@ class ChatService @Inject constructor(
     @JavascriptInterface
     fun receiveMessages(data: String) {
         val job = scope.launch {
-            val nowMicro = epochMicro() - CHAT_DELAY_OFFSET_SECS.seconds
-                .toDouble(DurationUnit.MICROSECONDS)
+            val nowMicro = epochMicro() -
+                CHAT_DELAY_OFFSET_SECS.seconds
+                    .toDouble(DurationUnit.MICROSECONDS)
 
             try {
                 val ytChatMessages = json.decodeFromString<YTChatMessages>(data)

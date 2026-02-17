@@ -5,16 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavHostController
+import com.livetl.android.ui.navigation.MainNavDisplay
 import com.livetl.android.ui.navigation.Route
-import com.livetl.android.ui.navigation.mainNavHost
-import com.livetl.android.ui.navigation.navigateToPlayer
 import com.livetl.android.ui.theme.LiveTLTheme
 import com.livetl.android.util.AppPreferences
-import com.livetl.android.util.waitUntil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,7 +18,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var prefs: AppPreferences
 
-    private var navController: NavHostController? = null
+    private val pendingPlayerUrl = MutableStateFlow<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +32,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LiveTLTheme {
-                navController = mainNavHost(
-                    startRoute = startRoute,
-                )
+                MainNavDisplay(startRoute, pendingPlayerUrl)
             }
         }
 
@@ -60,13 +54,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleVideoIntent(data: String?) {
-        data?.let {
-            lifecycleScope.launch {
-                // The app might take some time to actually load up
-                waitUntil({ navController != null }) {
-                    navController?.navigateToPlayer(it)
-                }
-            }
-        }
+        pendingPlayerUrl.value = data
     }
 }

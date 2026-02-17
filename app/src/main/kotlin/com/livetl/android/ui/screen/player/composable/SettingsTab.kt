@@ -37,7 +37,13 @@ fun SettingsTab(modifier: Modifier = Modifier, playerViewModel: PlayerViewModel 
                     title = stringResource(R.string.setting_tl_languages),
                     preference = playerViewModel.prefs.tlLanguages(),
                     choices = TranslatedLanguage.entries.associate {
-                        val locale = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.BAKLAVA) Locale(it.id) else Locale.of(it.id)
+                        val locale = if (Build.VERSION.SDK_INT <=
+                            Build.VERSION_CODES.BAKLAVA
+                        ) {
+                            Locale(it.id)
+                        } else {
+                            Locale.of(it.id)
+                        }
                         it.id to locale.getDisplayName(locale).capitalize()
                     },
                 )

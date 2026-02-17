@@ -51,7 +51,9 @@ fun PlayerScreen(urlOrId: String, viewModel: PlayerViewModel = hiltViewModel()) 
             if (!isInPipMode && !isInSplitScreenMode) {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) == true) {
+                        if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) ==
+                            true
+                        ) {
                             activity.enterPictureInPictureMode(
                                 PictureInPictureParams.Builder()
                                     // Must be between 2.39:1 and 1:2.39 (inclusive)
