@@ -45,10 +45,11 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
         val bottomSheetProperties =
             lastEntry?.metadata?.get(BOTTOM_SHEET_KEY) as? ModalBottomSheetProperties
         return bottomSheetProperties?.let { properties ->
+            val previousEntries = entries.dropLast(1)
             BottomSheetScene(
                 key = lastEntry.contentKey,
-                previousEntries = entries.dropLast(1),
-                overlaidEntries = entries.dropLast(1),
+                previousEntries = previousEntries,
+                overlaidEntries = previousEntries,
                 entry = lastEntry,
                 modalBottomSheetProperties = properties,
                 onBack = onBack,
@@ -58,16 +59,14 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
 
     companion object {
         /**
-         * Function to be called on the [NavEntry.metadata] to mark this entry as something that
-         * should be displayed within a [ModalBottomSheet].
+         * Marks a [NavEntry] to be displayed within a [ModalBottomSheet].
          *
-         * @param modalBottomSheetProperties properties that should be passed to the containing
-         * [ModalBottomSheet].
+         * @param modalBottomSheetProperties properties passed to the [ModalBottomSheet].
          */
         fun bottomSheet(
             modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
         ): Map<String, Any> = mapOf(BOTTOM_SHEET_KEY to modalBottomSheetProperties)
 
-        internal const val BOTTOM_SHEET_KEY = "bottomsheet"
+        private const val BOTTOM_SHEET_KEY = "bottomsheet"
     }
 }

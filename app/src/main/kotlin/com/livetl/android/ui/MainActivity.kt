@@ -25,10 +25,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        val startRoute = when (prefs.showWelcomeScreen().get()) {
-            true -> Route.Welcome
-            false -> Route.Home
-        }
+        val startRoute = if (prefs.showWelcomeScreen().get()) Route.Welcome else Route.Home
 
         setContent {
             LiveTLTheme {
