@@ -6,7 +6,7 @@ hilt = "2.59.2"
 junit = "6.1.0"
 kotlin = "2.3.21"
 ktor = "3.5.0"
-navigation3 = "1.0.1"
+navigation3 = "1.1.2"
 
 [plugins]
 android-application = { id = "com.android.application", version = "9.2.1" }
