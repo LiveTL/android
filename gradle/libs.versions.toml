@@ -1,5 +1,5 @@
 [versions]
-aboutlib = "14.2.0"
+aboutlib = "14.2.1"
 coil = "2.7.0"
 coroutines = "1.11.0"
 hilt = "2.59.2"
