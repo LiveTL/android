@@ -13,13 +13,13 @@ plugins {
 val appPackageName = "com.livetl.android"
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     namespace = appPackageName
 
     defaultConfig {
         applicationId = appPackageName
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 305
         versionName = "9.2.1"
     }

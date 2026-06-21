@@ -50,7 +50,7 @@ class ChatFilterer @Inject constructor(private val prefs: AppPreferences) {
             return null
         }
 
-        val (lang, text) = trimmedText.split(rightToken!!, limit = 2)
+        val (lang, text) = trimmedText.split(rightToken, limit = 2)
         val taggedLang = TranslatedLanguage.fromId(lang.removePrefix(leftToken.toString()).trim())
         val trimmedTextContent = ChatMessageContent.Text(
             text.trim()
